@@ -5,7 +5,7 @@ public class Deck {
 	 * also extends vector, meaning we can see all elements and change them(for shuffling, plus use clone
 	 *  for when moving deck from discard pile to in play deck
 	 */
-	Stack<Card> currentDeck= new Stack<Card>();
+	private Stack<Card> currentDeck= new Stack<Card>();
 	//fills the deck with the appropriate number and style of cards
 	public void DeckBuild(){
 			for(int f=0; f<4; f++){
@@ -79,12 +79,23 @@ public class Deck {
 
 	}
 	
-	
+	public int remaining(){
+		return currentDeck.size();
+	}
 	public Card draw(){
 		return currentDeck.pop();
 	}
 	
 	public Stack<Card> getCurrentDeck(){
 		return currentDeck;
+	}
+	public void CardRemove(Card r){
+		currentDeck.remove(r);
+	}
+	public boolean containsCard(Card aCard){
+		if(currentDeck.contains(aCard)){
+			return true;			
+		}
+		else return false;
 	}
 }

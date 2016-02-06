@@ -54,4 +54,17 @@ public class Card{
 	public int getValue(){
 		return value;
 	}
+	//TODO: Override hash code, just in case.
+	public boolean equals(Object object){
+		final Card comp = (Card)object;
+		if((comp.value == this.value)&&(comp.colour==this.colour)){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+	public void print(){
+		System.out.println("This is a "+colour+"with the value of "+value);
+	}
 }
