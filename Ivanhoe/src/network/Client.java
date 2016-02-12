@@ -7,6 +7,7 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 
 import Util.config;
+import Util.logger;
 
 public class Client {
 	
@@ -50,7 +51,7 @@ public class Client {
 	
 	private void start() throws IOException {
 	    streamOut = new DataOutputStream(socket.getOutputStream());
-	    System.out.println("Starting ClientThread...");
+	    logger.println("Starting ClientThread...");
 	    if (clientThread == null){
 	    	clientThread = new ClientThread(this, socket);
 	    }
@@ -64,6 +65,10 @@ public class Client {
 		catch(IOException ioe){
 			System.out.println("Unexpected exception: "+ ioe.getMessage());
 		}
+	}
+	
+	public void chat(String message){
+		sendMessage("CHAT|"+message);
 	}
 	
 	public void stop() {  
@@ -87,13 +92,15 @@ public class Client {
 		}
 		recentMessage = message;
 		messageRecieved = true;
+		System.out.println(message);
 	}
 	
 	
-	public boolean messageRecieved(){
-		return messageRecieved;
-	}
-	public String getMessage(){
+	
+	public synchronized String getMessage(){
+		while (!messageRecieved){
+			//loop
+		}
 		messageRecieved = false;
 		return recentMessage;
 	}

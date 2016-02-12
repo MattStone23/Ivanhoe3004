@@ -1,0 +1,15 @@
+CLIENT
+	"Draw"	->				
+	"Play|C|#|(additional info)"		
+	"Withdraw"
+	"End"
+	"StartTourn|C"
+	"WinToken|C"
+	"CONNECT"
+	"CLOSE"
+	"SHUTDOWN"
+	"STARTGAME"
+
+SERVER
+	"GAMESTATE|COLOUR|DECK|TURN|{P#^HAND#^DISPLAY()^SH^ST}|{P#^HAND#^DISPLAY()^SH^ST}"
+	"DRAW|C|#"

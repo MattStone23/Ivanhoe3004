@@ -2,6 +2,8 @@ package network;
 import java.io.*;
 import java.net.Socket;
 
+import Util.logger;
+
 public class ClientThread extends Thread {
 	private Client client = null;
 	private Socket socket = null;
@@ -24,9 +26,9 @@ public class ClientThread extends Thread {
 		while(running) {
 			try {
 				// handle responses from server and tell client class what to do
-				System.out.println("CLIENTThread waiting...");
+				logger.println("CLIENTThread waiting...");
 				received = inputStream.readUTF();
-				System.out.println("CLIENTThread Recieved:\t"+received);
+				logger.println("CLIENTThread Recieved:\t"+received);
 				client.handle(received);
 			}
 			catch(IOException ioe) {

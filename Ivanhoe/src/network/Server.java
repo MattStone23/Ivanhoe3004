@@ -37,7 +37,6 @@ public class Server implements Runnable {
 			System.out.println("Binding to port " + port + ", please wait  ...");
 			server = new ServerSocket(port);  
 			server.setReuseAddress(true);
-			System.out.println("Server started: " + server);
 			start(); 
 		}
 		catch(IOException ioe){
@@ -95,17 +94,82 @@ public class Server implements Runnable {
 	}
 	public synchronized void handle(int clientNum, String message){
 		//TODO handle stuff
-		//if quit message
-		
-		//if shutdown message
-		
 		ServerThread from = clients.get(clientNum);
+		String toMessage = "";
+		String fromMessage = "";
+		
+		String[] args =  message.split("\\|");
+		String command = args[0];
+		System.out.println("COMMAND:\t\""+command+"\"");
+		System.out.println("COMMAND:\t\""+args.length+"\"");
+		//if quit message
+		switch (command){
+		case "QUIT":
+			//shut down this client
+			from.close();
+			break;
+		case "SHUTDOWN":
+			//shutdown the server
+			this.shutdown();
+			break;
+		case "STARTTOURN":
+			//startTourn()
+			toMessage = args[1]+" colour tournament started";
+			fromMessage = toMessage;
+			break;
+		case "DRAW":
+			//draw a card
+			toMessage = clientNum + " drew a card";
+			fromMessage = "DRAW|G|1";
+			break;
+		case "PLAY":
+			//play a card
+			toMessage = clientNum + " played a card:"+args[1]+"|"+args[2];
+			fromMessage = toMessage;
+			break;
+		case "WITHDRAW":
+			//withdraw from tournament
+			break;
+		case "ENDTURN":
+			//end turn
+			toMessage = clientNum + " ended their turn";
+			fromMessage = "Turn Over";
+			break;
+		case "IVANHOE":
+			//interrupt actioncard
+			break;
+		case "WINTOKEN":
+			//select which token to win if purple tournament won
+			break;
+		case "STARTGAME":
+			//start the game
+			toMessage = "Game Starting";
+			fromMessage = toMessage;
+			break;
+		case "CONNECT":
+			toMessage = clientNum + "joined the lobby";
+			fromMessage = toMessage;
+			break;
+		case "CHAT":
+			//chat and testing functionality
+			toMessage = clientNum+":\t"+args[1];
+			fromMessage = "";
+			break;
+		default:
+			//invalid input
+			from.send("INVALID");
+			break;
+		}
+		
+		
+		
+		//update all clients
 		for (ServerThread to : clients.values()){
 			if (from.getID() != to.getID()){
-				to.send(message);
+				to.send(toMessage);
 			}
-			else{
-				to.send("Hello Client From Server");
+			else {
+				to.send(fromMessage);
 			}
 		}
 	}

@@ -18,9 +18,7 @@ public class ClientTest {
 		
 		Client client = new Client(config.IP, config.PORT);
 		client.sendMessage("Hello server");
-		while (!client.messageRecieved()){
-			
-		}
+		
 		assertEquals(client.getMessage(),"Hello Client From Server");
 		server.shutdown();
 		timer.wait(1);
@@ -38,8 +36,7 @@ public class ClientTest {
 		client1.sendMessage("Hello client2");
 		timer.wait(1);//wait for message to send to all clients
 		
-		while (!client2.messageRecieved()){	
-		}
+		
 		assertEquals(client2.getMessage(),"Hello client2");
 		
 		
@@ -47,8 +44,7 @@ public class ClientTest {
 		client2.sendMessage("Hello to you client1");
 		timer.wait(1);//wait for message to send to all clients
 		
-		while (!client1.messageRecieved()){	
-		}
+		
 		assertEquals(client1.getMessage(),"Hello to you client1");
 		
 		server.shutdown();
