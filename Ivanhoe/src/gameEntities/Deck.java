@@ -104,4 +104,14 @@ public class Deck {
 		}
 		else return false;
 	}
+	
+	public void shuffle(){
+		Card temp;
+		for(int i=0 ;i<currentDeck.size()-1  ; i++){
+			int rnd=(int) Math.random()*111;
+			temp= currentDeck.get(rnd);
+			currentDeck.set(rnd, currentDeck.get(i));
+			currentDeck.set(i, temp);			
+		}
+	}
 }

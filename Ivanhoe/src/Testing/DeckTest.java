@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import gameEntities.Deck;
 import gameEntities.Card;
+import gameEntities.Hand;
 
 public class DeckTest {
 
@@ -12,15 +13,28 @@ public class DeckTest {
 	public void test() {
 		Deck testDeck= new Deck();
 		assertEquals(true, testDeck.getCurrentDeck().isEmpty());
+		testDeck.putInto(new Card(3,'p'));
 		Deck testDeck2= new Deck();
 		testDeck2.DeckBuild();
 		assertEquals(false, testDeck2.getCurrentDeck().isEmpty());
 		assertEquals( 110, testDeck2.getCurrentDeck().size());
 	}
+	
+	@Test
+	public void handtest(){
+		Deck testDeck= new Deck();
+		testDeck.DeckBuild();
+		Hand testhand= new Hand();
+		testhand.initialize();
+		testhand.DrawCard(testDeck);
+		assertEquals(109, testDeck.remaining());	
+	}
+	
 	@Test
 	public void CardNumtest(){
 		Deck CardNum = new Deck();
 		CardNum.DeckBuild();
+		CardNum.shuffle();
 		assertEquals( 110, CardNum.remaining());
 		
 		Card cardtmp = new Card(3,'p');

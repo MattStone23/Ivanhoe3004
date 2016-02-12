@@ -3,7 +3,10 @@ import java.util.*;
 public class Hand {
 	Stack<Card> hand;
 	
-	
+	//TODO: change this to a constructor
+	public void initialize(){
+		hand= new Stack<Card>();
+	}
 	public void DrawCard(Deck Inplay){
 		hand.push(Inplay.draw());
 	}
