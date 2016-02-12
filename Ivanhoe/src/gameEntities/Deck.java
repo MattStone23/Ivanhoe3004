@@ -70,12 +70,14 @@ public class Deck {
 			}
 			
 			
-			for(int f=1; f<=17; f++){
+			for(int f=1; f<=15; f++){
 				currentDeck.push(new Card(f,'a'));
 			}
-			currentDeck.push(new Card(8, 'a'));
-			currentDeck.push(new Card(8, 'a'));
-			currentDeck.push(new Card(11, 'a'));
+			currentDeck.push(new Card(16, 'a'));
+			currentDeck.push(new Card(16, 'a'));
+			currentDeck.push(new Card(16, 'a'));
+			currentDeck.push(new Card(17, 'a'));
+			currentDeck.push(new Card(17, 'a'));
 
 	}
 	
@@ -84,6 +86,10 @@ public class Deck {
 	}
 	public Card draw(){
 		return currentDeck.pop();
+	}
+	
+	public void putInto(Card ACard){
+		currentDeck.push(ACard);
 	}
 	
 	public Stack<Card> getCurrentDeck(){
