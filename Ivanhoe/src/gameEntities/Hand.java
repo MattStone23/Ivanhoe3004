@@ -14,4 +14,12 @@ public class Hand {
 	public void swap(int i, int j){
 		
 	}
+	
+	public Card play(Card type){
+		if(hand.contains(type)){
+			hand.remove(type);			
+			return type;
+		}
+		throw new IllegalArgumentException();
+	}
 }

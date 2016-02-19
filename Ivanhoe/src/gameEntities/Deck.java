@@ -91,7 +91,11 @@ public class Deck {
 	public void putInto(Card ACard){
 		currentDeck.push(ACard);
 	}
-	
+	public void putAll(Stack<Card> disc){
+		while(!(disc.empty())){
+			this.putInto(disc.pop());
+		}
+	}
 	public Stack<Card> getCurrentDeck(){
 		return currentDeck;
 	}
