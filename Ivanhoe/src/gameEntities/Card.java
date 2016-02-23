@@ -46,7 +46,7 @@ public class Card{
 		}
 		colour= col;
 		value=val;
-		System.out.println("Made a "+colour+" card with the face value of "+ val );
+		//System.out.println("Made a "+colour+" card with the face value of "+ val );
 	}
 	public char getColour(){
 		return colour;

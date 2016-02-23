@@ -8,9 +8,17 @@ public class Player {
 		plyHand = new Hand();
 		display = new Stack<Card>();
 		colours = new int[4];
-		for(int i = 0; i<= 4; i++){
+		for(int i = 0; i< 4; i++){
 			colours[i]=0;
 		}
+	}
+	
+	public int displayVal(){
+		int out = 0 ;
+		for(Card card : display){
+			out += card.getValue();
+		}
+		return out;
 	}
 	public void addStone(char type){
 		switch (type){

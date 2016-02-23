@@ -25,7 +25,6 @@ public class DeckTest {
 		Deck testDeck= new Deck();
 		testDeck.DeckBuild();
 		Hand testhand= new Hand();
-		testhand.initialize();
 		testhand.DrawCard(testDeck);
 		assertEquals(109, testDeck.remaining());	
 	}
