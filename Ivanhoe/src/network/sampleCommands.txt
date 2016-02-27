@@ -6,10 +6,11 @@ CLIENT
 	"StartTourn|C"
 	"WinToken|C"
 	"CONNECT"
-	"CLOSE"
+	"QUIT"
 	"SHUTDOWN"
 	"STARTGAME"
 
 SERVER
 	"GAMESTATE|COLOUR|DECK|TURN|{P#^HAND#^DISPLAY()^SH^ST}|{P#^HAND#^DISPLAY()^SH^ST}"
 	"DRAW|C|#"
+	"JOIN|(player name/ID)"

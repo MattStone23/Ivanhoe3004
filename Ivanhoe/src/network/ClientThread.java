@@ -2,7 +2,6 @@ package network;
 import java.io.*;
 import java.net.Socket;
 
-import Util.logger;
 
 public class ClientThread extends Thread {
 	private Client client = null;
@@ -26,9 +25,9 @@ public class ClientThread extends Thread {
 		while(running) {
 			try {
 				// handle responses from server and tell client class what to do
-				logger.println("CLIENTThread waiting...");
 				received = inputStream.readUTF();
-				logger.println("CLIENTThread Recieved:\t"+received);
+				
+				
 				client.handle(received);
 			}
 			catch(IOException ioe) {
@@ -43,6 +42,7 @@ public class ClientThread extends Thread {
 	public void open() {
 		try {
 			inputStream  = new DataInputStream(socket.getInputStream());
+			
 		}
 	    catch(IOException ioe) {
 	    	System.out.println("Error getting input stream: " + ioe);
@@ -54,6 +54,7 @@ public class ClientThread extends Thread {
 	public void close(){
 		try {
 			if (inputStream != null) inputStream.close();
+			
 		}
 	    catch (IOException ioe){
 	    	System.out.println("Error closing input stream: " + ioe);

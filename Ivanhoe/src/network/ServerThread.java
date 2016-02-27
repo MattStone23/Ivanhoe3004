@@ -2,6 +2,8 @@ package network;
 import java.io.*;
 import java.net.Socket;
 
+import Util.logger;
+
 
 public class ServerThread extends Thread {
 	private Server       server    = null;
@@ -10,6 +12,7 @@ public class ServerThread extends Thread {
 	private DataInputStream  inputStream  =  null;
 	private DataOutputStream outputStream = null;
 	private boolean running;
+	private logger netLog;
 	
 	// username of corresponding client
 //	private String username;
@@ -40,7 +43,7 @@ public class ServerThread extends Thread {
 				
 				// serverThread does the 'receiving' from client, and then tells server what to do
 				received = inputStream.readUTF();
-				System.out.println("SERVERThread "+ ID + " Recieved:\t"+received);
+				netLog.write("RECIEVED: \t"+received);
 				server.handle(ID, received);
 				
 			}
@@ -55,14 +58,17 @@ public class ServerThread extends Thread {
 	public void open() throws IOException {
 		inputStream = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
 		outputStream = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
+		netLog = new logger("servLog"+ID);
 	}
 	public void close(){
 		try{
 			if (socket != null)    socket.close();
 			if (inputStream != null)  inputStream.close();
 			if (outputStream != null) outputStream.close();
+			if (netLog != null) netLog.close();
 			
 			running = false;
+			netLog=null;
 			socket = null;
 			inputStream=null;
 			outputStream=null;
@@ -75,6 +81,7 @@ public class ServerThread extends Thread {
 
 	public void send(String msg){
 		try {  
+			netLog.write("SEND:\t"+msg);
 			outputStream.writeUTF(msg);
 			outputStream.flush();
 		}

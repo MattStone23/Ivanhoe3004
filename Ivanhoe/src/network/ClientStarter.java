@@ -1,13 +1,13 @@
 package network;
 
-import java.util.Scanner;
+//import java.util.Scanner;
 
 import Util.timer;
 
 public class ClientStarter {
 
 	
-	private static Scanner sc = new Scanner(System.in);
+	//private static Scanner sc = new Scanner(System.in);
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub

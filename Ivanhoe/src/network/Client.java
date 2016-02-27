@@ -18,6 +18,7 @@ public class Client {
 	private DataOutputStream streamOut;
 	private ClientThread clientThread;
 	private String recentMessage;
+	private logger networkLog;
 	
 	
 	public Client(){
@@ -55,11 +56,13 @@ public class Client {
 	    if (clientThread == null){
 	    	clientThread = new ClientThread(this, socket);
 	    }
+	    networkLog = new logger("clientLog");
 	}
 	
 	public void sendMessage(String message){
 		//TODO
 		try{
+			networkLog.write("SENT: \t"+message);
 			streamOut.writeUTF(message);
 		}
 		catch(IOException ioe){
@@ -76,7 +79,10 @@ public class Client {
 	    	  	if (streamOut != null) streamOut.close();
 
 	    	  	if (socket != null) socket.close();
+	    	  	
+	    	  	if (networkLog != null) networkLog.close();
 
+	    	  	this.networkLog = null;
 	    	  	this.socket = null;
 	    	  	this.streamOut = null;    	  
 	      } catch(IOException ioe) {  
@@ -87,12 +93,12 @@ public class Client {
 	
 	public void handle(String message){
 		//TODO handle
+		networkLog.write("RECIEVED: \t"+message);
 		if (message.equals("CLOSE")){
 			clientThread.close();
 		}
 		recentMessage = message;
 		messageRecieved = true;
-		System.out.println(message);
 	}
 	
 	
