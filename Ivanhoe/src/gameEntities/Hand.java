@@ -29,5 +29,9 @@ public class Hand {
 		}
 		throw new IllegalArgumentException();
 	}
+	
+	public Stack<Card> retHandStack(){
+		return hand;
+	}
 }
 

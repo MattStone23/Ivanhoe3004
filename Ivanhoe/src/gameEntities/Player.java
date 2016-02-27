@@ -4,6 +4,7 @@ public class Player {
 	Hand plyHand;
 	Stack<Card> display;
 	int colours[];
+	boolean withdrawn;
 	public Player(){
 		plyHand = new Hand();
 		display = new Stack<Card>();
@@ -19,6 +20,22 @@ public class Player {
 			out += card.getValue();
 		}
 		return out;
+	}
+	
+	public void enterTour(){
+		withdrawn=false;
+	}
+	
+	public void withdraw(){
+		withdrawn= true;
+	}
+	
+	public boolean isWithdrawn(){
+		return withdrawn;
+	}
+	
+	public int displayNum(){
+		return display.size();
 	}
 	public void addStone(char type){
 		switch (type){
@@ -52,6 +69,10 @@ public class Player {
 		return numcol;
 	}
 	
+	public int[] getStones(){
+		return colours;
+	}
+	
 	//removes a token of a selected colour in case of failing to win a tournament with a maiden in play.
 	public void removeColour( char type){
 		switch (type){
@@ -82,5 +103,9 @@ public class Player {
 	
 	public void playCard(Card type){
 		display.push(plyHand.play(type));
+	}
+	
+	public Hand getHand(){
+		return plyHand;
 	}
 }

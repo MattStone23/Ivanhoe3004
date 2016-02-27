@@ -26,24 +26,53 @@ public class GameBoard {
 	
 	//starts a tournament, and makes it's colour the input colour
 	public void startTour(char col){
+		if(tourney == 'p' && col== 'p'){
+			throw new IllegalArgumentException();
+		}
+		for(int i=0; i<numPlayers; i++){
+			players[i].enterTour();
+		}
 		tourney=col;
+	}
+	
+	public void withdraw(int player){
+		players[player].withdraw();
 	}
 	
 	public char getCol(){
 		return tourney;
 	}
 	
+	public void changeCol(char col){
+		tourney=col;
+	}
 	
-	public void endTour(){
+	public void endTour(int winner, char col){
+		
+		/* commented out because winning is decided by who doesn't withdraw, not hand size
 		int temp= 0;
 		for(int i = 0 ; i<=numPlayers;i++){
 			if(players[i].displayVal() > players[temp].displayVal()) temp= i;
 			discard.putAll(players[i].display);
+		*/
+		if(tourney != 'p'){
+			players[winner].addStone(tourney);
 		}
-		players[temp].addStone(tourney);
+		else{
+			players[winner].addStone(col);
+		}
 	}
 	
 	public void playCard(Card type, int plynum){
 		players[plynum].playCard(type);
+	}
+	
+	
+	public Deck getDeck(){
+		return inPlay;
+	}
+	
+	public Player[] getPlayers(){
+		return players;
 	}
 }

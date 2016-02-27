@@ -65,6 +65,6 @@ public class Card{
 		}
 	}
 	public void print(){
-		System.out.println("This is a "+colour+"with the value of "+value);
+		System.out.println("This is a "+colour+" with the value of "+value);
 	}
 }
