@@ -41,6 +41,82 @@ public class Engine {
 		}
 	}
 	
+	public void playActionCard(String[] in){
+		int val;
+		val = Integer.parseInt(in[2]);
+		switch(val){
+		case 1:
+			if (state.getCol() != 'p'){
+				throw new IllegalArgumentException();
+			}
+			if (in[3].charAt(0)=='g' || in[3].charAt(0)=='p'){
+				throw new IllegalArgumentException();
+			}
+			state.changeCol(in[3].charAt(0));
+			break;
+		case 2:
+			if (state.getCol()=='p' || state.getCol()== 'g'){
+				throw new IllegalArgumentException();
+			}
+			if (in[3].charAt(0)=='g' || in[3].charAt(0)=='p'){
+				throw new IllegalArgumentException();
+			}
+			state.changeCol(in[3].charAt(0));
+			break;
+		case 3:
+			if (state.getCol()=='p' || state.getCol()== 'g'){
+				throw new IllegalArgumentException();
+			}
+			state.changeCol('g');
+			break;
+		case 4:
+			
+			break;
+		case 5:
+			
+			break;
+		case 6:
+			
+			break;
+		case 7:
+			
+			break;
+		case 8:
+			
+			break;
+		case 9:
+			
+			break;
+		case 10:
+			
+			break;
+		case 11:
+			
+			break;
+		case 12:
+			
+			break;
+		case 13:
+			
+			break;
+		case 14:
+			
+			break;
+		case 15:
+			
+			break;
+		case 16:
+			
+			break;
+		case 17:
+			
+			break;
+		default:
+			throw new IllegalArgumentException();
+		}
+		
+	}
+	
 	//boolean to check if player has a maiden card.
 	public boolean withdraw(){
 		state.withdraw(turn);
