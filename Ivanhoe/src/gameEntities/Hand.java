@@ -8,9 +8,31 @@ public class Hand {
 	public void DrawCard(Deck Inplay){
 		hand.push(Inplay.draw());
 	}
+	
+	public void addCard(Card card){
+		hand.push(card);
+	}
 	public void Discard(int i,Deck discardPile){
 		discardPile.putInto(hand.get(i));
 		hand.remove(i);
+	}
+	
+	public void DiscardCol(char col, Deck discardPile){
+		for(Card card :hand){
+			if( card.getColour()== col){
+				discardPile.putInto(card);
+				hand.remove(card);
+			}
+		}
+	}
+	
+	public void DiscardVal(int value, Deck discardPile){
+		for(Card card :hand){
+			if( card.getValue()== value){
+				discardPile.putInto(card);
+				hand.remove(card);
+			}
+		}
 	}
 	
 	public void swap(int i, int j){

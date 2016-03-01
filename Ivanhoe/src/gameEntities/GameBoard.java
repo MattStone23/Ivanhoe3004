@@ -26,7 +26,7 @@ public class GameBoard {
 	
 	//starts a tournament, and makes it's colour the input colour
 	public void startTour(char col){
-		if(tourney == 'p' && col== 'p'){
+		if(tourney == 'P' && col== 'P'){
 			throw new IllegalArgumentException();
 		}
 		for(int i=0; i<numPlayers; i++){
@@ -55,12 +55,16 @@ public class GameBoard {
 			if(players[i].displayVal() > players[temp].displayVal()) temp= i;
 			discard.putAll(players[i].display);
 		*/
-		if(tourney != 'p'){
+		if(tourney != 'P'){
 			players[winner].addStone(tourney);
 		}
 		else{
 			players[winner].addStone(col);
 		}
+	}
+	
+	public void returnCard(int card, int player){
+		players[player].moveCard(card);
 	}
 	
 	public void playCard(Card type, int plynum){

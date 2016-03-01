@@ -22,6 +22,23 @@ public class Player {
 		return out;
 	}
 	
+	public int displayLowest(){
+		int temp= 10;
+		for(int i= 0 ; i<display.size();i++){
+			if(display.get(i).getValue()<temp) temp= display.get(i).getValue();
+		}
+		return temp;
+	}
+	
+	public int displayHighest(){
+		int temp= 0;
+		for(int i= 0 ; i<display.size();i++){
+			if(display.get(i).getValue()>temp) temp= display.get(i).getValue();
+		}
+		return temp;
+	}
+	
+	
 	public void enterTour(){
 		withdrawn=false;
 	}
@@ -37,21 +54,40 @@ public class Player {
 	public int displayNum(){
 		return display.size();
 	}
+	
+	public void moveCard(int card){
+		plyHand.addCard(display.get(card));
+		display.remove(card);
+	}
+	
+	public void displayDisc(int card, Deck discard){
+		discard.putInto(display.get(card));
+		display.remove(card);
+	}
+	
+	public void displayDiscVal(int val, Deck discard){
+		for( Card card:display){
+			if(card.getValue()==val && card.getColour()!='A'){
+				discard.putInto(card);
+				display.remove(card);
+			}
+		}
+	}
 	public void addStone(char type){
 		switch (type){
-		case 'r':
+		case 'R':
 			colours[0]++;
 			break;
-		case 'g':
+		case 'G':
 			colours[1]++;
 			break;
-		case 'y':
+		case 'Y':
 			colours[2]++;
 			break;
-		case 'b':
+		case 'B':
 			colours[3]++;
 			break;
-		case 'p':
+		case 'P':
 			colours[4]++;
 			break;
 		default:
@@ -76,23 +112,23 @@ public class Player {
 	//removes a token of a selected colour in case of failing to win a tournament with a maiden in play.
 	public void removeColour( char type){
 		switch (type){
-		case 'r':
+		case 'R':
 			if(colours[0]<1) throw new IllegalArgumentException();
 			colours[0]--;
 			break;
-		case 'g':
+		case 'G':
 			if(colours[1]<1) throw new IllegalArgumentException();
 			colours[1]--;
 			break;
-		case 'y':
+		case 'Y':
 			if(colours[2]<1) throw new IllegalArgumentException();
 			colours[2]--;
 			break;
-		case 'b':
+		case 'B':
 			if(colours[3]<1) throw new IllegalArgumentException();
 			colours[3]--;
 			break;
-		case 'p':
+		case 'P':
 			if(colours[4]<1) throw new IllegalArgumentException();
 			colours[4]--;
 			break;

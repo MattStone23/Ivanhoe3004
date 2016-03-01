@@ -13,7 +13,7 @@ public class DeckTest {
 	public void test() {
 		Deck testDeck= new Deck();
 		assertEquals(true, testDeck.getCurrentDeck().isEmpty());
-		testDeck.putInto(new Card(3,'p'));
+		testDeck.putInto(new Card(3,'P'));
 		Deck testDeck2= new Deck();
 		testDeck2.DeckBuild();
 		assertEquals(false, testDeck2.getCurrentDeck().isEmpty());
@@ -36,129 +36,129 @@ public class DeckTest {
 		CardNum.shuffle();
 		assertEquals( 110, CardNum.remaining());
 		
-		Card cardtmp = new Card(3,'p');
+		Card cardtmp = new Card(3,'P');
 		while (CardNum.containsCard(cardtmp)){
 			CardNum.CardRemove(cardtmp);
 		}
 		assertEquals(106, CardNum.remaining());
 		
-		cardtmp = new Card(4,'p');
+		cardtmp = new Card(4,'P');
 		while (CardNum.containsCard(cardtmp)){
 			CardNum.CardRemove(cardtmp);
 		}
 		assertEquals(102, CardNum.remaining());
 		
-		cardtmp = new Card(5,'p');
+		cardtmp = new Card(5,'P');
 		while (CardNum.containsCard(cardtmp)){
 			CardNum.CardRemove(cardtmp);
 		}
 		assertEquals(98, CardNum.remaining());
 		
-		cardtmp = new Card(7,'p');
+		cardtmp = new Card(7,'P');
 		while (CardNum.containsCard(cardtmp)){
 			CardNum.CardRemove(cardtmp);
 		}
 		assertEquals(96, CardNum.remaining());
 		
-		cardtmp = new Card(3,'r');
+		cardtmp = new Card(3,'R');
 		while (CardNum.containsCard(cardtmp)){
 			CardNum.CardRemove(cardtmp);
 		}
 		assertEquals(90, CardNum.remaining());
 		
-		cardtmp = new Card(4,'r');
+		cardtmp = new Card(4,'R');
 		while (CardNum.containsCard(cardtmp)){
 			CardNum.CardRemove(cardtmp);
 		}
 		assertEquals(84, CardNum.remaining());
 		
-		cardtmp = new Card(5,'r');		
+		cardtmp = new Card(5,'R');		
 		while (CardNum.containsCard(cardtmp)){
 			CardNum.CardRemove(cardtmp);
 		}
 		assertEquals(82, CardNum.remaining());
 		
-		cardtmp = new Card(2,'b');
+		cardtmp = new Card(2,'B');
 		while (CardNum.containsCard(cardtmp)){
 			CardNum.CardRemove(cardtmp);
 		}
 		assertEquals(78, CardNum.remaining());
 		
-		cardtmp = new Card(3,'b');
+		cardtmp = new Card(3,'B');
 		while (CardNum.containsCard(cardtmp)){
 			CardNum.CardRemove(cardtmp);
 		}
 		assertEquals(74, CardNum.remaining());
 		
-		cardtmp = new Card(4,'b');
+		cardtmp = new Card(4,'B');
 		while (CardNum.containsCard(cardtmp)){
 			CardNum.CardRemove(cardtmp);
 		}
 		assertEquals(70, CardNum.remaining());
 		
-		cardtmp = new Card(5,'b');
+		cardtmp = new Card(5,'B');
 		while (CardNum.containsCard(cardtmp)){
 			CardNum.CardRemove(cardtmp);
 		}
 		assertEquals(68, CardNum.remaining());
 		
-		cardtmp = new Card(2,'y');
+		cardtmp = new Card(2,'Y');
 		while (CardNum.containsCard(cardtmp)){
 			CardNum.CardRemove(cardtmp);
 		}
 		assertEquals(64, CardNum.remaining());
 		
-		cardtmp = new Card(3,'y');
+		cardtmp = new Card(3,'Y');
 		while (CardNum.containsCard(cardtmp)){
 			CardNum.CardRemove(cardtmp);
 		}
 		assertEquals(56, CardNum.remaining());
 		
-		cardtmp = new Card(4,'y');
+		cardtmp = new Card(4,'Y');
 		while (CardNum.containsCard(cardtmp)){
 			CardNum.CardRemove(cardtmp);
 		}
 		assertEquals(54, CardNum.remaining());
 		
-		cardtmp = new Card(1,'g');
+		cardtmp = new Card(1,'G');
 		while (CardNum.containsCard(cardtmp)){
 			CardNum.CardRemove(cardtmp);
 		}
 		assertEquals(40, CardNum.remaining());
 		
-		cardtmp = new Card(2,'w');
+		cardtmp = new Card(2,'W');
 		while (CardNum.containsCard(cardtmp)){
 			CardNum.CardRemove(cardtmp);
 		}
 		assertEquals(32, CardNum.remaining());
 		
-		cardtmp = new Card(3,'w');
+		cardtmp = new Card(3,'W');
 		while (CardNum.containsCard(cardtmp)){
 			CardNum.CardRemove(cardtmp);
 		}
 		assertEquals(24, CardNum.remaining());
 		
-		cardtmp = new Card(6,'w');
+		cardtmp = new Card(6,'W');
 		while (CardNum.containsCard(cardtmp)){
 			CardNum.CardRemove(cardtmp);
 		}
 		assertEquals(20, CardNum.remaining());
 		
 
-		cardtmp = new Card(16,'a');
+		cardtmp = new Card(16,'A');
 		while (CardNum.containsCard(cardtmp)){
 			CardNum.CardRemove(cardtmp);
 		}
 		assertEquals(17, CardNum.remaining());
 		
-		cardtmp = new Card(17,'a');
+		cardtmp = new Card(17,'A');
 		while (CardNum.containsCard(cardtmp)){
 			CardNum.CardRemove(cardtmp);
 		}
 		assertEquals(15, CardNum.remaining());
 		
 		for(int i=0; i<=15; i++){
-			cardtmp = new Card(i,'a');
+			cardtmp = new Card(i,'A');
 			while (CardNum.containsCard(cardtmp)){
 				CardNum.CardRemove(cardtmp);
 			}

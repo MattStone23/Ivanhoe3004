@@ -46,49 +46,74 @@ public class Engine {
 		val = Integer.parseInt(in[2]);
 		switch(val){
 		case 1:
-			if (state.getCol() != 'p'){
+			if (state.getCol() != 'P'){
 				throw new IllegalArgumentException();
 			}
-			if (in[3].charAt(0)=='g' || in[3].charAt(0)=='p'){
+			if (in[3].charAt(0)=='G' || in[3].charAt(0)=='P'){
 				throw new IllegalArgumentException();
 			}
 			state.changeCol(in[3].charAt(0));
 			break;
 		case 2:
-			if (state.getCol()=='p' || state.getCol()== 'g'){
+			if (state.getCol()=='P' || state.getCol()== 'G'){
 				throw new IllegalArgumentException();
 			}
-			if (in[3].charAt(0)=='g' || in[3].charAt(0)=='p'){
+			if (in[3].charAt(0)=='G' || in[3].charAt(0)=='P'){
 				throw new IllegalArgumentException();
 			}
 			state.changeCol(in[3].charAt(0));
 			break;
 		case 3:
-			if (state.getCol()=='p' || state.getCol()== 'g'){
+			if (state.getCol()=='G' || state.getCol()== 'G'){
 				throw new IllegalArgumentException();
 			}
-			state.changeCol('g');
+			state.changeCol('G');
 			break;
-		case 4:
 			
+			//TODO: check if getter will return the object itself, or a copy of the object. could be double danger if it returns a copy. Currently assuming they will return the object itself.
+		case 4:
+			for(int ply = 0; ply<numply; ply++){
+				if(ply != turn && !(state.getPlayers()[ply].isWithdrawn())){
+					state.getPlayers()[ply].getHand().DiscardCol('P', state.discard);
+				}
+			}
 			break;
 		case 5:
-			
+			//discards a random card from the player indicated by arg[3]'s hand
+			state.getPlayers()[Integer.parseInt(in[3])].displayDisc( (int)(Math.random()*(state.getPlayers()[Integer.parseInt(in[3])].displayNum()))  , state.discard);
 			break;
 		case 6:
-			
+			state.returnCard(Integer.parseInt(in[3]), turn);
 			break;
 		case 7:
-			
+			//discards the last card in each players hand.
+			for(int ply = 0; ply<numply; ply++){
+				if(ply != turn){
+					state.getPlayers()[ply].displayDisc(state.getPlayers()[ply].displayNum()-1, state.discard);
+				}
+			}
 			break;
 		case 8:
-			
+			int minval=10;
+			for(int ply = 0; ply<numply; ply++){
+				if(state.getPlayers()[ply].displayLowest()<minval)minval= state.getPlayers()[ply].displayLowest();
+			}
+			for(int ply = 0; ply<numply;ply++){
+				state.getPlayers()[ply].displayDiscVal(minval, state.discard);
+			}
 			break;
 		case 9:
-			
+			int maxval=0;
+			for(int ply = 0; ply<numply; ply++){
+				if(state.getPlayers()[ply].displayHighest()>maxval)maxval= state.getPlayers()[ply].displayHighest();
+			}
 			break;
 		case 10:
-			
+			for(int ply = 0; ply<numply; ply++){
+				if(ply != turn && !(state.getPlayers()[ply].isWithdrawn())){
+					state.getPlayers()[ply].getHand().DiscardCol('W', state.discard);
+				}
+			}
 			break;
 		case 11:
 			
@@ -97,7 +122,7 @@ public class Engine {
 			
 			break;
 		case 13:
-			
+			state.playCard(new Card(13, 'W' ), turn);
 			break;
 		case 14:
 			
@@ -120,7 +145,7 @@ public class Engine {
 	//boolean to check if player has a maiden card.
 	public boolean withdraw(){
 		state.withdraw(turn);
-		if(state.getPlayers()[turn].getHand().retHandStack().contains(new Card(6, 'w'))){
+		if(state.getPlayers()[turn].getHand().retHandStack().contains(new Card(6, 'W'))){
 			return true;
 		}
 		return false;
@@ -131,7 +156,7 @@ public class Engine {
 	
 	//returns the value of the display, using the number of cards if tournemant colour is green
 	public int displayVal(int player){
-		if(state.getCol()!='g'){
+		if(state.getCol()!='G'){
 			return state.getPlayers()[player].displayVal();
 		}
 		else{

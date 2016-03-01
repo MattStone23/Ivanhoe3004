@@ -19,13 +19,13 @@ public class GameBoardTest {
 	@Test
 	public void tournTest(){
 		GameBoard board = new GameBoard(3);
-		board.startTour('r');
-		assertEquals('r',board.getCol());
+		board.startTour('R');
+		assertEquals('R',board.getCol());
 		board.endTour(1, board.getCol());
 		assertEquals(1,board.getPlayers()[1].getStones()[0]);
-		board.startTour('p');
-		assertEquals('p', board.getCol());
-		board.endTour(2, 'r');
+		board.startTour('P');
+		assertEquals('P', board.getCol());
+		board.endTour(2, 'R');
 		assertEquals(1,board.getPlayers()[2].getStones()[0]);
 	}
 	
