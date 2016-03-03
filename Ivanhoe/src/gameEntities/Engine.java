@@ -2,7 +2,7 @@ package gameEntities;
 
 public class Engine {
 	GameBoard state;
-	//tracks which palyers turn it is
+	//tracks which players turn it is
 	int turn;
 	int numply;
 	int playersleft;
@@ -10,7 +10,7 @@ public class Engine {
 	public Engine(int players){
 		state = new GameBoard( players);
 		turn =0;
-		numply=0;
+		numply=players;
 	}
 	
 	
@@ -151,7 +151,13 @@ public class Engine {
 		return false;
 	}
 	
+	public void startTour(char col){
+		state.startTour(col);
+	}
 	
+	public int turnNum(){
+		return turn;
+	}
 	
 	
 	//returns the value of the display, using the number of cards if tournemant colour is green
