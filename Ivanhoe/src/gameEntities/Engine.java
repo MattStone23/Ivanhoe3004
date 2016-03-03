@@ -145,7 +145,7 @@ public class Engine {
 	//boolean to check if player has a maiden card.
 	public boolean withdraw(){
 		state.withdraw(turn);
-		if(state.getPlayers()[turn].getHand().retHandStack().contains(new Card(6, 'W'))){
+		if(state.getPlayers()[turn].getHand().getHandStack().contains(new Card(6, 'W'))){
 			return true;
 		}
 		return false;
@@ -177,5 +177,22 @@ public class Engine {
 	
 	public GameBoard currentState(){
 		return state;
+	}
+	
+	public String getGameStateForPlayer(int aPlayer){
+		String gameState = state.getCol() + "~" + turn +"~";
+		
+		for (int x=0;x<numply;x++){
+			if (x == aPlayer){
+				state.getPlayers()[x].getPrivateString();
+			}
+			else{
+				state.getPlayers()[x].getPublicString();
+			}
+			
+		}
+		
+		
+		return null;
 	}
 }

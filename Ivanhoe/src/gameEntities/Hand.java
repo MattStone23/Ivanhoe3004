@@ -52,8 +52,18 @@ public class Hand {
 		throw new IllegalArgumentException();
 	}
 	
-	public Stack<Card> retHandStack(){
+	public Stack<Card> getHandStack(){
 		return hand;
+	}
+	
+	public String toString(){
+		String r = "";
+		for (Card c : hand){
+			r = r + c.toString()+",";
+		}
+		if (r.length()>2)
+			r.substring(0, r.length()-2);
+		return r;
 	}
 }
 

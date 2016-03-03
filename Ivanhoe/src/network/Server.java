@@ -8,16 +8,19 @@ import java.util.Set;
 
 import Util.config;
 import Util.timer;
+import gameEntities.Engine;
 
 public class Server implements Runnable {
 	
 	private HashMap<Integer, ServerThread> clients = null;
+	private HashMap<Integer, Integer> players = null;
 	private ServerSocket server = null;
 	private Thread       thread = null;
 	private int clientCount = 0;
 	private int port;
 	private int maxClients;
 	private int gameState;
+	private Engine engine;
 	
 	
 	private static final int LOBBY = 0;
@@ -27,6 +30,7 @@ public class Server implements Runnable {
 	public Server(){
 		port = config.PORT;
 		clients = new HashMap<Integer, ServerThread>();
+		players = new HashMap<Integer, Integer>();
 		maxClients = config.MAX_CLIENTS;
 		
 		bindToPort();
@@ -34,6 +38,7 @@ public class Server implements Runnable {
 	public Server(int portNum){
 		port = portNum;
 		clients = new HashMap<Integer, ServerThread>();
+		players = new HashMap<Integer, Integer>();
 		maxClients = config.MAX_CLIENTS;
 		
 		bindToPort();
@@ -99,6 +104,7 @@ public class Server implements Runnable {
 				//Lobby is open and not full
 				serverThread.send("ACCEPT");
 				clients.put(serverThread.getID(), serverThread);
+				players.put(serverThread.getID(), clientCount+1);
 				clientCount++; 
 			}
 		}
@@ -170,6 +176,7 @@ public class Server implements Runnable {
 		case "STARTGAME":
 			//start the game
 			gameState = RUNNING;
+			engine = new Engine(clientCount);
 			toMessage = "Game Starting";
 			fromMessage = toMessage;
 			break;

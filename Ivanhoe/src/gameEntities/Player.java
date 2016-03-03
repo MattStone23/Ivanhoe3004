@@ -144,4 +144,29 @@ public class Player {
 	public Hand getHand(){
 		return plyHand;
 	}
+	
+	public String getPrivateString(){
+		String r = colours + "$" +
+				withdrawn +"$"+
+				plyHand.toString() +"$"+
+				displayToString();
+		return r;
+	}
+	public String getPublicString(){
+		String r = colours.toString() + "$" +
+				withdrawn +"$"+
+				plyHand.getHandStack().size() +"$"+
+				displayToString();
+		return r;
+	}
+	
+	private String displayToString(){
+		String r = "";
+		for (Card c : display){
+			r = r + c.toString()+",";
+		}
+		if (r.length()>2)
+			r.substring(0, r.length()-2);
+		return r;
+	}
 }
