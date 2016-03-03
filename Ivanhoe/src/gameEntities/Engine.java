@@ -40,10 +40,12 @@ public class Engine {
 			state.playCard(new Card(val, type ), turn);
 		}
 	}
-	
+	//TODO make sure cards make it into the discard.
 	public void playActionCard(String[] in){
+		char type;
 		int val;
 		val = Integer.parseInt(in[2]);
+		type= in[1].charAt(0);
 		switch(val){
 		case 1:
 			if (state.getCol() != 'P'){
@@ -79,14 +81,14 @@ public class Engine {
 			}
 			break;
 		case 5:
-			//discards a random card from the player indicated by arg[3]'s hand
-			state.getPlayers()[Integer.parseInt(in[3])].displayDisc( (int)(Math.random()*(state.getPlayers()[Integer.parseInt(in[3])].displayNum()))  , state.discard);
+			//discards a specific card from the player indicated by arg[3]'s display
+			state.getPlayers()[Integer.parseInt(in[3])].displayDisc( Integer.parseInt(in[4])  , state.discard);
 			break;
 		case 6:
 			state.returnCard(Integer.parseInt(in[3]), turn);
 			break;
 		case 7:
-			//discards the last card in each players hand.
+			//discards the last card in each players display.
 			for(int ply = 0; ply<numply; ply++){
 				if(ply != turn){
 					state.getPlayers()[ply].displayDisc(state.getPlayers()[ply].displayNum()-1, state.discard);
@@ -122,7 +124,7 @@ public class Engine {
 			
 			break;
 		case 13:
-			state.playCard(new Card(13, 'W' ), turn);
+			state.setShield(turn);
 			break;
 		case 14:
 			
@@ -139,16 +141,18 @@ public class Engine {
 		default:
 			throw new IllegalArgumentException();
 		}
+		state.playCard(new Card(val, type ), turn);
 		
 	}
 	
 	//boolean to check if player has a maiden card.
 	public boolean withdraw(){
 		state.withdraw(turn);
-		if(state.getPlayers()[turn].getHand().retHandStack().contains(new Card(6, 'W'))){
+		/*if(state.getPlayers()[turn].getHand().retHandStack().contains(new Card(6, 'W'))){
 			return true;
 		}
-		return false;
+		return false;*/
+		return state.getPlayers()[turn].containsMaiden();
 	}
 	
 	public void startTour(char col){
@@ -160,7 +164,7 @@ public class Engine {
 	}
 	
 	
-	//returns the value of the display, using the number of cards if tournemant colour is green
+	//returns the value of the display, using the number of cards if tournament color is green
 	public int displayVal(int player){
 		if(state.getCol()!='G'){
 			return state.getPlayers()[player].displayVal();
