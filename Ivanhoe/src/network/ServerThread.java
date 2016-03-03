@@ -49,7 +49,8 @@ public class ServerThread extends Thread {
 			}
 			catch(IOException ioe)
 			{
-				System.out.println(ID + " ERROR reading: " + ioe.getMessage());
+				System.err.println("ST:"+ID + " ERROR reading: " + ioe.getMessage());
+				running = false;
 				server.removeThread(ID);
 			}
 		}
@@ -58,7 +59,7 @@ public class ServerThread extends Thread {
 	public void open() throws IOException {
 		inputStream = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
 		outputStream = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
-		netLog = new logger("servLog"+ID);
+		netLog = new logger(ID+"_servLog");
 	}
 	public void close(){
 		try{
@@ -74,7 +75,7 @@ public class ServerThread extends Thread {
 			outputStream=null;
 		}
 		catch (IOException ioe){
-			System.out.println("Error closing ServerThread "+ID+": "+ioe.getMessage());
+			System.err.println("Error closing ServerThread "+ID+": "+ioe.getMessage());
 		}
 	}
 
@@ -86,7 +87,7 @@ public class ServerThread extends Thread {
 			outputStream.flush();
 		}
 		catch(IOException ioe) {  
-			System.out.println(ID + " ERROR sending: " + ioe.getMessage());
+			System.err.println(ID + " ERROR sending: " + ioe.getMessage());
 			server.removeThread(ID);
 		}
 	}

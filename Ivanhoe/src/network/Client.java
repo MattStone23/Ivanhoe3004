@@ -8,6 +8,7 @@ import java.net.UnknownHostException;
 
 import Util.config;
 import Util.logger;
+import Util.timer;
 
 public class Client {
 	
@@ -38,16 +39,17 @@ public class Client {
 	}
 	
 	private void connectToServer(){
-		System.out.println("Establishing connection. Please wait ...");
+		System.out.println("CLIENT-----Establishing connection. Please wait ...");
 	      try
 	      {  socket = new Socket(ipAddress, port);
-	         System.out.println("Connected: " + socket);
+	         System.out.println("CLIENT-----Connected: " + socket);
+	         networkLog = new logger(socket.getLocalPort()+"_clientLog");
 	         start();
 	      }
 	      catch(UnknownHostException uhe)
-	      {  System.out.println("Host unknown: " + uhe.getMessage()); }
+	      {  System.err.println("Host unknown: " + uhe.getMessage()); }
 	      catch(IOException ioe)
-	      {  System.out.println("Unexpected exception: " + ioe.getMessage()); }
+	      {  System.err.println("Unexpected exception: " + ioe.getMessage()); }
 	}
 	
 	private void start() throws IOException {
@@ -55,8 +57,7 @@ public class Client {
 	    logger.println("Starting ClientThread...");
 	    if (clientThread == null){
 	    	clientThread = new ClientThread(this, socket);
-	    }
-	    networkLog = new logger("clientLog");
+	    }    
 	}
 	
 	public void sendMessage(String message){
@@ -66,7 +67,7 @@ public class Client {
 			streamOut.writeUTF(message);
 		}
 		catch(IOException ioe){
-			System.out.println("Unexpected exception: "+ ioe.getMessage());
+			System.err.println("Unexpected exception: "+ ioe.getMessage());
 		}
 	}
 	
@@ -86,7 +87,7 @@ public class Client {
 	    	  	this.socket = null;
 	    	  	this.streamOut = null;    	  
 	      } catch(IOException ioe) {  
-	    	  System.out.println("Error stopping client: "+ioe.getMessage());
+	    	  System.err.println("Error stopping client: "+ioe.getMessage());
 	      }
 	      clientThread.close();  
 	   }

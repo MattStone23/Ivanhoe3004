@@ -19,20 +19,19 @@ public class ClientThread extends Thread {
 	
 	//Run thread
 	public void run(){
-		System.out.println("client thread Running. Port: "+socket.getPort());
+		System.out.println("CLIENT-----client thread Running. Port: "+socket.getPort());
 		String received;
 		running = true;
 		while(running) {
 			try {
 				// handle responses from server and tell client class what to do
 				received = inputStream.readUTF();
-				
-				
 				client.handle(received);
 			}
 			catch(IOException ioe) {
-				System.out.println("Listening ERROR: " + ioe.getMessage());
-				client.stop();
+				System.err.println("Listening ERROR: " + ioe.getMessage());
+				running = false;
+				//client.stop();
 			}
 			
 		}
@@ -45,7 +44,7 @@ public class ClientThread extends Thread {
 			
 		}
 	    catch(IOException ioe) {
-	    	System.out.println("Error getting input stream: " + ioe);
+	    	System.err.println("Error getting input stream: " + ioe);
 	        //client.stop();
 	    }
 	}
@@ -57,7 +56,7 @@ public class ClientThread extends Thread {
 			
 		}
 	    catch (IOException ioe){
-	    	System.out.println("Error closing input stream: " + ioe);
+	    	System.err.println("Error closing input stream: " + ioe);
 	    }
 		running=false;
 	   

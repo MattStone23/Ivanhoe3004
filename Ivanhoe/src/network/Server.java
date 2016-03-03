@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Set;
 
 import Util.config;
+import Util.timer;
 
 public class Server implements Runnable {
 	
@@ -16,6 +17,12 @@ public class Server implements Runnable {
 	private int clientCount = 0;
 	private int port;
 	private int maxClients;
+	private int gameState;
+	
+	
+	private static final int LOBBY = 0;
+	private static final int RUNNING = 1;
+	private static final int ENDED = 2;
 	
 	public Server(){
 		port = config.PORT;
@@ -34,56 +41,75 @@ public class Server implements Runnable {
 	
 	private void bindToPort(){
 		try{
-			System.out.println("Binding to port " + port + ", please wait  ...");
+			System.out.println("SERVER----------Binding to port " + port + ", please wait  ...");
 			server = new ServerSocket(port);  
 			server.setReuseAddress(true);
 			start(); 
 		}
 		catch(IOException ioe){
-			System.out.println("Can not bind to port " + port + ": " + ioe.getMessage()); 
+			System.err.println("Can not bind to port " + port + ": " + ioe.getMessage()); 
 		}
 	}
 	public void start(){
 		if (thread == null){
 			thread = new Thread(this); 
 			thread.start();
-			System.out.println("Server started: "+ server +": "+thread.getId());
+			gameState = LOBBY;
+			System.out.println("SERVER----------Server started: "+ server +": "+thread.getId());
 		}
 	}
 	
 	public void run(){
 		while (thread != null){
 			try{
-				System.out.println("Waiting for a client ..."); 
+				System.out.println("SERVER----------Waiting for a client ..."); 
 				addThread(server.accept());
 			}
 			catch(IOException ioe){
-					System.out.println("Server accept error: " + ioe);
+					System.err.println("Server accept error: " + ioe);
 			}
 		}
 	}
 	
 	private void addThread(Socket socket){
-		if (clientCount < maxClients){
-			System.out.println("Accepting Client: " + socket);
-			try	{
-				ServerThread serverThread = new ServerThread(this, socket);
-				serverThread.open(); 
-				serverThread.start();  
+
+		//accept client		
+		System.out.println("SERVER----------Accepting Client: " + socket);
+		try	{
+			ServerThread serverThread = new ServerThread(this, socket);
+			serverThread.open(); 
+			serverThread.start();  
+			timer.wait(1);
+			//Check if should refuse
+			if (clientCount >= maxClients){
+				//too many clients
+				System.err.println("Client refused: maximum " + maxClients + " reached.");
+				serverThread.send("REJECT|Full Lobby");
+				serverThread.close();
+				serverThread = null;
+			}
+			else if (gameState != LOBBY){
+				//LOBBY NOT OPEN
+				System.err.println("Client refused: Lobby not open.");
+				serverThread.send("REJECT|Lobby Closed");
+				serverThread.close();
+				serverThread = null;
+			}
+			else{
+				//Lobby is open and not full
+				serverThread.send("ACCEPT");
 				clients.put(serverThread.getID(), serverThread);
 				clientCount++; 
 			}
-			catch(IOException ioe){
-				System.out.println("Error opening thread: " + ioe); 
-			} 
 		}
-		else
-			System.out.println("Client refused: maximum " + maxClients + " reached.");
+		catch(IOException ioe){
+			System.err.println("Error opening thread: " + ioe); 
+		}
 	}
 	public synchronized void removeThread(int ID){
 		if (clients.containsKey(ID)){
 			ServerThread toTerm = clients.get(ID);
-			System.out.println("Removing client thread " + ID);
+			System.out.println("SERVER----------Removing client thread " + ID);
 			clients.remove(ID);
 			clientCount--;
 			
@@ -100,8 +126,8 @@ public class Server implements Runnable {
 		
 		String[] args =  message.split("\\|");
 		String command = args[0];
-		System.out.println("COMMAND:\t\""+command+"\"");
-		System.out.println("COMMAND:\t\""+args.length+"\"");
+		System.out.println("SERVER----------COMMAND:\t\""+command+"\"");
+		System.out.println("SERVER----------COMMAND:\t\""+args.length+"\"");
 		//if quit message
 		switch (command){
 		case "QUIT":
@@ -143,6 +169,7 @@ public class Server implements Runnable {
 			break;
 		case "STARTGAME":
 			//start the game
+			gameState = RUNNING;
 			toMessage = "Game Starting";
 			fromMessage = toMessage;
 			break;
@@ -189,11 +216,14 @@ public class Server implements Runnable {
 				clients.put(key, null);
 			}
 			clients.clear();
-			if (server!=null){server.close();}
+			if (server!=null){
+				server.close();
+				server=null;
+			}
 		} catch (IOException e) {
-			System.out.println("Unexpected Error while shutting down: "+e.getMessage());
+			System.err.println("Unexpected Error while shutting down: "+e.getMessage());
 		}
-		System.out.println("Server Shutdown cleanly "+ server);
+		System.out.println("SERVER----------Server Shutdown cleanly "+ server);
 		
 	}
 }
