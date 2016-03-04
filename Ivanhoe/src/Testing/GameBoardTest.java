@@ -5,6 +5,7 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import gameEntities.GameBoard;
+import gameEntities.Card;
 
 public class GameBoardTest {
 	
@@ -28,6 +29,22 @@ public class GameBoardTest {
 		board.endTour(2, 'R');
 		assertEquals(1,board.getPlayers()[2].getStones()[0]);
 	}
+	/* put this in an engine test
+	@Test
+	public void playCardTest(){
+		GameBoard board = new GameBoard(3);
+		board.startTour('R');
+		while(! board.getPlayers()[0].getHand().retHandStack().contains(new Card (3, 'R'))){
+			board.playerDraw(0);
+		}
+		board.playCard(new Card(3,'R'), 0);
+		while(! board.getPlayers()[0].getHand().retHandStack().contains(new Card (3, 'R'))){
+			board.playerDraw(0);
+		}
+		board.playCard(new Card(3, 'A'), 0);
+		assertEquals(1,board.getDiscard().remaining());
+	}
+	*/
 	
 	@Test
 	public void test() {
