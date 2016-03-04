@@ -166,4 +166,10 @@ public class Player {
 	public Hand getHand(){
 		return plyHand;
 	}
+	
+	public void displayPrint(){
+		for (Card card :display){
+			card.print();
+		}
+	}
 }

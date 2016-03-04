@@ -33,6 +33,7 @@ public class Engine {
 		int val;
 		type= in[1].charAt(0);
 		val= Integer.parseInt(in[2]);
+		if(state.getCol()!= type) throw new IllegalArgumentException();
 		if(!state.getPlayers()[turn].getHand().retHandStack().contains(new Card(val, type))){
 			throw new IllegalArgumentException();
 		}

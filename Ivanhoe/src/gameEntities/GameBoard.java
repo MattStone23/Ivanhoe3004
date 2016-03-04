@@ -1,5 +1,6 @@
 package gameEntities;
 import java.util.*;
+import Util.config;
 public class GameBoard {
 	Deck inPlay;
 	Deck discard;
@@ -12,7 +13,8 @@ public class GameBoard {
 		discard= new Deck();
 		inPlay= new Deck();
 		inPlay.DeckBuild();
-		inPlay.shuffle();
+		if(config.SEEDED) inPlay.seededShuffle();
+		else inPlay.shuffle();
 		numPlayers=numP;
 		players= new Player[numP];
 		for(int i = 0; i<numP; i++){
@@ -25,6 +27,12 @@ public class GameBoard {
 	public void playerDraw(int plyr){
 		players[plyr].displayVal();
 		players[plyr].plyHand.DrawCard(inPlay);
+		if(inPlay.remaining()==0){
+			inPlay= discard;
+			discard = new Deck();
+			if(config.SEEDED) inPlay.seededShuffle();
+			else inPlay.shuffle();
+		}
 	}
 	
 	//starts a tournament, and makes it's colour the input colour

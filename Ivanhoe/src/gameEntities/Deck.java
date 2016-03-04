@@ -120,6 +120,10 @@ public class Deck {
 			currentDeck.set(i, temp);			
 		}
 	}
+	//provides a constant random deck
+	public void seededShuffle(){
+		Collections.shuffle(currentDeck, new Random(80085));
+	}
 
 }
 

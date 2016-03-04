@@ -30,6 +30,23 @@ public class DeckTest {
 	}
 	
 	@Test
+	public void seededShuffleTest(){
+		Deck testDeck1 = new Deck();
+		Deck testDeck2 = new Deck();
+		testDeck1.DeckBuild();
+		testDeck2.DeckBuild();
+		testDeck1.seededShuffle();
+		testDeck2.seededShuffle();
+		Card card1, card2;
+		for( int i=0;i<110; i++){
+			card1= testDeck1.draw();
+			card2= testDeck2.draw();
+			assertEquals(card1, card2);
+			card1.print();
+		}
+	}
+	
+	@Test
 	public void CardNumtest(){
 		Deck CardNum = new Deck();
 		CardNum.DeckBuild();

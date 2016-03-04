@@ -11,11 +11,25 @@ public class EngineTest {
 	public void test() {
 		Engine eng= new Engine(3);
 		assertEquals(86, eng.currentState().getDeck().remaining());
-
 		eng.draw();
-		//eng.playCard("Play|R|3|");
 		eng.endTurn();
 		eng.startTour('R');
+		String[] args =  "Play|R|3|".split("\\|");
+		for(int i = 0; i<3;i++){
+			System.out.print("Player "+i+"'s hand:\n");
+			eng.currentState().getPlayers()[i].getHand().display();
+			System.out.print("\nPlayer "+i+"'s display:\n");
+			eng.currentState().getPlayers()[i].displayPrint();
+			System.out.print("\n");
+		}
+		eng.playCard(args);
+		for(int i = 0; i<3;i++){
+			System.out.print("Player "+i+"'s hand:\n");
+			eng.currentState().getPlayers()[i].getHand().display();
+			System.out.print("\nPlayer "+i+"'s display:\n");
+			eng.currentState().getPlayers()[i].displayPrint();
+			System.out.print("\n");
+		}
 		assertEquals(85, eng.currentState().getDeck().remaining());
 
 	}
