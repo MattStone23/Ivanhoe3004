@@ -17,6 +17,9 @@ public class GameBoard {
 		players= new Player[numP];
 		for(int i = 0; i<numP; i++){
 			players[i]= new Player();
+			for( int j = 0; j<8; j++){
+				playerDraw(i);
+			}
 		}
 	}
 	public void playerDraw(int plyr){
@@ -36,9 +39,12 @@ public class GameBoard {
 	}
 	
 	public void withdraw(int player){
-		players[player].withdraw();
+		players[player].withdraw(discard);
 	}
 	
+	public void setShield(int player){
+		players[player].setShield();
+	}
 	public char getCol(){
 		return tourney;
 	}
@@ -68,7 +74,10 @@ public class GameBoard {
 	}
 	
 	public void playCard(Card type, int plynum){
-		players[plynum].playCard(type);
+		if(type.getColour()=='A'){
+			players[plynum].discardType(type, discard);
+		}
+		else players[plynum].playCard(type);
 	}
 	
 	
@@ -76,14 +85,11 @@ public class GameBoard {
 		return inPlay;
 	}
 	
-	public Player[] getPlayers(){
-		return players;
-	}
-	
 	public Deck getDiscard(){
 		return discard;
 	}
 	
-	
-	
+	public Player[] getPlayers(){
+		return players;
+	}
 }
