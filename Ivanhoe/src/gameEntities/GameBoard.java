@@ -79,4 +79,11 @@ public class GameBoard {
 	public Player[] getPlayers(){
 		return players;
 	}
+	
+	public Deck getDiscard(){
+		return discard;
+	}
+	
+	
+	
 }
