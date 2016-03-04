@@ -80,5 +80,10 @@ public class GameBoard {
 		return players;
 	}
 	
+	public Deck getDiscard(){
+		return discard;
+	}
+	
+	
 	
 }

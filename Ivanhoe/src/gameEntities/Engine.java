@@ -180,14 +180,18 @@ public class Engine {
 	}
 	
 	public String getGameStateForPlayer(int aPlayer){
-		String gameState = state.getCol() + "~" + turn +"~";
+		String gameState = state.getCol() + "~" +
+							turn +"~"+
+							state.getDeck().remaining()+"~"+
+							state.getDiscard().remaining() +"~"+
+							numply;
 		
 		for (int x=0;x<numply;x++){
 			if (x == aPlayer){
-				state.getPlayers()[x].getPrivateString();
+				gameState = gameState + "|" + state.getPlayers()[x].getPrivateString();
 			}
 			else{
-				state.getPlayers()[x].getPublicString();
+				gameState = gameState + "|" + state.getPlayers()[x].getPublicString();
 			}
 			
 		}

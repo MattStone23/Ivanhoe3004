@@ -65,5 +65,21 @@ public class Hand {
 			r.substring(0, r.length()-2);
 		return r;
 	}
+	public void setHand(String s){
+		String cards[] = s.split(",");
+		Stack<Card> newHand = new Stack<Card>();
+		for (int x = 0; x < cards.length; x++){
+			Card newCard = new Card(cards[x]);
+			newHand.push(newCard);
+		}
+		hand.clear();
+		hand = newHand;
+	}
+	public void setHand(int numCards){
+		hand.clear();
+		for (int x=0;x<numCards;x++){
+			hand.push(new Card());
+		}
+	}
 }
 
