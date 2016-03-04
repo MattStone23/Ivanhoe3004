@@ -17,6 +17,9 @@ public class GameBoard {
 		players= new Player[numP];
 		for(int i = 0; i<numP; i++){
 			players[i]= new Player();
+			for( int j = 0; j<8; j++){
+				playerDraw(i);
+			}
 		}
 	}
 	public void playerDraw(int plyr){
