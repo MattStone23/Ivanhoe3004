@@ -5,10 +5,12 @@ public class Player {
 	Stack<Card> display;
 	int colours[];
 	boolean withdrawn;
+	Card shield;
 	public Player(){
 		plyHand = new Hand();
 		display = new Stack<Card>();
 		colours = new int[5];
+		shield = null;
 		for(int i = 0; i< 5; i++){
 			colours[i]=0;
 		}
@@ -30,6 +32,10 @@ public class Player {
 		return temp;
 	}
 	
+	public boolean containsMaiden(){
+		return (display.contains(new Card(6, 'W')));
+	}
+	
 	public int displayHighest(){
 		int temp= 0;
 		for(int i= 0 ; i<display.size();i++){
@@ -43,8 +49,17 @@ public class Player {
 		withdrawn=false;
 	}
 	
-	public void withdraw(){
+	public void setShield(){
+		shield = new Card(13, 'A');
+	}
+	
+	public void withdraw(Deck discard){
 		withdrawn= true;
+		if(shield !=null) discard.putInto(shield);
+		while(!display.isEmpty()){
+			discard.putInto(display.pop());
+		}
+		shield= null;
 	}
 	
 	public boolean isWithdrawn(){
@@ -139,6 +154,14 @@ public class Player {
 	
 	public void playCard(Card type){
 		display.push(plyHand.play(type));
+	}
+	
+	public void discardType(Card type, Deck discard){
+		for( int i =0; i<plyHand.getHandStack().size();i++){
+			if(plyHand.getHandStack().get(i).equals(type)){
+				plyHand.Discard(i, discard);
+			}
+		}
 	}
 	
 	public Hand getHand(){

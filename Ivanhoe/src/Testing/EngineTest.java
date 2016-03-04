@@ -18,6 +18,7 @@ public class EngineTest {
 		eng.startTour('R');
 		assertEquals(85, eng.currentState().getDeck().remaining());
 
+		
 	}
 	
 	@Test

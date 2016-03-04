@@ -7,6 +7,7 @@ public class Engine {
 	int numply;
 	int playersleft;
 	
+	
 	public Engine(int players){
 		state = new GameBoard( players);
 		turn =0;

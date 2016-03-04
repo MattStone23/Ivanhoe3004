@@ -21,6 +21,7 @@ public class GameBoard {
 				playerDraw(i);
 			}
 		}
+		
 	}
 	public void playerDraw(int plyr){
 		players[plyr].displayVal();
