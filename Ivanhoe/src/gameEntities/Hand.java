@@ -35,6 +35,14 @@ public class Hand {
 		}
 	}
 	
+	public boolean containstype(char t){
+		for(Card card:hand){
+			if(card.getColour()==t)
+				return true;
+		}
+		return false;
+	}
+	
 	public void swap(int i, int j){
 	}
 	

@@ -116,6 +116,7 @@ public class Player {
 	public int getNumcolours(){
 		int numcol = 0;
 		for(int i=0;i <5; i++){
+
 			if(colours[i]>0) numcol++;
 		}
 		return numcol;
@@ -167,6 +168,7 @@ public class Player {
 		return plyHand;
 	}
 	
+
 	public String getPrivateString(){
 		String r = Arrays.toString(colours) + "$" +
 				withdrawn +"$"+
@@ -226,5 +228,12 @@ public class Player {
 		}
 		
 		setDisplay(args[3]);
+	}
+
+	public void displayPrint(){
+		for (Card card :display){
+			card.print();
+		}
+
 	}
 }
