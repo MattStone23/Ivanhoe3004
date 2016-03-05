@@ -9,9 +9,9 @@ public class Player {
 	public Player(){
 		plyHand = new Hand();
 		display = new Stack<Card>();
-		colours = new int[4];
-		shield= null;
-		for(int i = 0; i< 4; i++){
+		colours = new int[5];
+		shield=null;
+		for(int i = 0; i< 5; i++){
 			colours[i]=0;
 		}
 	}
@@ -47,7 +47,6 @@ public class Player {
 	
 	public void enterTour(){
 		withdrawn=false;
-		shield= null;
 	}
 	
 	public void setShield(){
@@ -115,7 +114,8 @@ public class Player {
 	//returns how many different types of tournaments a player has won.
 	public int getNumcolours(){
 		int numcol = 0;
-		for(int i=0;i <=4; i++){
+		for(int i=0;i <5; i++){
+
 			if(colours[i]>0) numcol++;
 		}
 		return numcol;
@@ -156,6 +156,7 @@ public class Player {
 	public void playCard(Card type){
 		display.push(plyHand.play(type));
 	}
+	
 	public void discardType(Card type, Deck discard){
 		for( int i =0; i<plyHand.getHandStack().size();i++){
 			if(plyHand.getHandStack().get(i).equals(type)){
@@ -163,13 +164,82 @@ public class Player {
 			}
 		}
 	}
+	
 	public Hand getHand(){
 		return plyHand;
 	}
 	
+
+	public String getPrivateString(){
+		String r = Arrays.toString(colours) + "$" +
+				withdrawn +"$"+
+				plyHand.toString() +"$"+
+				displayToString();
+		return r;
+	}
+	public String getPublicString(){
+		String r = Arrays.toString(colours) + "$" +
+				withdrawn +"$"+
+				"size"+plyHand.getHandStack().size() +"$"+
+				displayToString();
+		return r;
+	}
+	
+	private String displayToString(){
+		String r = "";
+		if (display.size()==0){
+			r="0";
+		}
+		for (Card c : display){
+			r = r + c.toString()+",";
+		}
+		if (r.length()>2)
+			r=r.substring(0, r.length()-1);
+		return r;
+	}
+	
+	private void setDisplay(String s){
+		if (!"0".equals(s)){
+			String cards[] = s.split(",");
+			Stack<Card> newDisplay = new Stack<Card>();
+			for (int x = 0; x < cards.length; x++){
+				Card newCard = new Card(cards[x]);
+				newDisplay.push(newCard);
+			}
+			display.clear();
+			display = newDisplay;
+		}
+	}
+	
+	private void setColours(String s){
+		s=s.substring(1, s.length()-1);
+		String args[] = s.split(", ");
+		for (int x=0;x<5;x++){
+			colours[x] = Integer.parseInt(args[x]);
+		}
+	}
+	
+	public void setPlayer(String s){
+		String args[] = s.split("\\$");
+		setColours(args[0]);
+		
+		withdrawn = Boolean.parseBoolean(args[1]);
+		
+		//check public or private hand
+		if (args[2].startsWith("size")){
+			plyHand.setHand(Integer.parseInt(args[2].substring(4)));
+		}
+		else{
+			plyHand.setHand(args[2]);
+		}
+		
+		setDisplay(args[3]);
+	}
+
 	public void displayPrint(){
 		for (Card card :display){
 			card.print();
 		}
+
 	}
 }
