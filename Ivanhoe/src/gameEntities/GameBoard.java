@@ -1,11 +1,12 @@
 package gameEntities;
 import java.util.*;
+import Util.config;
 public class GameBoard {
 	Deck inPlay;
 	Deck discard;
 	Player[] players;
 	int numPlayers;
-	char tourney;
+	char tourney, oldtourney;
 	int turn;
 	int playersleft;
 	int deckSize;
@@ -16,7 +17,8 @@ public class GameBoard {
 		discard= new Deck();
 		inPlay= new Deck();
 		inPlay.DeckBuild();
-		inPlay.shuffle();
+		if(config.SEEDED) inPlay.seededShuffle();
+		else inPlay.shuffle();
 		numPlayers=numP;
 		turn =0;
 		tourney = 'N';
@@ -43,6 +45,12 @@ public class GameBoard {
 	public void playerDraw(int plyr){
 		players[plyr].displayVal();
 		players[plyr].plyHand.DrawCard(inPlay);
+		if(inPlay.remaining()==0){
+			inPlay= discard;
+			discard = new Deck();
+			if(config.SEEDED) inPlay.seededShuffle();
+			else inPlay.shuffle();
+		}
 	}
 	
 	//starts a tournament, and makes it's colour the input colour
@@ -71,6 +79,37 @@ public class GameBoard {
 		tourney=col;
 	}
 	
+
+	public int highestDisplay(){
+		int plyerHI=-1, dispHI=0;
+		for(int i=0; i<numPlayers;i++){
+			if(players[i].displayVal()>dispHI)
+				dispHI=players[i].displayVal();
+				plyerHI=i;
+		}
+		return plyerHI;
+	}
+	
+	public boolean hasValidCard(int plyer){
+		if(players[plyer].getHand().containstype('G')||players[plyer].getHand().containstype('Y')||players[plyer].getHand().containstype('R')||players[plyer].getHand().containstype('B')||players[plyer].getHand().containstype('W')){
+			return true;
+		}
+		if(oldtourney!='P'&&players[plyer].getHand().containstype('P')){
+			return true;
+		}
+		return false;
+	}
+	
+	public int highestDisplayG(){
+		int plyerHI=-1, dispHI=0;
+		for(int i=0; i<numPlayers;i++){
+			if(players[i].displayNum()>dispHI)
+				dispHI=players[i].displayNum();
+				plyerHI=i;
+		}
+		return plyerHI;
+	}
+	
 	public void endTour(int winner, char col){
 		
 		/* commented out because winning is decided by who doesn't withdraw, not hand size
@@ -85,6 +124,8 @@ public class GameBoard {
 		else{
 			players[winner].addStone(col);
 		}
+		oldtourney=tourney;
+		tourney='N';
 	}
 	
 	public void returnCard(int card, int player){
