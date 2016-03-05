@@ -65,9 +65,10 @@ public class GameBoard {
 	public int highestDisplay(){
 		int plyerHI=-1, dispHI=0;
 		for(int i=0; i<numPlayers;i++){
-			if(players[i].displayVal()>dispHI)
+			if(players[i].displayVal()>dispHI){
 				dispHI=players[i].displayVal();
 				plyerHI=i;
+			}
 		}
 		return plyerHI;
 	}
@@ -85,9 +86,10 @@ public class GameBoard {
 	public int highestDisplayG(){
 		int plyerHI=-1, dispHI=0;
 		for(int i=0; i<numPlayers;i++){
-			if(players[i].displayNum()>dispHI)
+			if(players[i].displayNum()>dispHI){
 				dispHI=players[i].displayNum();
 				plyerHI=i;
+			}
 		}
 		return plyerHI;
 	}

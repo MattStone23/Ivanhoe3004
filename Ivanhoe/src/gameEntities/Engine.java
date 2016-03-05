@@ -17,8 +17,12 @@ public class Engine {
 	
 	//ends the turn and switches to the next valid player, then draws card for that player.
 	public void endTurn(){
+		if(state.getCol()=='N'&& state.hasValidCard(turn)){
+			System.out.print("you have a valid card you can play to start the tournament!\n");
+			return;
+		}
 		if(!state.getPlayers()[turn].isWithdrawn()){
-			if(state.getCol()=='G'){
+			if(state.getCol()!='G'){
 				if(turn!= state.highestDisplay()){
 					System.out.print("You have not played enough cards to be the highest value display\n");
 					return;
@@ -202,12 +206,12 @@ public class Engine {
 	//boolean to check if player has a maiden card.
 	public boolean withdraw(){
 		if(lastLeft()) return false;
+		if(state.getCol()=='N'){
+			System.out.print("You're trying to withdraw from a tournament that hasn't started. Don't do that.\n");
+			return false;
+		}
 		state.withdraw(turn);
 		playersleft--;
-		/*if(state.getPlayers()[turn].getHand().getHandStack().contains(new Card(6, 'W'))){
-			return true;
-		}
-		return false;*/
 		return state.getPlayers()[turn].containsMaiden();
 	}
 	
@@ -220,6 +224,10 @@ public class Engine {
 	}
 	
 	public void startTour(char col){
+		if(!state.getPlayers()[turn].getHand().containstype(col)){
+			System.out.print("YOu don't have that colour of card\n");
+			return;
+		}
 		state.startTour(col);
 		playersleft=numply;
 	}
@@ -229,12 +237,13 @@ public class Engine {
 	}
 	
 	public void printState(){
-		System.out.print("Card remaining in Deck: "+state.getDeck().remaining()+"\t Cards in discard pile: "+state.getDiscard().remaining()+"Players left :"+playersleft+"\n-----------\n");
+		System.out.print("Card remaining in Deck: "+state.getDeck().remaining()+"\t Cards in discard pile: "+state.getDiscard().remaining()+"\tPlayers left :"+playersleft+"\n");
+		System.out.print("Tournament colour: "+state.getCol()+"\t Player "+state.highestDisplay()+"is in the lead\n--------------\n");
 		for(int i = 0; i<state.numPlayers;i++){
 			//System.out.print("Player "+i+" has ")
 			System.out.print("Player "+i+"'s hand:\n");
 			state.getPlayers()[i].getHand().display();
-			System.out.print("\nPlayer "+i+"'s display:\n");
+			System.out.print("\nPlayer "+i+"'s display:\t value of:"+displayVal(i)+"\n");
 			state.getPlayers()[i].displayPrint();
 			System.out.print("\n");
 		}
