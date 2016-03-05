@@ -6,7 +6,7 @@ public class GameBoard {
 	Deck discard;
 	Player[] players;
 	int numPlayers;
-	char tourney;
+	char tourney, oldtourney;
 	
 	public GameBoard(int numP){
 		if( numP<2 || numP>5) throw new IllegalArgumentException();
@@ -16,6 +16,7 @@ public class GameBoard {
 		if(config.SEEDED) inPlay.seededShuffle();
 		else inPlay.shuffle();
 		numPlayers=numP;
+		tourney='N';
 		players= new Player[numP];
 		for(int i = 0; i<numP; i++){
 			players[i]= new Player();
@@ -61,6 +62,36 @@ public class GameBoard {
 		tourney=col;
 	}
 	
+	public int highestDisplay(){
+		int plyerHI=-1, dispHI=0;
+		for(int i=0; i<numPlayers;i++){
+			if(players[i].displayVal()>dispHI)
+				dispHI=players[i].displayVal();
+				plyerHI=i;
+		}
+		return plyerHI;
+	}
+	
+	public boolean hasValidCard(int plyer){
+		if(players[plyer].getHand().containstype('G')||players[plyer].getHand().containstype('Y')||players[plyer].getHand().containstype('R')||players[plyer].getHand().containstype('B')||players[plyer].getHand().containstype('W')){
+			return true;
+		}
+		if(oldtourney!='P'&&players[plyer].getHand().containstype('P')){
+			return true;
+		}
+		return false;
+	}
+	
+	public int highestDisplayG(){
+		int plyerHI=-1, dispHI=0;
+		for(int i=0; i<numPlayers;i++){
+			if(players[i].displayNum()>dispHI)
+				dispHI=players[i].displayNum();
+				plyerHI=i;
+		}
+		return plyerHI;
+	}
+	
 	public void endTour(int winner, char col){
 		
 		/* commented out because winning is decided by who doesn't withdraw, not hand size
@@ -75,6 +106,8 @@ public class GameBoard {
 		else{
 			players[winner].addStone(col);
 		}
+		oldtourney=tourney;
+		tourney='N';
 	}
 	
 	public void returnCard(int card, int player){

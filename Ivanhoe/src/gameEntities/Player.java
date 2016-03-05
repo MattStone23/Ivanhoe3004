@@ -157,8 +157,8 @@ public class Player {
 		display.push(plyHand.play(type));
 	}
 	public void discardType(Card type, Deck discard){
-		for( int i =0; i<plyHand.retHandStack().size();i++){
-			if(plyHand.retHandStack().get(i).equals(type)){
+		for( int i =0; i<plyHand.getHandStack().size();i++){
+			if(plyHand.getHandStack().get(i).equals(type)){
 				plyHand.Discard(i, discard);
 			}
 		}

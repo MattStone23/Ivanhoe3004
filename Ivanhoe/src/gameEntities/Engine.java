@@ -1,5 +1,6 @@
 package gameEntities;
 
+import java.util.*;
 public class Engine {
 	GameBoard state;
 	//tracks which players turn it is
@@ -16,31 +17,61 @@ public class Engine {
 	
 	//ends the turn and switches to the next valid player, then draws card for that player.
 	public void endTurn(){
+		if(!state.getPlayers()[turn].isWithdrawn()){
+			if(state.getCol()=='G'){
+				if(turn!= state.highestDisplay()){
+					System.out.print("You have not played enough cards to be the highest value display\n");
+					return;
+				}
+			}
+			else{
+				if(turn!=state.highestDisplayG()){
+					System.out.print("You have not played enough cards to be the highest value display\n");
+					return;
+				}
+			}
+		}
 		do{
 			turn= (turn+1)%numply;
 		}while(state.getPlayers()[turn].isWithdrawn());
+		if(playersleft==1){
+			if(state.getCol()=='P'){
+				Scanner getCol= new Scanner(System.in);
+				String col;
+				System.out.print("You won a purple tournament! What colour token do you want?:  ");
+				col= getCol.nextLine();
+				System.out.print("\n\n");
+				state.endTour(turn, col.charAt(0));				
+			}
+			else state.endTour(turn, state.getCol());
+		}
 	}
 	
 	
 	public void draw(){
+		if(lastLeft()) return;
 		state.playerDraw(turn);
 	}
 	
-	
+	public void removeToken(char colour){
+		state.getPlayers()[turn].removeColour(colour);
+	}
 	
 	public void playCard( String[] in){
+		if(lastLeft()) return;
 		char type;
 		int val;
 		type= in[1].charAt(0);
 		val= Integer.parseInt(in[2]);
-		if(state.getCol()!= type) throw new IllegalArgumentException();
-		if(!state.getPlayers()[turn].getHand().retHandStack().contains(new Card(val, type))){
+
+		if(!state.getPlayers()[turn].getHand().getHandStack().contains(new Card(val, type))){
 			throw new IllegalArgumentException();
 		}
 		if(in[1]=="A"){
 			playActionCard(in);
 		}
 		else{
+			if(state.getCol()!= type && type!= 'W' ) throw new IllegalArgumentException();
 			state.playCard(new Card(val, type ), turn);
 		}
 	}
@@ -170,20 +201,46 @@ public class Engine {
 	
 	//boolean to check if player has a maiden card.
 	public boolean withdraw(){
+		if(lastLeft()) return false;
 		state.withdraw(turn);
-		/*if(state.getPlayers()[turn].getHand().retHandStack().contains(new Card(6, 'W'))){
+		playersleft--;
+		/*if(state.getPlayers()[turn].getHand().getHandStack().contains(new Card(6, 'W'))){
 			return true;
 		}
 		return false;*/
 		return state.getPlayers()[turn].containsMaiden();
 	}
 	
+	public boolean lastLeft(){
+		if(playersleft==1){
+			System.out.print("You've won the last tounrnament, please start a new tournament\n");
+			return true;
+		}
+		return false;
+	}
+	
 	public void startTour(char col){
 		state.startTour(col);
+		playersleft=numply;
 	}
 	
 	public int turnNum(){
 		return turn;
+	}
+	
+	public void printState(){
+		System.out.print("Card remaining in Deck: "+state.getDeck().remaining()+"\t Cards in discard pile: "+state.getDiscard().remaining()+"Players left :"+playersleft+"\n-----------\n");
+		for(int i = 0; i<state.numPlayers;i++){
+			//System.out.print("Player "+i+" has ")
+			System.out.print("Player "+i+"'s hand:\n");
+			state.getPlayers()[i].getHand().display();
+			System.out.print("\nPlayer "+i+"'s display:\n");
+			state.getPlayers()[i].displayPrint();
+			System.out.print("\n");
+		}
+		System.out.print("\n\n\n");
+		System.out.print("Player "+turn+"'s turn\n\n\n");
+		
 	}
 	
 	
