@@ -47,7 +47,6 @@ public class Player {
 	
 	public void enterTour(){
 		withdrawn=false;
-		shield= null;
 	}
 	
 	public void setShield(){
@@ -157,6 +156,7 @@ public class Player {
 	public void playCard(Card type){
 		display.push(plyHand.play(type));
 	}
+	
 	public void discardType(Card type, Deck discard){
 		for( int i =0; i<plyHand.getHandStack().size();i++){
 			if(plyHand.getHandStack().get(i).equals(type)){
@@ -164,6 +164,7 @@ public class Player {
 			}
 		}
 	}
+	
 	public Hand getHand(){
 		return plyHand;
 	}
@@ -186,27 +187,32 @@ public class Player {
 	
 	private String displayToString(){
 		String r = "";
+		if (display.size()==0){
+			r="0";
+		}
 		for (Card c : display){
 			r = r + c.toString()+",";
 		}
 		if (r.length()>2)
-			r.substring(0, r.length()-2);
+			r=r.substring(0, r.length()-1);
 		return r;
 	}
 	
 	private void setDisplay(String s){
-		String cards[] = s.split(",");
-		Stack<Card> newDisplay = new Stack<Card>();
-		for (int x = 0; x < cards.length; x++){
-			Card newCard = new Card(cards[x]);
-			newDisplay.push(newCard);
+		if (!"0".equals(s)){
+			String cards[] = s.split(",");
+			Stack<Card> newDisplay = new Stack<Card>();
+			for (int x = 0; x < cards.length; x++){
+				Card newCard = new Card(cards[x]);
+				newDisplay.push(newCard);
+			}
+			display.clear();
+			display = newDisplay;
 		}
-		display.clear();
-		display = newDisplay;
 	}
 	
 	private void setColours(String s){
-		s.substring(1, s.length()-2);
+		s=s.substring(1, s.length()-1);
 		String args[] = s.split(", ");
 		for (int x=0;x<5;x++){
 			colours[x] = Integer.parseInt(args[x]);
@@ -214,7 +220,7 @@ public class Player {
 	}
 	
 	public void setPlayer(String s){
-		String args[] = s.split("$");
+		String args[] = s.split("\\$");
 		setColours(args[0]);
 		
 		withdrawn = Boolean.parseBoolean(args[1]);

@@ -70,7 +70,7 @@ public class Hand {
 			r = r + c.toString()+",";
 		}
 		if (r.length()>2)
-			r.substring(0, r.length()-2);
+			r=r.substring(0, r.length()-1);
 		return r;
 	}
 	public void setHand(String s){
@@ -90,4 +90,3 @@ public class Hand {
 		}
 	}
 }
-

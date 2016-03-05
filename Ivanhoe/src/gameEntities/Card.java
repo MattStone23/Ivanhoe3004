@@ -1,4 +1,3 @@
-
 package gameEntities;
 
 public class Card{
@@ -50,7 +49,7 @@ public class Card{
 		//System.out.println("Made a "+colour+" card with the face value of "+ val );
 	}
 	public Card(String s){
-		if (s.length()==2){
+		if (s.length()==2||s.length()==3){
 			char col = s.charAt(0);
 			int val = Integer.parseInt(s.substring(1)); 
 			
@@ -129,3 +128,4 @@ public class Card{
 		return r;
 	}
 }
+
