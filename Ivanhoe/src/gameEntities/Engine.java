@@ -15,26 +15,26 @@ public class Engine {
 	
 	
 	//ends the turn and switches to the next valid player, then draws card for that player.
-	public void endTurn(){
+	public int endTurn(){
 		if(lastDraw!=state.getTurn()){
 			System.out.print("YOu didn't draw a card this turn\n");
-			return;
+			throw new IllegalArgumentException("You didn't draw a card this turn\n");
 		}
 		if(state.getCol()=='N'&& state.hasValidCard(state.getTurn())){
 			System.out.print("you have a valid card you can play to start the tournament!\n");
-			return;
+			throw new IllegalArgumentException("you have a valid card you can play to start the tournament!\n");
 		}
 		if(!state.getPlayers()[state.getTurn()].isWithdrawn()){
 			if(state.getCol()=='G'){
 				if(state.getTurn()!= state.highestDisplayG()){
 					System.out.print("You have not played enough cards to be the highest value display\n");
-					return;
+					throw new IllegalArgumentException("You have not played enough cards to be the highest value display\n");
 				}
 			}
 			else{
 				if(state.getTurn()!=state.highestDisplay()){
 					System.out.print("You have not played enough cards to be the highest value display\n");
-					return;
+					throw new IllegalArgumentException("You have not played enough cards to be the highest value display\n");
 				}
 			}
 		}
@@ -44,17 +44,20 @@ public class Engine {
 		state.hasDrawn=false;
 		if(state.getPlayersleft()==1){
 			if(state.getCol()=='P'){
-				Scanner getCol= new Scanner(System.in);
+				/*Scanner getCol= new Scanner(System.in);
 				String col;
 				System.out.print("You won a purple tournament! What colour token do you want?:  ");
 				col= getCol.nextLine();
 				System.out.print("\n\n");
 				state.endTour(state.getTurn(), col.charAt(0));
-				getCol.close();
+				getCol.close();*/
+				return 1;
 			}
 			else state.endTour(state.getTurn(), state.getCol());
 			state.getPlayers()[state.getTurn()].win(state.getDiscard());
+			if(state.getPlayers()[state.getTurn()].isWinner(state.getNumPlayers())) return 2;			
 		}
+		return 0;
 	}
 	
 	
@@ -85,6 +88,7 @@ public class Engine {
 		}
 		else{
 			if(state.getCol()!= c.getColour() && c.getColour()!= 'W' ) throw new IllegalArgumentException();
+			if(state.getPlayers()[state.getTurn()].containsMaiden()) throw new IllegalArgumentException();
 			state.playCard(c, state.getTurn());
 		}
 	}
