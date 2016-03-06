@@ -84,7 +84,7 @@ public class EngineTest {
 		System.out.println("SETTING GAME STATES");
 		System.out.println("ENGINE\t\t"+eng.getGameStateForPlayer(-1));
 		System.out.println("TESTGAME\t"+testGame.getGameStateForPlayer(-1));
-		System.out.println("TESTGAME2\t"+testGame2.getGameStateForPlayer(-1));
+		System.out.println("TESTGAME 2\t"+testGame2.getGameStateForPlayer(-1));
 	}
 	@Test
 	public void GameTest(){
