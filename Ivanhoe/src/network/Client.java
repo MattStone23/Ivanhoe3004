@@ -3,6 +3,7 @@ package network;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
@@ -22,6 +23,8 @@ public class Client {
 	private ClientThread clientThread;
 	private String recentMessage;
 	private logger networkLog;
+	private int playerNum;
+	private int playerID;
 	
 	
 	public Client(){
@@ -45,7 +48,7 @@ public class Client {
 	private void connectToServer(){
 		System.out.println("CLIENT-----Establishing connection. Please wait ...");
 	      try
-	      {  socket = new Socket(ipAddress, port);
+	      {  socket = new Socket(InetAddress.getByName(ipAddress), port);
 	         System.out.println("CLIENT-----Connected: " + socket);
 	         networkLog = new logger(socket.getLocalPort()+"_clientLog");
 	         start();
@@ -110,6 +113,8 @@ public class Client {
 			break;
 		case "ACCEPT":
 			System.out.println("Connected to lobby");
+			playerNum = Integer.parseInt(args[1]);
+			playerID = Integer.parseInt(args[2]);
 			break;
 		case "PROMPT":
 			//TODO deal with this

@@ -1,6 +1,8 @@
 package Testing;
 
 import static org.junit.Assert.*;
+
+import gameEntities.Card;
 import gameEntities.Engine;
 import gameEntities.GameBoard;
 import java.util.*;
@@ -122,6 +124,9 @@ public class EngineTest {
 				break;
 			case "WINTOKEN":
 				//select which token to win if purple tournament won
+				break;
+			case "DESC":
+				System.out.println(new Card(args[1]).getDesc());
 				break;
 			}
 		}

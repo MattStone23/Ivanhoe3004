@@ -1,6 +1,9 @@
 package network;
 
+import java.net.InetAddress;
 import java.util.Scanner;
+
+import Util.config;
 
 //import java.util.Scanner;
 
@@ -13,6 +16,7 @@ public class ClientStarter {
 	
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
+		//Client c = new Client("134.117.28.215",config.PORT);
 		Client c = new Client();
 		timer.wait(1);
 		c.sendMessage("CONNECT");

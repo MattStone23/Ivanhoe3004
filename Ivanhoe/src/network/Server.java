@@ -1,8 +1,11 @@
 package network;
 
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Set;
 
@@ -47,8 +50,11 @@ public class Server implements Runnable {
 	private void bindToPort(){
 		try{
 			System.out.println("SERVER----------Binding to port " + port + ", please wait  ...");
-			server = new ServerSocket(port);  
+			server = new ServerSocket(port, 10, InetAddress.getByName(config.IP));
 			server.setReuseAddress(true);
+			System.out.println("IA:\t"+server.getInetAddress());
+			System.out.println("LH:\t"+InetAddress.getLocalHost());
+			System.out.println("HA:\t"+InetAddress.getLocalHost().getHostAddress());
 			start(); 
 		}
 		catch(IOException ioe){
@@ -192,7 +198,7 @@ public class Server implements Runnable {
 			}
 			catch (IllegalArgumentException iae){
 				engine = null;
-				broadCast("CHAT|Not Enough Players");
+				broadCast("INVALID|Not Enough Players");
 			}
 			break;
 		case "CONNECT":
@@ -200,9 +206,8 @@ public class Server implements Runnable {
 			broadCast(toMessage);
 			break;
 		case "CHAT":
-			//chat and testing functionality
-			toMessage = clientNum+":\t"+args[1];
-			fromMessage = "";
+			toMessage = "CHAT|Player "+players.get(clientNum)+"("+clientNum + ") said:"+args[1];
+			broadCast(toMessage);
 			break;
 		default:
 			//invalid input

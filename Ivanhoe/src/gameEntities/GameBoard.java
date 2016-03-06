@@ -11,6 +11,7 @@ public class GameBoard {
 	int playersleft;
 	int deckSize;
 	int discardSize;
+	boolean hasDrawn;
 	
 	public GameBoard(int numP){
 		if( numP<2 || numP>5) throw new IllegalArgumentException();
@@ -29,6 +30,7 @@ public class GameBoard {
 				playerDraw(i);
 			}
 		}
+		hasDrawn=false;
 		
 	}
 	public GameBoard(){
@@ -38,6 +40,7 @@ public class GameBoard {
 		players = null;
 		numPlayers=0;
 		tourney = 'N';
+		hasDrawn=false;
 		playersleft=0;
 		deckSize=0;
 		discardSize=0;
@@ -45,6 +48,7 @@ public class GameBoard {
 	public Card playerDraw(int plyr){
 		players[plyr].displayVal();
 		Card c = players[plyr].plyHand.DrawCard(inPlay);
+		hasDrawn=true;
 		if(inPlay.remaining()==0){
 			inPlay= discard;
 			discard = new Deck();
@@ -84,9 +88,10 @@ public class GameBoard {
 	public int highestDisplay(){
 		int plyerHI=-1, dispHI=0;
 		for(int i=0; i<numPlayers;i++){
-			if(players[i].displayVal()>dispHI)
+			if(players[i].displayVal()>dispHI){
 				dispHI=players[i].displayVal();
 				plyerHI=i;
+			}
 		}
 		return plyerHI;
 	}
@@ -104,9 +109,10 @@ public class GameBoard {
 	public int highestDisplayG(){
 		int plyerHI=-1, dispHI=0;
 		for(int i=0; i<numPlayers;i++){
-			if(players[i].displayNum()>dispHI)
+			if(players[i].displayNum()>dispHI){
 				dispHI=players[i].displayNum();
 				plyerHI=i;
+			}
 		}
 		return plyerHI;
 	}
@@ -209,6 +215,7 @@ public class GameBoard {
 		this.setNumPlayers(Integer.parseInt(args[4]));
 		if (players==null||players.length!=numPlayers)
 			players = new Player[numPlayers];
+		this.hasDrawn=Boolean.parseBoolean(args[5]);
 	}
 	
 	/**
@@ -221,7 +228,8 @@ public class GameBoard {
 							this.getTurn() +"~"+
 							this.getDeckSize()+"~"+
 							this.getDiscardSize() +"~"+
-							this.getNumPlayers();
+							this.getNumPlayers()+"~"+
+							this.hasDrawn;
 		
 		for (int x=0;x<this.getNumPlayers();x++){
 			if (x == aPlayer-1 || aPlayer == -1){
@@ -238,18 +246,39 @@ public class GameBoard {
 	}
 	
 	public void printState(){
-		System.out.print("Card remaining in Deck: "+this.getDeckSize()+"\t Cards in discard pile: "+this.getDiscardSize()+"Players left :"+this.getPlayersleft()+"\n-----------\n");
+		System.out.print("Card remaining in Deck: "+this.getDeckSize()+"\t Cards in discard pile: "+this.getDiscardSize()+"\tPlayers left :"+this.getPlayersleft()+"\n-----------\n");
 		for(int i = 0; i<this.numPlayers;i++){
 			//System.out.print("Player "+i+" has ")
 			System.out.print("Player "+i+"'s hand:\n");
 			this.getPlayers()[i].getHand().display();
-			System.out.print("\nPlayer "+i+"'s display:\n");
-			this.getPlayers()[i].displayPrint();
+			System.out.print("\nPlayer "+i+"'s display:"+(this.getCol()=='G'?this.getPlayers()[i].displayNum():this.getPlayers()[i].displayVal())+"\n");
+			if (this.getPlayers()[i].isWithdrawn())
+				System.out.println("WITHDRAWN");
+			else
+				this.getPlayers()[i].displayPrint();
 			System.out.print("\n");
 		}
-		System.out.print("\n\n\n");
-		System.out.print("Player "+this.getTurn()+"'s turn\n\n\n");
+		System.out.print("TOURN COLOUR: "+this.getCol()+"\n\n");
+		System.out.print("Player "+this.getTurn()+"'s turn:\tMOVES: "+getValidMoves(turn)+"\n\n\n");
 		
 	}
+	
+	public String getValidMoves(int player){
+		if (!hasDrawn){
+			return "DRAW";
+		}
+		if (tourney=='N'){
+			return "STARTTOURN";
+		}
+		if (this.highestDisplay()==player){
+			return "PLAY, WITHDRAW, ENDTURN";
+		}
+		else{
+			return "PLAY, WITHDRAW";
+		}
+		
+	}
+	
+	
 	
 }
