@@ -15,21 +15,21 @@ public class Engine {
 	
 	//ends the turn and switches to the next valid player, then draws card for that player.
 	public void endTurn(){
-
+		
 		if(state.getCol()=='N'&& state.hasValidCard(state.getTurn())){
 			System.out.print("you have a valid card you can play to start the tournament!\n");
 			return;
 		}
 		if(!state.getPlayers()[state.getTurn()].isWithdrawn()){
 			if(state.getCol()=='G'){
-				if(state.getTurn()!= state.highestDisplay()){
+				if(state.getTurn()!= state.highestDisplayG()){
 
 					System.out.print("You have not played enough cards to be the highest value display\n");
 					return;
 				}
 			}
 			else{
-				if(state.getTurn()!=state.highestDisplayG()){
+				if(state.getTurn()!=state.highestDisplay()){
 					System.out.print("You have not played enough cards to be the highest value display\n");
 					return;
 				}
@@ -48,6 +48,7 @@ public class Engine {
 				state.endTour(state.getTurn(), col.charAt(0));				
 			}
 			else state.endTour(state.getTurn(), state.getCol());
+			state.getPlayers()[state.getTurn()].win(state.getDiscard());
 		}
 	}
 	
@@ -98,7 +99,7 @@ public class Engine {
 			if (state.getCol()=='P' || state.getCol()== 'G'){
 				throw new IllegalArgumentException();
 			}
-			if (in[3].charAt(0)=='G' || in[2].charAt(0)=='P'){
+			if (in[2].charAt(0)=='G' || in[2].charAt(0)=='P'){
 				throw new IllegalArgumentException();
 			}
 			state.changeCol(in[2].charAt(0));
@@ -221,8 +222,12 @@ public class Engine {
 	}
 	
 	public void startTour(char col){
-		if(!state.getPlayers()[state.getTurn()].getHand().containstype(col)){
+		if(!state.getPlayers()[state.getTurn()].getHand().containstype(col)&&!state.getPlayers()[state.getTurn()].getHand().containstype('W')){
 			System.out.print("YOu don't have that colour of card\n");
+			return;
+		}
+		if(col=='P'&&state.getOldtour()=='P'){
+			System.out.print("No running two purple tournaments in a row!\n");
 			return;
 		}
 		state.startTour(col);
@@ -234,19 +239,7 @@ public class Engine {
 	}
 	
 	public void printState(){
-		System.out.print("Card remaining in Deck: "+state.getDeck().remaining()+"\t Cards in discard pile: "+state.getDiscard().remaining()+"\tPlayers left :"+state.getPlayersleft()+"\n");
-		System.out.print("Tournament colour: "+state.getCol()+"\t Player "+state.highestDisplay()+"is in the lead\n--------------\n");
-		for(int i = 0; i<state.numPlayers;i++){
-			//System.out.print("Player "+i+" has ")
-			System.out.print("Player "+i+"'s hand:\n");
-			state.getPlayers()[i].getHand().display();
-			System.out.print("\nPlayer "+i+"'s display:\t value of:"+displayVal(i)+"\n");
-			state.getPlayers()[i].displayPrint();
-			System.out.print("\n");
-		}
-		System.out.print("\n\n\n");
-		System.out.print("Player "+state.getTurn()+"'s turn\n\n\n");
-		
+		state.print();	
 	}
 	
 	

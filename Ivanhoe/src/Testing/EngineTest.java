@@ -39,11 +39,11 @@ public class EngineTest {
 	public void testParse(){
 		Engine eng= new Engine(2);
 		System.out.println(eng.getGameStateForPlayer(-1));
-		eng.startTour('R');
+		eng.startTour('B');
 		System.out.println(eng.getGameStateForPlayer(-1));
 		eng.draw();
 		System.out.println(eng.getGameStateForPlayer(-1));
-		String[] test = {"Play",eng.currentState().getPlayers()[0].getHand().getHandStack().peek().toString()};
+		String[] test = {"Play","B4"};
 		eng.playCard(test);
 		eng.withdraw();
 		eng.endTurn();

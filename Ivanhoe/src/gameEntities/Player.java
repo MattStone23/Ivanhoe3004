@@ -62,6 +62,14 @@ public class Player {
 		shield= null;
 	}
 	
+	public void win(Deck discard){
+		if(shield !=null) discard.putInto(shield);
+		while(!display.isEmpty()){
+			discard.putInto(display.pop());
+		}
+		shield= null;
+	}
+	
 	public boolean isWithdrawn(){
 		return withdrawn;
 	}
