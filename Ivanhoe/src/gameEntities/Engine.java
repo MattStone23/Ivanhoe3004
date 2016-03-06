@@ -46,9 +46,9 @@ public class Engine {
 	}
 	
 	
-	public void draw(){
-		if(lastLeft()) return;
-		state.playerDraw(state.getTurn());
+	public Card draw(){
+		if(lastLeft()) return null;
+		return state.playerDraw(state.getTurn());
 	}
 	
 	public void removeToken(char colour){
@@ -210,7 +210,8 @@ public class Engine {
 		return false;
 	}
 	
-	public void startTour(char col){
+	public void startTour(String[] args){
+		char col = args[1].charAt(0);
 		state.startTour(col);
 		state.setPlayersleft(state.getNumPlayers());
 	}
@@ -220,18 +221,7 @@ public class Engine {
 	}
 	
 	public void printState(){
-		System.out.print("Card remaining in Deck: "+state.getDeck().remaining()+"\t Cards in discard pile: "+state.getDiscard().remaining()+"Players left :"+state.getPlayersleft()+"\n-----------\n");
-		for(int i = 0; i<state.numPlayers;i++){
-			//System.out.print("Player "+i+" has ")
-			System.out.print("Player "+i+"'s hand:\n");
-			state.getPlayers()[i].getHand().display();
-			System.out.print("\nPlayer "+i+"'s display:\n");
-			state.getPlayers()[i].displayPrint();
-			System.out.print("\n");
-		}
-		System.out.print("\n\n\n");
-		System.out.print("Player "+state.getTurn()+"'s turn\n\n\n");
-		
+		state.printState();
 	}
 	
 	

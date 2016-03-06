@@ -133,8 +133,9 @@ public class Server implements Runnable {
 		String[] args =  message.split("\\|");
 		String command = args[0];
 		System.out.println("SERVER----------COMMAND:\t\""+command+"\"");
-		System.out.println("SERVER----------COMMAND:\t\""+args.length+"\"");
+		System.out.println("SERVER----------#ofARGS:\t\""+args.length+"\"");
 		//if quit message
+		try{
 		switch (command){
 		case "QUIT":
 			//shut down this client
@@ -146,26 +147,36 @@ public class Server implements Runnable {
 			break;
 		case "STARTTOURN":
 			//startTourn()
-			toMessage = args[1]+" colour tournament started";
-			fromMessage = toMessage;
+			if (engine!=null){
+				//TODO args check
+				engine.startTour(args);
+			}
 			break;
 		case "DRAW":
 			//draw a card
-			toMessage = clientNum + " drew a card";
-			fromMessage = "DRAW|G|1";
+			//TODO check for single draw only
+			if (engine!=null){
+				toMessage = engine.draw().toString();
+				clients.get(clientNum).send("CHAT|You drew "+toMessage);
+			}
 			break;
 		case "PLAY":
 			//play a card
-			toMessage = clientNum + " played a card:"+args[1]+"|"+args[2];
-			fromMessage = toMessage;
+			if (engine!=null){
+				engine.playCard(args);
+			}
 			break;
 		case "WITHDRAW":
 			//withdraw from tournament
+			if (engine!=null){
+				engine.withdraw();
+			}
 			break;
 		case "ENDTURN":
 			//end turn
-			toMessage = clientNum + " ended their turn";
-			fromMessage = "Turn Over";
+			if (engine!=null){
+				engine.endTurn();
+			}
 			break;
 		case "IVANHOE":
 			//interrupt actioncard
@@ -175,14 +186,18 @@ public class Server implements Runnable {
 			break;
 		case "STARTGAME":
 			//start the game
-			gameState = RUNNING;
-			engine = new Engine(clientCount);
-			toMessage = "Game Starting";
-			fromMessage = toMessage;
+			try{
+				engine = new Engine(clientCount);
+				gameState = RUNNING;
+			}
+			catch (IllegalArgumentException iae){
+				engine = null;
+				broadCast("CHAT|Not Enough Players");
+			}
 			break;
 		case "CONNECT":
-			toMessage = clientNum + "joined the lobby";
-			fromMessage = toMessage;
+			toMessage = "CHAT|Player "+players.get(clientNum)+"("+clientNum + ") joined the lobby";
+			broadCast(toMessage);
 			break;
 		case "CHAT":
 			//chat and testing functionality
@@ -191,20 +206,30 @@ public class Server implements Runnable {
 			break;
 		default:
 			//invalid input
-			from.send("INVALID");
+			from.send("INVALID|Improper command");
 			break;
+		}
+		}
+		catch (IllegalArgumentException iae){
+			from.send("INVALID|Improper arguments");
 		}
 		
 		
 		
 		//update all clients
-		for (ServerThread to : clients.values()){
-			if (from.getID() != to.getID()){
-				to.send(toMessage);
-			}
-			else {
-				to.send(fromMessage);
-			}
+		if (engine!=null)
+			broadCastUpdate();
+	}
+	
+	public void broadCastUpdate(){
+		for (Integer to : clients.keySet()){
+			clients.get(to).send("GAMESTATE|"+engine.getGameStateForPlayer(players.get(to)));
+		}
+	}
+	
+	public void broadCast(String message){
+		for (Integer to : clients.keySet()){
+			clients.get(to).send(message);
 		}
 	}
 	

@@ -9,6 +9,7 @@ import java.net.UnknownHostException;
 import Util.config;
 import Util.logger;
 import Util.timer;
+import gameEntities.GameBoard;
 
 public class Client {
 	
@@ -17,6 +18,7 @@ public class Client {
 	private Socket socket;
 	private boolean messageRecieved;
 	private DataOutputStream streamOut;
+	private GameBoard gameState;
 	private ClientThread clientThread;
 	private String recentMessage;
 	private logger networkLog;
@@ -26,6 +28,7 @@ public class Client {
 		port = config.PORT;
 		ipAddress = config.IP;
 		recentMessage = new String();
+		gameState = new GameBoard();
 		
 		connectToServer();
 	}
@@ -34,6 +37,7 @@ public class Client {
 		port = portNum;
 		ipAddress = ipAdd;
 		recentMessage = new String();
+		gameState = new GameBoard();
 		
 		connectToServer();
 	}
@@ -95,8 +99,30 @@ public class Client {
 	public void handle(String message){
 		//TODO handle
 		networkLog.write("RECIEVED: \t"+message);
-		if (message.equals("CLOSE")){
+		String args[] = message.split("\\|");
+		switch (args[0]){
+		case "GAMESTATE":
+			gameState.setGameState(message);
+			gameState.printState();
+			break;
+		case "CHAT":
+			System.out.println(args[1]);
+			break;
+		case "ACCEPT":
+			System.out.println("Connected to lobby");
+			break;
+		case "PROMPT":
+			//TODO deal with this
+			System.out.println("Need input");
+			break;
+		case "INVALID":
+			System.err.println(args[1]);
+			break;
+		case "CLOSE":
 			clientThread.close();
+			break;
+		default:
+			System.err.println("UNRECOGNIZED RESPONSE FROM SERVER\n"+message);
 		}
 		recentMessage = message;
 		messageRecieved = true;

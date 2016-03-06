@@ -15,8 +15,8 @@ public class EngineTest {
 		assertEquals(86, eng.currentState().getDeck().remaining());
 		eng.draw();
 		eng.endTurn();
-		eng.startTour('R');
-		String[] args =  "Play|R|3|".split("\\|");
+		eng.startTour("STARTTOURN|R".split("\\|"));
+		String[] args =  "Play|W6".split("\\|");
 		eng.printState();
 		eng.playCard(args);
 		eng.printState();
@@ -59,12 +59,11 @@ public class EngineTest {
 	public void testParse(){
 		Engine eng= new Engine(2);
 		System.out.println(eng.getGameStateForPlayer(-1));
-		eng.startTour('R');
+		eng.startTour("STARTTOURN|B".split("\\|"));
 		System.out.println(eng.getGameStateForPlayer(-1));
 		eng.draw();
 		System.out.println(eng.getGameStateForPlayer(-1));
-		String[] test = {"Play",eng.currentState().getPlayers()[0].getHand().getHandStack().peek().toString()};
-		eng.playCard(test);
+		eng.playCard("PLAY|B4".split("\\|"));
 		eng.withdraw();
 		eng.endTurn();
 		System.out.println(eng.getGameStateForPlayer(-1));
@@ -99,7 +98,7 @@ public class EngineTest {
 			switch (command){
 			case "STARTTOURN":
 				//startTourn()
-				eng.startTour(args[1].charAt(0));
+				eng.startTour(args);
 				break;
 			case "DRAW":
 				eng.draw();
