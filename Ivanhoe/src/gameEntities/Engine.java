@@ -4,19 +4,18 @@ import java.util.*;
 public class Engine {
 	GameBoard state;
 	//tracks which player last drew a card
-	int lastDraw;
 	
 	
 	
 	public Engine(int players){
 		state = new GameBoard( players);
-		lastDraw=-1;
 	}
 	
 	
 	//ends the turn and switches to the next valid player, then draws card for that player.
 	public int endTurn(){
-		if(lastDraw!=state.getTurn()){
+		if(!state.hasDrawn){
+
 			System.out.print("YOu didn't draw a card this turn\n");
 			throw new IllegalArgumentException("You didn't draw a card this turn\n");
 		}
@@ -63,12 +62,7 @@ public class Engine {
 	
 
 	public Card draw(){
-		if(lastDraw==state.getTurn()){
-			System.out.print("YOu already drew a card this turn\n");
-			return null;
-		}
 		if(lastLeft()) return null;
-		lastDraw=state.getTurn();
 		return state.playerDraw(state.getTurn());
 	}
 	
@@ -212,7 +206,7 @@ public class Engine {
 	
 	//boolean to check if player has a maiden card.
 	public boolean withdraw(){
-		if(lastDraw!=state.getTurn()){
+		if(!state.hasDrawn){
 			System.out.print("YOu didn't draw a card this turn\n");
 			return false;
 		}
