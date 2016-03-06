@@ -18,12 +18,14 @@ public class Hand {
 	}
 	
 	public void DiscardCol(char col, Deck discardPile){
+		Stack<Card> temp= new Stack<Card>();
 		for(Card card :hand){
 			if( card.getColour()== col){
 				discardPile.putInto(card);
-				hand.remove(card);
 			}
+			else temp.push(card);
 		}
+		hand=temp;
 	}
 	
 	public void DiscardVal(int value, Deck discardPile){

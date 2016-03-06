@@ -15,7 +15,6 @@ public class Engine {
 	
 	//ends the turn and switches to the next valid player, then draws card for that player.
 	public void endTurn(){
-		
 		if(state.getCol()=='N'&& state.hasValidCard(state.getTurn())){
 			System.out.print("you have a valid card you can play to start the tournament!\n");
 			return;
@@ -45,7 +44,8 @@ public class Engine {
 				System.out.print("You won a purple tournament! What colour token do you want?:  ");
 				col= getCol.nextLine();
 				System.out.print("\n\n");
-				state.endTour(state.getTurn(), col.charAt(0));				
+				state.endTour(state.getTurn(), col.charAt(0));
+				getCol.close();
 			}
 			else state.endTour(state.getTurn(), state.getCol());
 			state.getPlayers()[state.getTurn()].win(state.getDiscard());
@@ -77,7 +77,6 @@ public class Engine {
 			state.playCard(c, state.getTurn());
 		}
 	}
-	//TODO make sure cards make it into the discard.
 	public void playActionCard(String[] in){
 		Card c = new Card(in[1]);
 		char type = c.getColour();
@@ -114,13 +113,8 @@ public class Engine {
 			break;
 			
 			//Break Lance: makes player indicated by in[3] discard all purple cards.
-			//TODO: check if getter will return the object itself, or a copy of the object. could be double danger if it returns a copy. Currently assuming they will return the object itself.
 		case 4:
-			for(int ply = 0; ply<state.getNumPlayers(); ply++){
-				if(ply != state.getTurn() && !(state.getPlayers()[ply].isWithdrawn())){
-					state.getPlayers()[ply].getHand().DiscardCol('P', state.discard);
-				}
-			}
+			state.getPlayers()[Integer.parseInt(in[3])].displayDiscCol('P', state.getDiscard());
 			break;
 			
 		case 5:
@@ -208,6 +202,10 @@ public class Engine {
 			System.out.print("You're trying to withdraw from a tournament that hasn't started. Don't do that.\n");
 			return false;
 		}
+		if(state.highestDisplay()==-1&&state.getPlayers()[state.getTurn()].displayVal()==0){
+			System.out.print("You haven't played a card yet!");
+			return false;
+		}
 		state.withdraw(state.getTurn());
 		state.setPlayersleft(state.getPlayersleft()-1);
 		return state.getPlayers()[state.getTurn()].containsMaiden();
@@ -222,6 +220,10 @@ public class Engine {
 	}
 	
 	public void startTour(char col){
+		if(state.getCol()!='N'){
+			System.out.print("No changing colours midtournament");
+			return;
+		}
 		if(!state.getPlayers()[state.getTurn()].getHand().containstype(col)&&!state.getPlayers()[state.getTurn()].getHand().containstype('W')){
 			System.out.print("YOu don't have that colour of card\n");
 			return;

@@ -67,7 +67,8 @@ public class GameBoard {
 	public void print(){
 		char[] colarr= {'R','G','Y','B','P'};
 		System.out.print("Card remaining in Deck: "+this.getDeck().remaining()+"\t Cards in discard pile: "+this.getDiscard().remaining()+"\tPlayers left :"+this.getPlayersleft()+"\n");
-		System.out.print("Tournament colour: "+this.getCol()+"\t Player "+this.highestDisplay()+"is in the lead\n--------------\n");
+		if(tourney=='G')System.out.print("Tournament colour: "+this.getCol()+"\t Player "+this.highestDisplayG()+"is in the lead\n--------------\n");
+		else System.out.print("Tournament colour: "+this.getCol()+"\t Player "+this.highestDisplay()+"is in the lead\n--------------\n");
 		for(int i = 0; i<this.numPlayers;i++){
 			System.out.print("Player "+i+" has ");
 			int j =0;
@@ -78,7 +79,8 @@ public class GameBoard {
 			System.out.print(" stones.\n");
 			System.out.print("Player "+i+"'s hand:\n");
 			this.getPlayers()[i].getHand().display();
-			System.out.print("\nPlayer "+i+"'s display:\t value of:"+players[i].displayVal()+"\n");
+			if(tourney=='G')System.out.print("\nPlayer "+i+"'s display:\t value of:"+players[i].displayNum()+"\n");
+			else System.out.print("\nPlayer "+i+"'s display:\t value of:"+players[i].displayVal()+"\n");
 			this.getPlayers()[i].displayPrint();
 			System.out.print("\n");
 		}

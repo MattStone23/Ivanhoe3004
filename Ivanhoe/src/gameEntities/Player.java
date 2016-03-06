@@ -89,13 +89,28 @@ public class Player {
 	}
 	
 	public void displayDiscVal(int val, Deck discard){
+		Stack<Card> temp= new Stack<Card>();
 		for( Card card:display){
 			if(card.getValue()==val && card.getColour()!='A'){
 				discard.putInto(card);
-				display.remove(card);
 			}
+			else temp.push(card);
 		}
+		display=temp;
 	}
+	
+	public void displayDiscCol(char col, Deck discard){
+		Stack<Card> temp= new Stack<Card>();
+		for( Card card:display){
+			if(card.getColour()==col){
+				discard.putInto(card);
+			}
+			else temp.push(card);
+		}
+		display=temp;
+	}
+	
+	
 	public void addStone(char type){
 		switch (type){
 		case 'R':

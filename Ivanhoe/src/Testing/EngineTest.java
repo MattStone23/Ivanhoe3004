@@ -106,6 +106,7 @@ public class EngineTest {
 				break;
 			}
 		}
+		get.close();
 	}
 
 }
