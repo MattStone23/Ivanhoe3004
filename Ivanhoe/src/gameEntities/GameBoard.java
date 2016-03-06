@@ -28,6 +28,7 @@ public class GameBoard {
 			players[i]= new Player();
 			for( int j = 0; j<8; j++){
 				playerDraw(i);
+				hasDrawn=false;
 			}
 		}
 		hasDrawn=false;
@@ -46,6 +47,10 @@ public class GameBoard {
 		discardSize=0;
 	}
 	public Card playerDraw(int plyr){
+		if (hasDrawn){
+			System.out.print("YOu already drew a card this turn\n");
+			return null;
+		}
 		players[plyr].displayVal();
 		Card c = players[plyr].plyHand.DrawCard(inPlay);
 		hasDrawn=true;
@@ -287,8 +292,28 @@ public class GameBoard {
 			System.out.print("\n");
 		}
 		System.out.print("TOURN COLOUR: "+this.getCol()+"\n\n");
+		//System.out.print("TOURN COLOUR: "+this.getFancyCol()+"\n\n");
 		System.out.print("Player "+this.getTurn()+"'s turn:\tMOVES: "+getValidMoves(turn)+"\n\n\n");
 		
+	}
+	
+	//This was to colour the text
+	//Not really working
+	private String getFancyCol(){
+		switch (tourney){
+		case 'R':
+			return config.RED_TEXT+tourney+config.DEFAULT_TEXT;
+		case 'G':
+			return config.GREEN_TEXT+tourney+config.DEFAULT_TEXT;
+		case 'Y':
+			return config.YELLOW_TEXT+tourney+config.DEFAULT_TEXT;
+		case 'B':
+			return config.BLUE_TEXT+tourney+config.DEFAULT_TEXT;
+		case 'P':
+			return config.PURPLE_TEXT+tourney+config.DEFAULT_TEXT;
+		default:
+			return tourney+"";	
+		}
 	}
 	
 	public String getValidMoves(int player){
