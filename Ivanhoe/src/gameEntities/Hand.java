@@ -5,8 +5,8 @@ public class Hand {
 	public Hand(){
 		hand= new Stack<Card>();
 	}
-	public void DrawCard(Deck Inplay){
-		hand.push(Inplay.draw());
+	public Card DrawCard(Deck Inplay){
+		return hand.push(Inplay.draw());
 	}
 	
 	public void addCard(Card card){

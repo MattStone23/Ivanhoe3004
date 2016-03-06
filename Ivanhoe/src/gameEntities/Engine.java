@@ -27,7 +27,6 @@ public class Engine {
 		if(!state.getPlayers()[state.getTurn()].isWithdrawn()){
 			if(state.getCol()=='G'){
 				if(state.getTurn()!= state.highestDisplayG()){
-
 					System.out.print("You have not played enough cards to be the highest value display\n");
 					return;
 				}
@@ -42,6 +41,7 @@ public class Engine {
 		do{
 			state.setTurn((state.getTurn()+1)%state.getNumPlayers());
 		}while(state.getPlayers()[state.getTurn()].isWithdrawn());
+		state.hasDrawn=false;
 		if(state.getPlayersleft()==1){
 			if(state.getCol()=='P'){
 				Scanner getCol= new Scanner(System.in);
@@ -58,14 +58,15 @@ public class Engine {
 	}
 	
 	
-	public void draw(){
+
+	public Card draw(){
 		if(lastDraw==state.getTurn()){
 			System.out.print("YOu already drew a card this turn\n");
-			return;
+			return null;
 		}
-		if(lastLeft()) return;
-		state.playerDraw(state.getTurn());
+		if(lastLeft()) return null;
 		lastDraw=state.getTurn();
+		return state.playerDraw(state.getTurn());
 	}
 	
 	public void removeToken(char colour){
@@ -233,7 +234,9 @@ public class Engine {
 		return false;
 	}
 	
-	public void startTour(char col){
+
+	public void startTour(String[] args){
+		char col = args[1].charAt(0);
 		if(state.getCol()!='N'){
 			System.out.print("No changing colours midtournament");
 			return;
@@ -255,7 +258,7 @@ public class Engine {
 	}
 	
 	public void printState(){
-		state.print();	
+		state.printState();
 	}
 	
 	

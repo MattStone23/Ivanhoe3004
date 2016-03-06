@@ -1,6 +1,8 @@
 package Testing;
 
 import static org.junit.Assert.*;
+
+import gameEntities.Card;
 import gameEntities.Engine;
 import gameEntities.GameBoard;
 import java.util.*;
@@ -14,8 +16,9 @@ public class EngineTest {
 		Engine eng= new Engine(3);
 		assertEquals(86, eng.currentState().getDeck().remaining());
 		eng.draw();
-		eng.startTour('Y');
-		String[] args =  "Play|Y3".split("\\|");
+		eng.endTurn();
+		eng.startTour("STARTTOURN|R".split("\\|"));
+		String[] args =  "Play|W6".split("\\|");
 		eng.printState();
 		eng.playCard(args);
 		eng.endTurn();
@@ -39,12 +42,12 @@ public class EngineTest {
 	public void testParse(){
 		Engine eng= new Engine(2);
 		System.out.println(eng.getGameStateForPlayer(-1));
-		eng.startTour('B');
+
+		eng.startTour("STARTTOURN|B".split("\\|"));
 		System.out.println(eng.getGameStateForPlayer(-1));
 		eng.draw();
 		System.out.println(eng.getGameStateForPlayer(-1));
-		String[] test = {"Play","B4"};
-		eng.playCard(test);
+		eng.playCard("PLAY|B4".split("\\|"));
 		eng.withdraw();
 		eng.endTurn();
 		System.out.println(eng.getGameStateForPlayer(-1));
@@ -63,7 +66,7 @@ public class EngineTest {
 		System.out.println("SETTING GAME STATES");
 		System.out.println("ENGINE\t\t"+eng.getGameStateForPlayer(-1));
 		System.out.println("TESTGAME\t"+testGame.getGameStateForPlayer(-1));
-		System.out.println("TESTGAME2\t"+testGame2.getGameStateForPlayer(-1));
+		System.out.println("TESTGAME 2\t"+testGame2.getGameStateForPlayer(-1));
 	}
 	@Test
 	public void GameTest(){
@@ -78,7 +81,7 @@ public class EngineTest {
 			switch (command){
 			case "STARTTOURN":
 				//startTourn()
-				eng.startTour(args[1].charAt(0));
+				eng.startTour(args);
 				break;
 			case "DRAW":
 				eng.draw();
@@ -102,6 +105,9 @@ public class EngineTest {
 				break;
 			case "WINTOKEN":
 				//select which token to win if purple tournament won
+				break;
+			case "DESC":
+				System.out.println(new Card(args[1]).getDesc());
 				break;
 			}
 		}
