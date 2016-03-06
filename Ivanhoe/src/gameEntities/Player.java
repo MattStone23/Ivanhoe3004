@@ -88,6 +88,26 @@ public class Player {
 			}
 		}
 	}
+	
+	public boolean isWinner(int numPlyr){
+		int numStone=0;
+		if(numPlyr>3){
+			for(int c:colours){
+				if(c>0)numStone++;
+			}
+			if(numStone>=4)return true;
+		}
+		else{
+			for(int c:colours){
+				if(c>0)numStone++;
+			}
+			if(numStone>=5)return true;
+			
+		}
+		return false;
+	}
+	
+	
 	public void addStone(char type){
 		switch (type){
 		case 'R':
