@@ -42,15 +42,16 @@ public class GameBoard {
 		deckSize=0;
 		discardSize=0;
 	}
-	public void playerDraw(int plyr){
+	public Card playerDraw(int plyr){
 		players[plyr].displayVal();
-		players[plyr].plyHand.DrawCard(inPlay);
+		Card c = players[plyr].plyHand.DrawCard(inPlay);
 		if(inPlay.remaining()==0){
 			inPlay= discard;
 			discard = new Deck();
 			if(config.SEEDED) inPlay.seededShuffle();
 			else inPlay.shuffle();
 		}
+		return c;
 	}
 	
 	//starts a tournament, and makes it's colour the input colour
@@ -234,6 +235,21 @@ public class GameBoard {
 		
 		
 		return gameState;
+	}
+	
+	public void printState(){
+		System.out.print("Card remaining in Deck: "+this.getDeckSize()+"\t Cards in discard pile: "+this.getDiscardSize()+"Players left :"+this.getPlayersleft()+"\n-----------\n");
+		for(int i = 0; i<this.numPlayers;i++){
+			//System.out.print("Player "+i+" has ")
+			System.out.print("Player "+i+"'s hand:\n");
+			this.getPlayers()[i].getHand().display();
+			System.out.print("\nPlayer "+i+"'s display:\n");
+			this.getPlayers()[i].displayPrint();
+			System.out.print("\n");
+		}
+		System.out.print("\n\n\n");
+		System.out.print("Player "+this.getTurn()+"'s turn\n\n\n");
+		
 	}
 	
 }
