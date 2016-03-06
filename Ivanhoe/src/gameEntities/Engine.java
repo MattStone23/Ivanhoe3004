@@ -3,18 +3,23 @@ package gameEntities;
 import java.util.*;
 public class Engine {
 	GameBoard state;
-	//tracks which players turn it is
+	//tracks which player last drew a card
+	int lastDraw;
 	
 	
 	
 	public Engine(int players){
 		state = new GameBoard( players);
-		
+		lastDraw=-1;
 	}
 	
 	
 	//ends the turn and switches to the next valid player, then draws card for that player.
 	public void endTurn(){
+		if(lastDraw!=state.getTurn()){
+			System.out.print("YOu didn't draw a card this turn\n");
+			return;
+		}
 		if(state.getCol()=='N'&& state.hasValidCard(state.getTurn())){
 			System.out.print("you have a valid card you can play to start the tournament!\n");
 			return;
@@ -54,8 +59,13 @@ public class Engine {
 	
 	
 	public void draw(){
+		if(lastDraw==state.getTurn()){
+			System.out.print("YOu already drew a card this turn\n");
+			return;
+		}
 		if(lastLeft()) return;
 		state.playerDraw(state.getTurn());
+		lastDraw=state.getTurn();
 	}
 	
 	public void removeToken(char colour){
@@ -197,6 +207,10 @@ public class Engine {
 	
 	//boolean to check if player has a maiden card.
 	public boolean withdraw(){
+		if(lastDraw!=state.getTurn()){
+			System.out.print("YOu didn't draw a card this turn\n");
+			return false;
+		}
 		if(lastLeft()) return false;
 		if(state.getCol()=='N'){
 			System.out.print("You're trying to withdraw from a tournament that hasn't started. Don't do that.\n");

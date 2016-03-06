@@ -109,8 +109,6 @@ public class Player {
 		}
 		display=temp;
 	}
-	
-	
 	public void addStone(char type){
 		switch (type){
 		case 'R':

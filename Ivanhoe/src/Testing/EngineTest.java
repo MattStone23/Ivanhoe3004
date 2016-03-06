@@ -15,7 +15,7 @@ public class EngineTest {
 		assertEquals(86, eng.currentState().getDeck().remaining());
 		eng.draw();
 		eng.startTour('Y');
-		String[] args =  "Play|Y|3|".split("\\|");
+		String[] args =  "Play|Y3".split("\\|");
 		eng.printState();
 		eng.playCard(args);
 		eng.endTurn();
@@ -73,7 +73,6 @@ public class EngineTest {
 		while(!in.equals("quit")){
 			eng.printState();
 			in=get.nextLine();
-			System.out.println("~"+in+"~");
 			String[] args =  in.split("\\|");
 			String command = args[0];
 			switch (command){
