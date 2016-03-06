@@ -1,5 +1,7 @@
 package gameEntities;
 
+import Util.config;
+
 public class Card{
 	private char colour;
 	private int value;
@@ -110,6 +112,31 @@ public class Card{
 	public int getValue(){
 		return value;
 	}
+	//TODO getName() actionCards and supporters mostly
+	public String getName(){
+		if (colour=='W'){
+			switch (value){
+			case 2:
+			case 3:
+				return "Squire-"+value;
+			case 6:
+				return "Maiden-"+value;
+			default:
+				return null;
+			}
+		}
+		if (colour=='A'){
+			return config.ACTIONS[value-1][0];
+		}
+		return toString();
+	}
+	public String getDesc(){
+		if (colour=='A'){
+			return getName()+"\n"+config.ACTIONS[value-1][1];
+		}
+		return getName();
+	}
+	
 	//TODO: Override hash code, just in case.
 	public boolean equals(Object object){
 		final Card comp = (Card)object;
@@ -121,7 +148,7 @@ public class Card{
 		}
 	}
 	public void print(){
-		System.out.print(colour+""+value+"\t");
+		System.out.print(toString()+"\t");
 	}
 	public String toString(){
 		String r = colour + "" + value;

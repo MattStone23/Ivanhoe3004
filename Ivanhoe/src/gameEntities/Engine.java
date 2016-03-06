@@ -16,7 +16,7 @@ public class Engine {
 	//ends the turn and switches to the next valid player, then draws card for that player.
 	public void endTurn(){
 		if(!state.getPlayers()[state.getTurn()].isWithdrawn()){
-			if(state.getCol()=='G'){
+			if(state.getCol()!='G'){
 				if(state.getTurn()!= state.highestDisplay()){
 					System.out.print("You have not played enough cards to be the highest value display\n");
 					return;
@@ -32,6 +32,7 @@ public class Engine {
 		do{
 			state.setTurn((state.getTurn()+1)%state.getNumPlayers());
 		}while(state.getPlayers()[state.getTurn()].isWithdrawn());
+		state.hasDrawn=false;
 		if(state.getPlayersleft()==1){
 			if(state.getCol()=='P'){
 				Scanner getCol= new Scanner(System.in);

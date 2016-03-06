@@ -1,6 +1,8 @@
 package Testing;
 
 import static org.junit.Assert.*;
+
+import gameEntities.Card;
 import gameEntities.Engine;
 import gameEntities.GameBoard;
 import java.util.*;
@@ -82,7 +84,7 @@ public class EngineTest {
 		System.out.println("SETTING GAME STATES");
 		System.out.println("ENGINE\t\t"+eng.getGameStateForPlayer(-1));
 		System.out.println("TESTGAME\t"+testGame.getGameStateForPlayer(-1));
-		System.out.println("TESTGAME2\t"+testGame2.getGameStateForPlayer(-1));
+		System.out.println("TESTGAME 2\t"+testGame2.getGameStateForPlayer(-1));
 	}
 	@Test
 	public void GameTest(){
@@ -122,6 +124,9 @@ public class EngineTest {
 				break;
 			case "WINTOKEN":
 				//select which token to win if purple tournament won
+				break;
+			case "DESC":
+				System.out.println(new Card(args[1]).getDesc());
 				break;
 			}
 		}
