@@ -144,94 +144,153 @@ public class Server implements Runnable {
 		System.out.println("SERVER----------#ofARGS:\t\""+args.length+"\"");
 		//if quit message
 		try{
-		switch (command){
-		case "QUIT":
-			//shut down this client
-			from.close();
-			break;
-		case "SHUTDOWN":
-			//shutdown the server
-			this.shutdown();
-			break;
-		case "STARTTOURN":
-			//startTourn()
-			if (engine!=null){
-				//TODO args check
-				engine.startTour(args);
+			switch (command){
+			case "QUIT":
+				//shut down this client
+				from.close();
+				break;
+			case "SHUTDOWN":
+				//shutdown the server
+				this.shutdown();
+				break;
+			case "STARTTOURN":
+				//startTourn()
+				if(!isTheirTurn(clientNum)){
+					from.send("INVALID|Not your turn");
+					break;
+				}
+				if (engine!=null){
+					//TODO args check
+					engine.startTour(args);
+					broadCastUpdate();
+				}
+				
+					
+				break;
+			case "DRAW":
+				//draw a card
+				//TODO check for single draw only
+				if(!isTheirTurn(clientNum)){
+					from.send("INVALID|Not your turn");
+					break;
+				}
+				if (engine!=null){
+					toMessage = engine.draw().toString();
+					broadCastUpdate();
+					clients.get(clientNum).send("CHAT|You drew "+toMessage);
+				}	
+				break;
+			case "PLAY":
+				//play a card
+				if(!isTheirTurn(clientNum)){
+					from.send("INVALID|Not your turn");
+					break;
+				}
+				if (engine!=null){
+					engine.playCard(args);
+				}
+				
+				if (engine!=null)
+					broadCastUpdate();
+				break;
+			case "WITHDRAW":
+				//withdraw from tournament
+				if(!isTheirTurn(clientNum)){
+					from.send("INVALID|Not your turn");
+					break;
+				}
+				if (engine!=null){
+					engine.withdraw();
+				}
+				
+				if (engine!=null)
+					broadCastUpdate();
+				break;
+			case "ENDTURN":
+				//end turn
+				if(!isTheirTurn(clientNum)){
+					from.send("INVALID|Not your turn");
+					break;
+				}
+				if (engine!=null){
+					engine.endTurn();
+					//TODO handle win tournaments/win
+				}
+				
+				if (engine!=null)
+					broadCastUpdate();
+				break;
+			case "IVANHOE":
+				//interrupt actioncard
+				break;
+			case "WINTOKEN":
+				//select which token to win if purple tournament won
+				if(!isTheirTurn(clientNum)){
+					from.send("INVALID|Not your turn");
+					break;
+				}
+				
+				if (engine!=null)
+					broadCastUpdate();
+				//TODO
+				break;
+			case "STARTGAME":
+				//start the game
+				//If not the host, say invalid
+				if (players.get(clientNum).intValue()!=1){
+					IllegalArgumentException iae = new IllegalArgumentException("You are not the Host");
+					throw iae;
+				}
+				
+				try{
+					engine = new Engine(clientCount);
+					gameState = RUNNING;
+				}
+				catch (IllegalArgumentException iae){
+					engine = null;
+					broadCast("INVALID|Not Enough Players");
+				}
+				if (engine!=null)
+					broadCastUpdate();
+				break;
+			case "CONNECT":
+				toMessage = "CHAT|Player "+players.get(clientNum)+"("+clientNum + ") joined the lobby";
+				broadCast(toMessage);
+				break;
+			case "CHAT":
+				toMessage = "CHAT|Player "+players.get(clientNum)+"("+clientNum + ") said:"+args[1];
+				broadCast(toMessage);
+				break;
+			default:
+				//invalid input
+				from.send("INVALID|Improper command");
+				break;
 			}
-			break;
-		case "DRAW":
-			//draw a card
-			//TODO check for single draw only
-			if (engine!=null){
-				toMessage = engine.draw().toString();
-				clients.get(clientNum).send("CHAT|You drew "+toMessage);
-			}
-			break;
-		case "PLAY":
-			//play a card
-			if (engine!=null){
-				engine.playCard(args);
-			}
-			break;
-		case "WITHDRAW":
-			//withdraw from tournament
-			if (engine!=null){
-				engine.withdraw();
-			}
-			break;
-		case "ENDTURN":
-			//end turn
-			if (engine!=null){
-				engine.endTurn();
-			}
-			break;
-		case "IVANHOE":
-			//interrupt actioncard
-			break;
-		case "WINTOKEN":
-			//select which token to win if purple tournament won
-			break;
-		case "STARTGAME":
-			//start the game
-			try{
-				engine = new Engine(clientCount);
-				gameState = RUNNING;
-			}
-			catch (IllegalArgumentException iae){
-				engine = null;
-				broadCast("INVALID|Not Enough Players");
-			}
-			break;
-		case "CONNECT":
-			toMessage = "CHAT|Player "+players.get(clientNum)+"("+clientNum + ") joined the lobby";
-			broadCast(toMessage);
-			break;
-		case "CHAT":
-			toMessage = "CHAT|Player "+players.get(clientNum)+"("+clientNum + ") said:"+args[1];
-			broadCast(toMessage);
-			break;
-		default:
-			//invalid input
-			from.send("INVALID|Improper command");
-			break;
-		}
 		}
 		catch (IllegalArgumentException iae){
-			from.send("INVALID|Improper arguments");
+			from.send("INVALID|Improper arguments:"+iae.getMessage());
 		}
-		
-		
-		
+
+
+
 		//update all clients
-		if (engine!=null)
-			broadCastUpdate();
+		
 	}
-	
+
 	public void broadCastUpdate(){
 		for (Integer to : clients.keySet()){
 			clients.get(to).send("GAMESTATE|"+engine.getGameStateForPlayer(players.get(to)));
 		}
+	}
+	
+	private boolean isTheirTurn(int clientID){
+		if (engine!=null && players.get(clientID).intValue()-1==engine.turnNum())
+			return true;
+		return false;
+	}
+	
+	private boolean gameHasStarted(){
+		return false;
 	}
 	
 	public void broadCast(String message){
