@@ -60,13 +60,37 @@ public class GameBoard {
 	
 	//starts a tournament, and makes it's colour the input colour
 	public void startTour(char col){
-		if(tourney == 'P' && col== 'P'){
+		if(oldtourney == 'P' && col== 'P'){
 			throw new IllegalArgumentException();
 		}
 		for(int i=0; i<numPlayers; i++){
 			players[i].enterTour();
 		}
 		tourney=col;
+	}
+	
+	public void print(){
+		char[] colarr= {'R','G','Y','B','P'};
+		System.out.print("Card remaining in Deck: "+this.getDeck().remaining()+"\t Cards in discard pile: "+this.getDiscard().remaining()+"\tPlayers left :"+this.getPlayersleft()+"\n");
+		if(tourney=='G')System.out.print("Tournament colour: "+this.getCol()+"\t Player "+this.highestDisplayG()+"is in the lead\n--------------\n");
+		else System.out.print("Tournament colour: "+this.getCol()+"\t Player "+this.highestDisplay()+"is in the lead\n--------------\n");
+		for(int i = 0; i<this.numPlayers;i++){
+			System.out.print("Player "+i+" has ");
+			int j =0;
+			for( char stone : colarr){
+				System.out.print(this.getPlayers()[i].getStones()[j]+""+stone);
+				j++;
+			}
+			System.out.print(" stones.\n");
+			System.out.print("Player "+i+"'s hand:\n");
+			this.getPlayers()[i].getHand().display();
+			if(tourney=='G')System.out.print("\nPlayer "+i+"'s display:\t value of:"+players[i].displayNum()+"\n");
+			else System.out.print("\nPlayer "+i+"'s display:\t value of:"+players[i].displayVal()+"\n");
+			this.getPlayers()[i].displayPrint();
+			System.out.print("\n");
+		}
+		System.out.print("\n\n\n");
+		System.out.print("Player "+this.getTurn()+"'s turn\n\n\n");
 	}
 	
 	public void withdraw(int player){
@@ -170,6 +194,10 @@ public class GameBoard {
 	}
 	public void setTurn(int turn) {
 		this.turn = turn;
+	}
+	
+	public char getOldtour(){
+		return oldtourney;
 	}
 	public int getPlayersleft() {
 		return playersleft;

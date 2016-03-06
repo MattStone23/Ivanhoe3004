@@ -114,7 +114,7 @@ public class Deck {
 	public void shuffle(){
 		Card temp;
 		for(int i=0 ;i<=currentDeck.size()-1  ; i++){
-			int rnd=(int) (Math.random()*(110-i)) +i;
+			int rnd=(int) (Math.random()*(currentDeck.size()-i)) +i;
 			temp= currentDeck.get(rnd);
 			currentDeck.set(rnd, currentDeck.get(i));
 			currentDeck.set(i, temp);			
