@@ -1,8 +1,8 @@
 package Util;
 
 public class config {
-	public static int PORT = 3004;
-	public static String IP = "192.168.245.1";
+	public static int PORT = 3000;
+	public static String IP = "fe80::edb4:37bc:e476:d64a";
 	public static int MAX_CLIENTS = 5;
 	public static boolean SEEDED = true;
 	public static String BLACK_TEXT = (char)27 + "[30m";
