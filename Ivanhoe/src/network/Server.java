@@ -50,7 +50,8 @@ public class Server implements Runnable {
 	private void bindToPort(){
 		try{
 			System.out.println("SERVER----------Binding to port " + port + ", please wait  ...");
-			server = new ServerSocket(port, 10, InetAddress.getByName(config.IP));
+			//server = new ServerSocket(port, 10, InetAddress.getByName(config.IP));
+			server = new ServerSocket(port);
 			server.setReuseAddress(true);
 			System.out.println("IA:\t"+server.getInetAddress());
 			System.out.println("LH:\t"+InetAddress.getLocalHost());
