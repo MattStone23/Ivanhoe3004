@@ -109,10 +109,11 @@ public class Server implements Runnable {
 			}
 			else{
 				//Lobby is open and not full
-				serverThread.send("ACCEPT");
 				clients.put(serverThread.getID(), serverThread);
-				players.put(serverThread.getID(), clientCount+1);
-				clientCount++; 
+				players.put(serverThread.getID(), new Integer(clientCount+1));
+				clientCount++;
+				System.out.println("ACCEPT|"+players.get(serverThread.getID())+"|"+serverThread.getID());
+				serverThread.send("ACCEPT|"+players.get(serverThread.getID())+"|"+serverThread.getID());
 			}
 		}
 		catch(IOException ioe){
