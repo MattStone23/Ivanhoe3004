@@ -21,31 +21,12 @@ public class EngineTest {
 		String[] args =  "Play|W6".split("\\|");
 		eng.printState();
 		eng.playCard(args);
-		eng.printState();
-		assertEquals(85, eng.currentState().getDeck().remaining());
 		eng.endTurn();
-		eng.draw();
-		eng.printState();
-		eng.withdraw();
 		eng.endTurn();
-		assertEquals(0, eng.turnNum());
-		eng.draw();
-		eng.printState();
-		eng.endTurn();
-		assertEquals(1, eng.turnNum());
-		eng.draw();
-		eng.printState();
-		eng.endTurn();
-		assertEquals(0, eng.turnNum());
-		eng.draw();
-		eng.printState();
-		eng.endTurn();
-		assertEquals(1, eng.turnNum());
-		eng.draw();
 		eng.printState();
 		//if(eng.withdraw())eng.removeToken(colour);
 	}
-	
+	/*
 	@Test
 	public void turnTest(){
 		Engine eng= new Engine(3);
@@ -55,12 +36,13 @@ public class EngineTest {
 			assertEquals(i%3, eng.turnNum());
 			eng.endTurn();
 		}
-	}
+	}*/
 	
 	@Test
 	public void testParse(){
 		Engine eng= new Engine(2);
 		System.out.println(eng.getGameStateForPlayer(-1));
+
 		eng.startTour("STARTTOURN|B".split("\\|"));
 		System.out.println(eng.getGameStateForPlayer(-1));
 		eng.draw();
@@ -94,7 +76,6 @@ public class EngineTest {
 		while(!in.equals("quit")){
 			eng.printState();
 			in=get.nextLine();
-			System.out.println("~"+in+"~");
 			String[] args =  in.split("\\|");
 			String command = args[0];
 			switch (command){
@@ -130,6 +111,7 @@ public class EngineTest {
 				break;
 			}
 		}
+		get.close();
 	}
 
 }

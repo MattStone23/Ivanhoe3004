@@ -62,6 +62,14 @@ public class Player {
 		shield= null;
 	}
 	
+	public void win(Deck discard){
+		if(shield !=null) discard.putInto(shield);
+		while(!display.isEmpty()){
+			discard.putInto(display.pop());
+		}
+		shield= null;
+	}
+	
 	public boolean isWithdrawn(){
 		return withdrawn;
 	}
@@ -81,12 +89,25 @@ public class Player {
 	}
 	
 	public void displayDiscVal(int val, Deck discard){
+		Stack<Card> temp= new Stack<Card>();
 		for( Card card:display){
 			if(card.getValue()==val && card.getColour()!='A'){
 				discard.putInto(card);
-				display.remove(card);
 			}
+			else temp.push(card);
 		}
+		display=temp;
+	}
+	
+	public void displayDiscCol(char col, Deck discard){
+		Stack<Card> temp= new Stack<Card>();
+		for( Card card:display){
+			if(card.getColour()==col){
+				discard.putInto(card);
+			}
+			else temp.push(card);
+		}
+		display=temp;
 	}
 	
 	public boolean isWinner(int numPlyr){
