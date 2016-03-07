@@ -290,6 +290,7 @@ public class Server implements Runnable {
 					engine.removeToken(args);
 					prompt=0;
 					broadCastUpdate();
+					from.send("PROMPT|2|"+false);
 				}
 			}
 		}catch (IllegalArgumentException iae){

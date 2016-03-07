@@ -108,7 +108,8 @@ public class Client {
 				System.out.println("Starting Game");
 			}
 			gameState.setGameState(message);
-			gameState.printState();
+			gameState.print();
+			printClientData();
 			break;
 		case "CHAT":
 			System.out.println(args[1]);
@@ -169,6 +170,12 @@ public class Client {
 
 	public GameBoard getGameState() {
 		return gameState;
+	}
+	public void printClientData(){
+		//YOU ARE PLAYER X
+		System.out.println("You are Player "+(playerNum-1));
+		//VALID MOVES
+		System.out.println("MOVES: "+gameState.getValidMoves(playerNum-1));
 	}
 	
 	private void prompt(String[] args){

@@ -75,7 +75,7 @@ public class GameBoard {
 	
 	public void print(){
 		char[] colarr= {'R','G','Y','B','P'};
-		System.out.print("Card remaining in Deck: "+this.getDeck().remaining()+"\t Cards in discard pile: "+this.getDiscard().remaining()+"\tPlayers left :"+this.getPlayersleft()+"\n");
+		System.out.print("Card remaining in Deck: "+this.getDeckSize()+"\t Cards in discard pile: "+this.getDiscardSize()+"\tPlayers left :"+this.getPlayersleft()+"\n");
 		if(tourney=='G')System.out.print("Tournament colour: "+this.getCol()+"\t Player "+this.highestDisplayG()+"is in the lead\n--------------\n");
 		else System.out.print("Tournament colour: "+this.getCol()+"\t Player "+this.highestDisplay()+"is in the lead\n--------------\n");
 		for(int i = 0; i<this.numPlayers;i++){
@@ -89,12 +89,12 @@ public class GameBoard {
 			System.out.print("Player "+i+"'s hand:\n");
 			this.getPlayers()[i].getHand().display();
 			if(tourney=='G')System.out.print("\nPlayer "+i+"'s display:\t value of:"+players[i].displayNum()+"\n");
-			else System.out.print("\nPlayer "+i+"'s display:\t value of:"+players[i].displayVal()+"\n");
+			else System.out.print("\nPlayer "+i+"'s display:\t value of:"+(players[i].isWithdrawn()?"WITHDRAWN":players[i].displayVal())+"\n");
 			this.getPlayers()[i].displayPrint();
 			System.out.print("\n");
 		}
 		System.out.print("\n\n\n");
-		System.out.print("Player "+this.getTurn()+"'s turn\n\n\n");
+		System.out.print("Player "+this.getTurn()+"'s turn\n");
 	}
 	
 	public void withdraw(int player){
@@ -321,17 +321,27 @@ public class GameBoard {
 	}
 	
 	public String getValidMoves(int player){
+		String basic = "CHAT, DESC";
+		
+		if (turn!=player){
+			//NOT THEIR TURN
+			return basic;
+		}
+		//if it is their turn;
 		if (!hasDrawn){
-			return "DRAW";
+			return basic+", DRAW";
 		}
 		if (tourney=='N'){
-			return "STARTTOURN";
+			if (!hasValidCard(player)){
+				return basic + ", ENDTURN";
+			}
+			return basic + ", STARTTOURN";
 		}
 		if (this.highestDisplay()==player){
-			return "PLAY, WITHDRAW, ENDTURN";
+			return basic + ", PLAY, WITHDRAW, ENDTURN";
 		}
 		else{
-			return "PLAY, WITHDRAW";
+			return basic + ", PLAY, WITHDRAW";
 		}
 		
 	}

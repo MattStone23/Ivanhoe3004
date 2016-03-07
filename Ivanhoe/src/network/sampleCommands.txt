@@ -1,16 +1,19 @@
-CLIENT
-	"Draw"	->				
-	"Play|C|#|(additional info)"		
-	"Withdraw"
-	"End"
-	"StartTourn|C"
-	"WinToken|C"
-	"CONNECT"
-	"QUIT"
-	"SHUTDOWN"
-	"STARTGAME"
+"STARTGAME"
+"DRAW"			
+"PLAY|card|(ADDITIONAL INFO)"		
+"WITHDRAW"
+"ENDTURN"
+"STARTTOURN|colour" 
+"WINTOKEN|colour" (for winning purple tournament only)
+"LOSETOKEN|colour" (for withdrawing with maiden only)
+"CHAT|message"
+"DESC|card"
 
-SERVER
-	"GAMESTATE|COLOUR|DECK|TURN|{P#^HAND#^DISPLAY()^SH^ST}|{P#^HAND#^DISPLAY()^SH^ST}"
-	"DRAW|C|#"
-	"JOIN|(player name/ID)"
+cards are the format "colourNumber"
+for example A15. P4.
+
+colours are just a single character. P,B,R,G,Y,W
+
+SPECIAL SERVER COMMANDS
+"QUIT" this will close the client connection
+"SHUTDOWN" this will shutdown the server if sent from the host
