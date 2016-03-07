@@ -15,7 +15,12 @@ public class GameBoardTest {
 	@Test
 	public void shuffletst(){
 		GameBoard board = new GameBoard(3);
-		assertEquals(110,board.getDeck().remaining());
+		int cards=0;
+		for(int i=0; i<3;i++){
+			cards+=board.getPlayers()[i].getHand().getHandStack().size();
+		}
+		cards+=board.getDeckSize();
+		assertEquals(110,cards);
 	}
 	
 	@Test
@@ -50,11 +55,16 @@ public class GameBoardTest {
 	@Test
 	public void test() {
 		GameBoard board= new GameBoard(4);
+		int cards=0;
 		board.getDeck().shuffle();
 		board.playerDraw(1);
 		board.playerDraw(0);
 		board.playerDraw(2);
-		assertEquals(107,board.getDeck().remaining());
+		for(int i=0; i<4;i++){
+			cards+=board.getPlayers()[i].getHand().getHandStack().size();
+		}
+		cards+=board.getDeckSize();
+		assertEquals(110,cards);
 		for(int i =0; i<3;i++){
 			board.getPlayers()[i].getHand().display();
 		}
