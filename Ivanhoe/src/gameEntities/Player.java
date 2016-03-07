@@ -132,19 +132,19 @@ public class Player {
 	public void addStone(char type){
 		switch (type){
 		case 'R':
-			colours[0]++;
+			if(colours[0]<1)colours[0]++;
 			break;
 		case 'G':
-			colours[1]++;
+			if(colours[1]<1)colours[1]++;
 			break;
 		case 'Y':
-			colours[2]++;
+			if(colours[2]<1)colours[2]++;
 			break;
 		case 'B':
-			colours[3]++;
+			if(colours[3]<1)colours[3]++;
 			break;
 		case 'P':
-			colours[4]++;
+			if(colours[4]<1)colours[4]++;
 			break;
 		default:
 			throw new IllegalArgumentException();			
