@@ -23,7 +23,8 @@ public class Engine {
 			System.out.print("you have a valid card you can play to start the tournament!\n");
 			throw new IllegalArgumentException("you have a valid card you can play to start the tournament!\n");
 		}
-		if(!state.getPlayers()[state.getTurn()].isWithdrawn()){
+
+		if(!state.getPlayers()[state.getTurn()].isWithdrawn()&&state.getCol()!='N'){
 			if(state.getCol()=='G'){
 				if(state.getTurn()!= state.highestDisplayG()){
 					System.out.print("You have not played enough cards to be the highest value display\n");
@@ -42,6 +43,9 @@ public class Engine {
 		}while(state.getPlayers()[state.getTurn()].isWithdrawn());
 		state.hasDrawn=false;
 		if(state.getPlayersleft()==1){
+			for(Player ply: state.getPlayers()){
+				ply.enterTour();
+			}
 			if(state.getCol()=='P'){
 				/*Scanner getCol= new Scanner(System.in);
 				String col;
@@ -121,13 +125,13 @@ public class Engine {
 			state.changeCol('G');
 			break;
 			
-			//Break Lance: makes player indicated by in[3] discard all purple cards.
+			//Break Lance: makes player indicated by in[2] discard all purple cards.
 		case 4:
-			state.getPlayers()[Integer.parseInt(in[3])].displayDiscCol('P', state.getDiscard());
+			state.getPlayers()[Integer.parseInt(in[2])].displayDiscCol('P', state.getDiscard());
 			break;
 			
 		case 5:
-			//discards a specific card from the player indicated by arg[2]'s display
+			//Dodge:discards a specific card from the player indicated by arg[2]'s display
 			state.getPlayers()[Integer.parseInt(in[2])].displayDisc( Integer.parseInt(in[3])  , state.discard);
 			break;
 			
@@ -138,7 +142,7 @@ public class Engine {
 			
 			
 		case 7:
-			//discards the last card in each players display.
+			//Outmanuver:discards the last card in each opponents display.
 			for(int ply = 0; ply<state.getNumPlayers(); ply++){
 				if(ply != state.getTurn()){
 					state.getPlayers()[ply].displayDisc(state.getPlayers()[ply].displayNum()-1, state.discard);
@@ -146,7 +150,7 @@ public class Engine {
 			}
 			break;
 			
-			// Discards all cards of a lowest value in all players displays
+			//Charge Discards all cards of a lowest value in all players displays
 		case 8:
 			int minval=10;
 			for(int ply = 0; ply<state.getNumPlayers(); ply++){
@@ -156,20 +160,21 @@ public class Engine {
 				state.getPlayers()[ply].displayDiscVal(minval, state.discard);
 			}
 			break;
-			// Discards all cards of a highest value in all players displays
+			// Counter charge Discards all cards of a highest value in all players displays
 		case 9:
 			int maxval=0;
 			for(int ply = 0; ply<state.getNumPlayers(); ply++){
 				if(state.getPlayers()[ply].displayHighest()>maxval)maxval= state.getPlayers()[ply].displayHighest();
+			}
+			for(int ply = 0; ply<state.getNumPlayers();ply++){
+				state.getPlayers()[ply].displayDiscVal(maxval, state.discard);
 			}
 			break;
 			
 			//Dishonour: removes all follower (white) cards from all players display
 		case 10:
 			for(int ply = 0; ply<state.getNumPlayers(); ply++){
-				if(ply != state.getTurn() && !(state.getPlayers()[ply].isWithdrawn())){
-					state.getPlayers()[ply].getHand().DiscardCol('W', state.discard);
-				}
+					state.getPlayers()[ply].displayDiscCol('W', state.discard);	
 			}
 			break;
 			
