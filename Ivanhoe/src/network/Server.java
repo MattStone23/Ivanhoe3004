@@ -276,13 +276,13 @@ public class Server implements Runnable {
 			}
 			else if (prompt==1){//WON A PURPLE TOURN
 				if ("WINTOKEN".equals(command)){
-					//engine.addStone(args);
+					engine.addstone(args);
 					prompt=0;
 				}
 			}
 			else if (prompt==2){//LOST WITH A MAIDEN
 				if ("LOSETOKEN".equals(command)){
-					//engine.removeToken(args);
+					engine.removeToken(args);
 					prompt=0;
 				}
 			}
