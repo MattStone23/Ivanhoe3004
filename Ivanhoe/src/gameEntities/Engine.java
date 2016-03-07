@@ -208,7 +208,7 @@ public class Engine {
 		state.playCard(new Card(val, type ), state.getTurn());
 		
 	}
-	
+	//TODO: write prompt for maiden withdraw in server. returns true if display contains maiden
 	//boolean to check if player has a maiden card.
 	public boolean withdraw(){
 		if(!state.hasDrawn){
@@ -224,9 +224,10 @@ public class Engine {
 			System.out.print("You haven't played a card yet!");
 			return false;
 		}
+		boolean temp =state.getPlayers()[state.getTurn()].containsMaiden();
 		state.withdraw(state.getTurn());
 		state.setPlayersleft(state.getPlayersleft()-1);
-		return state.getPlayers()[state.getTurn()].containsMaiden();
+		return temp;
 	}
 	
 	public boolean lastLeft(){
