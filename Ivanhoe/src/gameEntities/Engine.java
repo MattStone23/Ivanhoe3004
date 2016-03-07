@@ -70,8 +70,11 @@ public class Engine {
 		return state.playerDraw(state.getTurn());
 	}
 	
-	public void removeToken(char colour){
-		state.getPlayers()[state.getTurn()].removeColour(colour);
+	public void removeToken(String[] in){
+		if(in.length!=2){
+			throw new IllegalArgumentException("Illegal argument");
+		}		
+		state.getPlayers()[state.getTurn()].removeColour(in[1].charAt(0));
 	}
 	
 	public void playCard( String[] in){
@@ -208,7 +211,7 @@ public class Engine {
 		state.playCard(new Card(val, type ), state.getTurn());
 		
 	}
-	
+	//TODO: write prompt for maiden withdraw in server. returns true if display contains maiden
 	//boolean to check if player has a maiden card.
 	public boolean withdraw(){
 		if(!state.hasDrawn){
@@ -224,9 +227,17 @@ public class Engine {
 			System.out.print("You haven't played a card yet!");
 			return false;
 		}
+		boolean temp =state.getPlayers()[state.getTurn()].containsMaiden();
 		state.withdraw(state.getTurn());
 		state.setPlayersleft(state.getPlayersleft()-1);
-		return state.getPlayers()[state.getTurn()].containsMaiden();
+		return temp;
+	}
+	
+	public void addstone(String[] in){
+		if(in.length!=2){
+			throw new IllegalArgumentException("Illegal argument");
+		}		
+		state.getPlayers()[state.getTurn()].addStone(in[1].charAt(0));
 	}
 	
 	public boolean lastLeft(){
