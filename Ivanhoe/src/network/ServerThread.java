@@ -49,9 +49,11 @@ public class ServerThread extends Thread {
 			}
 			catch(IOException ioe)
 			{
-				System.err.println("ST:"+ID + " ERROR reading: " + ioe.getMessage());
-				running = false;
-				server.removeThread(ID);
+				if (running){
+					System.err.println("ST:"+ID + " ERROR reading: " + ioe.getMessage());
+					running = false;
+					server.removeThread(ID);
+				}
 			}
 		}
 	}
@@ -63,12 +65,12 @@ public class ServerThread extends Thread {
 	}
 	public void close(){
 		try{
+			running = false;
 			if (socket != null)    socket.close();
 			if (inputStream != null)  inputStream.close();
 			if (outputStream != null) outputStream.close();
 			if (netLog != null) netLog.close();
 			
-			running = false;
 			netLog=null;
 			socket = null;
 			inputStream=null;
