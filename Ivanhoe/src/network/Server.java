@@ -11,6 +11,7 @@ import java.util.Set;
 
 import Util.config;
 import Util.timer;
+import gameEntities.Card;
 import gameEntities.Engine;
 
 public class Server implements Runnable {
@@ -267,6 +268,9 @@ public class Server implements Runnable {
 				case "PING":
 					from.send("CHAT|Ping Received");
 					break;
+				case "DESC":
+					if (args.length==2)
+					from.send(new Card(args[1]).getDesc());
 
 				default:
 					//invalid input
@@ -278,12 +282,14 @@ public class Server implements Runnable {
 				if ("WINTOKEN".equals(command)){
 					engine.addstone(args);
 					prompt=0;
+					broadCastUpdate();
 				}
 			}
 			else if (prompt==2){//LOST WITH A MAIDEN
 				if ("LOSETOKEN".equals(command)){
 					engine.removeToken(args);
 					prompt=0;
+					broadCastUpdate();
 				}
 			}
 		}catch (IllegalArgumentException iae){
