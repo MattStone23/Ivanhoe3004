@@ -204,6 +204,11 @@ public class GameBoard {
 		return oldtourney;
 	}
 	public int getPlayersleft() {
+		playersleft=0;
+		for (int x = 0;x<players.length;x++){
+			if (!players[x].isWithdrawn())
+				playersleft++;
+		}
 		return playersleft;
 	}
 	public void setPlayersleft(int playersleft) {

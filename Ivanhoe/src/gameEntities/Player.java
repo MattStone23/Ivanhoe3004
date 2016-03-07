@@ -250,6 +250,9 @@ public class Player {
 			display.clear();
 			display = newDisplay;
 		}
+		else{
+			display.clear();
+		}
 	}
 	
 	private void setColours(String s){

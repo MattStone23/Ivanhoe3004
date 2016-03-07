@@ -54,6 +54,7 @@ public class Engine {
 				System.out.print("\n\n");
 				state.endTour(state.getTurn(), col.charAt(0));
 				getCol.close();*/
+				state.getPlayers()[state.getTurn()].win(state.getDiscard());
 				return 1;
 			}
 			else state.endTour(state.getTurn(), state.getCol());
@@ -237,7 +238,7 @@ public class Engine {
 		if(in.length!=2){
 			throw new IllegalArgumentException("Illegal argument");
 		}		
-		state.getPlayers()[state.getTurn()].addStone(in[1].charAt(0));
+		state.endTour(state.getTurn(), (in[1].charAt(0)));
 	}
 	
 	public boolean lastLeft(){
@@ -277,7 +278,7 @@ public class Engine {
 	}
 	
 	public void printState(){
-		state.printState();
+		state.print();
 	}
 	
 	
