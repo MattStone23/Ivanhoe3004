@@ -24,6 +24,7 @@ public class Client {
 	private logger networkLog;
 	private int playerNum;
 	private int playerID;
+	private int prompt;
 	
 	
 	public Client(){
@@ -122,6 +123,7 @@ public class Client {
 		case "PROMPT":
 			//TODO deal with this
 			System.out.println("Need input");
+			prompt(args);
 			break;
 		case "INVALID":
 			System.err.println(args[1]);
@@ -167,6 +169,24 @@ public class Client {
 
 	public GameBoard getGameState() {
 		return gameState;
+	}
+	
+	private void prompt(String[] args){
+		if (1==Integer.parseInt(args[1])){
+			//won purple tourn
+			System.out.println("You won a purple tournament. Please reply with a colour to win. \"WINTOKEN|C\"");
+			prompt=1;
+		}
+		else if(2==Integer.parseInt(args[1])){
+			if (Boolean.parseBoolean(args[2])){
+				//LOST WITH MAIDEN
+				System.out.println("You lost a tournament with a maiden out. Please reply with a colour to lose. \"LOSETOKEN|C\"");
+				prompt=1;
+			}
+			else{
+				sendMessage("ENDTURN");
+			}
+		}
 	}
 	
 	
