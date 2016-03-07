@@ -493,7 +493,22 @@ public class EngineTest {
 		assertEquals(2,eng.currentState().getPlayers()[1].displayVal());
 		assertEquals(7,eng.currentState().getPlayers()[2].displayVal());
 	}
-	
+	@Test
+	public void maidenwithdraw(){
+		Engine eng = new Engine(2);
+		GameBoard testboard= new GameBoard(2);
+		testboard.setGameState("GAMESTATE|Y~0~94~0~3~true|[1, 1, 0, 0, 0]$false$A10,A16,W6,W6,A11,Y3,R3,B4$W6,Y3|[0, 0, 0, 0, 0]$false$P7,R3,B2,B2,Y2,P5,W2,G1$0|[0, 0, 0, 0, 0]$false$P7,R3,B2,B2,Y2,P5,W2,G1$0");
+		eng.setState(testboard);
+		try{
+			boolean temp=eng.withdraw();
+			assertTrue(temp);
+		}
+		catch(IllegalArgumentException e){
+			System.out.println(e.getMessage());
+		}
+		
+		
+	}
 	/*
 	@Test
 	public void GameTest(){
