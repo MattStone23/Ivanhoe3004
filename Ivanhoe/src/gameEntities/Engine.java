@@ -229,6 +229,11 @@ public class Engine {
 	
 
 	public void startTour(String[] args){
+		//check args
+		if (args.length!=2){
+			throw new IllegalArgumentException("Improper arguments");
+		}
+		
 		char col = args[1].charAt(0);
 		if(state.getCol()!='N'){
 			System.out.print("No changing colours midtournament");

@@ -9,7 +9,6 @@ import java.net.UnknownHostException;
 
 import Util.config;
 import Util.logger;
-import Util.timer;
 import gameEntities.GameBoard;
 
 public class Client {
@@ -31,7 +30,7 @@ public class Client {
 		port = config.PORT;
 		ipAddress = config.IP;
 		recentMessage = new String();
-		gameState = new GameBoard();
+		gameState = null;
 		
 		connectToServer();
 	}
@@ -40,7 +39,7 @@ public class Client {
 		port = portNum;
 		ipAddress = ipAdd;
 		recentMessage = new String();
-		gameState = new GameBoard();
+		gameState = null;
 		
 		connectToServer();
 	}
@@ -68,7 +67,6 @@ public class Client {
 	}
 	
 	public void sendMessage(String message){
-		//TODO
 		try{
 			networkLog.write("SENT: \t"+message);
 			streamOut.writeUTF(message);
@@ -100,21 +98,26 @@ public class Client {
 	   }
 	
 	public void handle(String message){
-		//TODO handle
 		networkLog.write("RECIEVED: \t"+message);
 		String args[] = message.split("\\|");
 		switch (args[0]){
 		case "GAMESTATE":
+			if (gameState==null){
+				gameState=new GameBoard();
+				System.out.println("Starting Game");
+			}
 			gameState.setGameState(message);
 			gameState.printState();
 			break;
 		case "CHAT":
 			System.out.println(args[1]);
+			recentMessage = args[1];
+			messageRecieved = true;
 			break;
 		case "ACCEPT":
-			System.out.println("Connected to lobby");
 			playerNum = Integer.parseInt(args[1]);
 			playerID = Integer.parseInt(args[2]);
+			System.out.println("Connected to lobby");
 			break;
 		case "PROMPT":
 			//TODO deal with this
@@ -126,11 +129,14 @@ public class Client {
 		case "CLOSE":
 			clientThread.close();
 			break;
+		case "REJECT":
+			System.out.println("ERROR "+args[1]);
+			playerNum = -1;
+			playerID = -1;
+			break;
 		default:
 			System.err.println("UNRECOGNIZED RESPONSE FROM SERVER\n"+message);
 		}
-		recentMessage = message;
-		messageRecieved = true;
 	}
 	
 	
@@ -142,4 +148,26 @@ public class Client {
 		messageRecieved = false;
 		return recentMessage;
 	}
+
+	public int getPlayerNum() {
+		return playerNum;
+	}
+
+	public void setPlayerNum(int playerNum) {
+		this.playerNum = playerNum;
+	}
+
+	public int getPlayerID() {
+		return playerID;
+	}
+
+	public void setPlayerID(int playerID) {
+		this.playerID = playerID;
+	}
+
+	public GameBoard getGameState() {
+		return gameState;
+	}
+	
+	
 }

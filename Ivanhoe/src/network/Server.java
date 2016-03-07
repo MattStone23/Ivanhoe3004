@@ -140,8 +140,6 @@ public class Server implements Runnable {
 		
 		String[] args =  message.split("\\|");
 		String command = args[0];
-		System.out.println("SERVER----------COMMAND:\t\""+command+"\"");
-		System.out.println("SERVER----------#ofARGS:\t\""+args.length+"\"");
 		//if quit message
 		try{
 			switch (command){
@@ -151,77 +149,60 @@ public class Server implements Runnable {
 				break;
 			case "SHUTDOWN":
 				//shutdown the server
+				if (players.get(clientNum).intValue()!=1){
+					IllegalArgumentException iae = new IllegalArgumentException("You are not the Host");
+					throw iae;
+				}
 				this.shutdown();
 				break;
+				
 			case "STARTTOURN":
 				//startTourn()
-				if(!isTheirTurn(clientNum)){
-					from.send("INVALID|Not your turn");
-					break;
-				}
-				if (engine!=null){
-					//TODO args check
+				if(gameHasStarted() && isTheirTurn(clientNum)){
 					engine.startTour(args);
 					broadCastUpdate();
-				}
-				
-					
+				}	
 				break;
+				
 			case "DRAW":
 				//draw a card
-				//TODO check for single draw only
-				if(!isTheirTurn(clientNum)){
-					from.send("INVALID|Not your turn");
-					break;
-				}
-				if (engine!=null){
+				if(gameHasStarted() && isTheirTurn(clientNum)){
 					toMessage = engine.draw().toString();
 					broadCastUpdate();
 					clients.get(clientNum).send("CHAT|You drew "+toMessage);
 				}	
 				break;
-			case "PLAY":
-				//play a card
-				if(!isTheirTurn(clientNum)){
-					from.send("INVALID|Not your turn");
-					break;
-				}
-				if (engine!=null){
-					engine.playCard(args);
-				}
 				
-				if (engine!=null)
+			case "PLAY":
+				//Play a card
+				if(gameHasStarted() && isTheirTurn(clientNum)){
+					engine.playCard(args);
 					broadCastUpdate();
+				}
 				break;
+				
 			case "WITHDRAW":
 				//withdraw from tournament
-				if(!isTheirTurn(clientNum)){
-					from.send("INVALID|Not your turn");
-					break;
-				}
-				if (engine!=null){
+				if(gameHasStarted() && isTheirTurn(clientNum)){
 					engine.withdraw();
-				}
-				
-				if (engine!=null)
 					broadCastUpdate();
+				}
 				break;
+				
 			case "ENDTURN":
 				//end turn
-				if(!isTheirTurn(clientNum)){
-					from.send("INVALID|Not your turn");
-					break;
-				}
-				if (engine!=null){
+				if(gameHasStarted() && isTheirTurn(clientNum)){
 					engine.endTurn();
 					//TODO handle win tournaments/win
-				}
-				
-				if (engine!=null)
 					broadCastUpdate();
+				}
 				break;
+				
 			case "IVANHOE":
 				//interrupt actioncard
+				if(gameHasStarted()){
+					from.send("INVALID|NOT IMPLEMENTED");
+				}
 				break;
 			case "WINTOKEN":
 				//select which token to win if purple tournament won
@@ -248,19 +229,27 @@ public class Server implements Runnable {
 				}
 				catch (IllegalArgumentException iae){
 					engine = null;
-					broadCast("INVALID|Not Enough Players");
+					throw iae;
 				}
+				
 				if (engine!=null)
 					broadCastUpdate();
 				break;
+				
 			case "CONNECT":
 				toMessage = "CHAT|Player "+players.get(clientNum)+"("+clientNum + ") joined the lobby";
 				broadCast(toMessage);
 				break;
+				
 			case "CHAT":
-				toMessage = "CHAT|Player "+players.get(clientNum)+"("+clientNum + ") said:"+args[1];
+				toMessage = "CHAT|Player "+players.get(clientNum)+"("+clientNum + ") said: "+args[1];
 				broadCast(toMessage);
 				break;
+				
+			case "PING":
+				from.send("CHAT|Ping Received");
+				break;
+				
 			default:
 				//invalid input
 				from.send("INVALID|Improper command");
@@ -271,9 +260,6 @@ public class Server implements Runnable {
 			from.send("INVALID|Improper arguments:"+iae.getMessage());
 		}
 
-
-
-		//update all clients
 		
 	}
 
@@ -284,13 +270,15 @@ public class Server implements Runnable {
 	}
 	
 	private boolean isTheirTurn(int clientID){
-		if (engine!=null && players.get(clientID).intValue()-1==engine.turnNum())
+		if (gameHasStarted() && players.get(clientID).intValue()-1==engine.turnNum())
 			return true;
-		return false;
+		throw new IllegalArgumentException("Not your turn.");
 	}
 	
 	private boolean gameHasStarted(){
-		return false;
+		if(engine==null)
+			throw new IllegalArgumentException("Game has not started yet.");
+		return (engine!=null);
 	}
 	
 	public void broadCast(String message){
@@ -301,17 +289,16 @@ public class Server implements Runnable {
 	
 	/** Shutdown the server cleanly */
 	public void shutdown() {
-		Set<Integer> keys = clients.keySet();
+		//Set<Integer> keys = clients.keySet();
 
 		if (thread != null) {
 			thread = null;
 		}
 
 		try {
-			for (Integer key : keys) {
+			for (Integer key : clients.keySet()) {
 				//clients.get(key).send("CLOSE");
 				clients.get(key).close();
-				clients.put(key, null);
 			}
 			clients.clear();
 			if (server!=null){
