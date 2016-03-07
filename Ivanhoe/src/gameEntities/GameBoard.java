@@ -278,9 +278,16 @@ public class GameBoard {
 	}
 	
 	public void printState(){
+		char[] colarr= {'R','G','Y','B','P'};
 		System.out.print("Card remaining in Deck: "+this.getDeckSize()+"\t Cards in discard pile: "+this.getDiscardSize()+"\tPlayers left :"+this.getPlayersleft()+"\n-----------\n");
 		for(int i = 0; i<this.numPlayers;i++){
-			//System.out.print("Player "+i+" has ")
+			System.out.print("Player "+i+" has ");
+			int j =0;
+			for( char stone : colarr){
+				System.out.print(this.getPlayers()[i].getStones()[j]+""+stone+" ");
+				j++;
+			}
+			System.out.print(" stones.\n");
 			System.out.print("Player "+i+"'s hand:\n");
 			this.getPlayers()[i].getHand().display();
 			System.out.print("\nPlayer "+i+"'s display:"+(this.getCol()=='G'?this.getPlayers()[i].displayNum():this.getPlayers()[i].displayVal())+"\n");

@@ -448,6 +448,8 @@ public class EngineTest {
 		eng.setState(testboard);
 		eng.playCard("PLAY|A6|0".split("\\|"));
 		assertEquals(new Card(3,'B'),eng.currentState().getPlayers()[eng.turnNum()].getHand().getHandStack().elementAt(7) );
+		assertEquals(0, eng.currentState().getPlayers()[0].displayVal());
+		eng.printState();
 	}
 	@Test
 	public void outmanuverTest(){
@@ -509,7 +511,7 @@ public class EngineTest {
 		
 		
 	}
-	/*
+	
 	@Test
 	public void GameTest(){
 		Engine eng=new Engine(3);
@@ -563,5 +565,5 @@ public class EngineTest {
 		}
 		get.close();
 	}
-	*/
+	
 }
