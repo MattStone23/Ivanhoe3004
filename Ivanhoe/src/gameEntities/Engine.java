@@ -70,8 +70,11 @@ public class Engine {
 		return state.playerDraw(state.getTurn());
 	}
 	
-	public void removeToken(char colour){
-		state.getPlayers()[state.getTurn()].removeColour(colour);
+	public void removeToken(String[] in){
+		if(in.length!=2){
+			throw new IllegalArgumentException("Illegal argument");
+		}		
+		state.getPlayers()[state.getTurn()].removeColour(in[1].charAt(0));
 	}
 	
 	public void playCard( String[] in){
@@ -228,6 +231,13 @@ public class Engine {
 		state.withdraw(state.getTurn());
 		state.setPlayersleft(state.getPlayersleft()-1);
 		return temp;
+	}
+	
+	public void addstone(String[] in){
+		if(in.length!=2){
+			throw new IllegalArgumentException("Illegal argument");
+		}		
+		state.getPlayers()[state.getTurn()].addStone(in[1].charAt(0));
 	}
 	
 	public boolean lastLeft(){
