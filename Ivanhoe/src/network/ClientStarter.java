@@ -19,12 +19,16 @@ public class ClientStarter {
 		//Client c = new Client("134.117.28.215",config.PORT);
 		String in="temp";
 		Server s = null;
+		Client c = null;
+		
+		
 		Scanner get = new Scanner(System.in); 
 		while (!"JOIN".equals(in)&&!"HOST".equals(in)){
 			System.out.println("Would you like to Host a game a play a game?\nHOST\nJOIN");
 			in = get.nextLine();
 		}
 		
+		try{
 		if ("HOST".equals(in)){
 			System.out.println("STARTING SERVER");
 			s = new Server();
@@ -42,7 +46,7 @@ public class ClientStarter {
 		}
 		
 		
-		Client c = new Client(in,config.PORT);
+		c = new Client(in,config.PORT);
 		timer.wait(1);
 		c.sendMessage("CONNECT");
 //		
@@ -52,6 +56,10 @@ public class ClientStarter {
 			System.out.print("INPUT:");
 			in=get.nextLine();
 			c.sendMessage(in);
+		}
+		}
+		catch (Exception e){
+			System.out.println(e.getMessage());
 		}
 		c.stop();
 		s.shutdown();
