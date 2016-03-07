@@ -252,11 +252,19 @@ public class Engine {
 
 	public void startTour(String[] args){
 		//check args
+		char[] colours={'R','P','G','Y','B'};
 		if (args.length!=2){
 			throw new IllegalArgumentException("Improper arguments");
 		}
 		
 		char col = args[1].charAt(0);
+		boolean check=false;
+		for(char colour:colours){
+			if(col==colour){
+				check=true;
+			}
+		}
+		if(!check)throw new IllegalArgumentException("Improper colour argument");
 		if(state.getCol()!='N'){
 			System.out.print("No changing colours midtournament");
 			return;
@@ -278,7 +286,7 @@ public class Engine {
 	}
 	
 	public void printState(){
-		state.print();
+		state.printState();
 	}
 	
 	

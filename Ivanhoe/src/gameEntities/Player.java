@@ -168,6 +168,9 @@ public class Player {
 	
 	//removes a token of a selected colour in case of failing to win a tournament with a maiden in play.
 	public void removeColour( char type){
+		if(this.getNumcolours()==0){
+			return;
+		}
 		switch (type){
 		case 'R':
 			if(colours[0]<1) throw new IllegalArgumentException();
