@@ -24,7 +24,7 @@ public class Server implements Runnable {
 	private int maxClients;
 	private int gameState;
 	private Engine engine;
-	
+	private int prompt=0;
 	
 	private static final int LOBBY = 0;
 	private static final int RUNNING = 1;
@@ -141,126 +141,157 @@ public class Server implements Runnable {
 		String[] args =  message.split("\\|");
 		String command = args[0];
 		//if quit message
+		
 		try{
-			switch (command){
-			case "QUIT":
-				//shut down this client
-				from.close();
-				break;
-			case "SHUTDOWN":
-				//shutdown the server
-				if (players.get(clientNum).intValue()!=1){
-					IllegalArgumentException iae = new IllegalArgumentException("You are not the Host");
-					throw iae;
-				}
-				this.shutdown();
-				break;
-				
-			case "STARTTOURN":
-				//startTourn()
-				if(gameHasStarted() && isTheirTurn(clientNum)){
-					engine.startTour(args);
-					broadCastUpdate();
-				}	
-				break;
-				
-			case "DRAW":
-				//draw a card
-				if(gameHasStarted() && isTheirTurn(clientNum)){
-					toMessage = engine.draw().toString();
-					broadCastUpdate();
-					clients.get(clientNum).send("CHAT|You drew "+toMessage);
-				}	
-				break;
-				
-			case "PLAY":
-				//Play a card
-				if(gameHasStarted() && isTheirTurn(clientNum)){
-					engine.playCard(args);
-					broadCastUpdate();
-				}
-				break;
-				
-			case "WITHDRAW":
-				//withdraw from tournament
-				if(gameHasStarted() && isTheirTurn(clientNum)){
-					engine.withdraw();
-					broadCastUpdate();
-				}
-				break;
-				
-			case "ENDTURN":
-				//end turn
-				if(gameHasStarted() && isTheirTurn(clientNum)){
-					engine.endTurn();
-					//TODO handle win tournaments/win
-					broadCastUpdate();
-				}
-				break;
-				
-			case "IVANHOE":
-				//interrupt actioncard
-				if(gameHasStarted()){
-					from.send("INVALID|NOT IMPLEMENTED");
-				}
-				break;
-			case "WINTOKEN":
-				//select which token to win if purple tournament won
-				if(!isTheirTurn(clientNum)){
-					from.send("INVALID|Not your turn");
+			if (prompt==0){
+				switch (command){
+				case "QUIT":
+					//shut down this client
+					from.close();
+					break;
+				case "SHUTDOWN":
+					//shutdown the server
+					if (players.get(clientNum).intValue()!=1){
+						IllegalArgumentException iae = new IllegalArgumentException("You are not the Host");
+						throw iae;
+					}
+					this.shutdown();
+					break;
+
+				case "STARTTOURN":
+					//startTourn()
+					if(gameHasStarted() && isTheirTurn(clientNum)){
+						engine.startTour(args);
+						broadCastUpdate();
+					}	
+					break;
+
+				case "DRAW":
+					//draw a card
+					if(gameHasStarted() && isTheirTurn(clientNum)){
+						toMessage = engine.draw().toString();
+						broadCastUpdate();
+						clients.get(clientNum).send("CHAT|You drew "+toMessage);
+					}	
+					break;
+
+				case "PLAY":
+					//Play a card
+					if(gameHasStarted() && isTheirTurn(clientNum)){
+						engine.playCard(args);
+						broadCastUpdate();
+					}
+					break;
+
+				case "WITHDRAW":
+					//withdraw from tournament
+					if(gameHasStarted() && isTheirTurn(clientNum)){
+						boolean tempB = engine.withdraw();
+						if(tempB){
+							//WITHDRAWN WITH A MAIDEN
+							prompt=2;
+						}
+						from.send("PROMPT|2|"+tempB);
+						broadCastUpdate();
+					}
+					break;
+
+				case "ENDTURN":
+					//end turn
+					if(gameHasStarted() && isTheirTurn(clientNum)){
+						int tempX = engine.endTurn();
+						if (tempX==1){
+							//SPECIAL CASE: PURPLE TOURNAMENT WON
+							int clientID = findClientByPlayerNum(engine.turnNum()+1);
+							//set prompt
+							prompt=1;
+							clients.get(clientID).send("PROMPT|1");
+						}
+						//TODO handle win tournaments/win
+						broadCastUpdate();
+
+						if (tempX==2){
+							broadCast("GAMEOVER|"+engine.turnNum()+1);
+						}
+					}
+					break;
+
+				case "IVANHOE":
+					//interrupt actioncard
+					if(gameHasStarted()){
+						from.send("INVALID|NOT IMPLEMENTED");
+					}
+					break;
+				case "WINTOKEN":
+					//select which token to win if purple tournament won
+					if(!isTheirTurn(clientNum)){
+						from.send("INVALID|Not your turn");
+						break;
+					}
+
+					if (engine!=null)
+						broadCastUpdate();
+					//TODO
+					break;
+				case "STARTGAME":
+					//start the game
+					//If not the host, say invalid
+					if (players.get(clientNum).intValue()!=1){
+						IllegalArgumentException iae = new IllegalArgumentException("You are not the Host");
+						throw iae;
+					}
+
+					try{
+						engine = new Engine(clientCount);
+						gameState = RUNNING;
+					}
+					catch (IllegalArgumentException iae){
+						engine = null;
+						throw iae;
+					}
+
+					if (engine!=null)
+						broadCastUpdate();
+					break;
+
+				case "CONNECT":
+					toMessage = "CHAT|Player "+players.get(clientNum)+"("+clientNum + ") joined the lobby";
+					broadCast(toMessage);
+					break;
+
+				case "CHAT":
+					toMessage = "CHAT|Player "+players.get(clientNum)+"("+clientNum + ") said: "+args[1];
+					broadCast(toMessage);
+					break;
+
+				case "PING":
+					from.send("CHAT|Ping Received");
+					break;
+
+				default:
+					//invalid input
+					from.send("INVALID|Improper command");
 					break;
 				}
-				
-				if (engine!=null)
-					broadCastUpdate();
-				//TODO
-				break;
-			case "STARTGAME":
-				//start the game
-				//If not the host, say invalid
-				if (players.get(clientNum).intValue()!=1){
-					IllegalArgumentException iae = new IllegalArgumentException("You are not the Host");
-					throw iae;
-				}
-				
-				try{
-					engine = new Engine(clientCount);
-					gameState = RUNNING;
-				}
-				catch (IllegalArgumentException iae){
-					engine = null;
-					throw iae;
-				}
-				
-				if (engine!=null)
-					broadCastUpdate();
-				break;
-				
-			case "CONNECT":
-				toMessage = "CHAT|Player "+players.get(clientNum)+"("+clientNum + ") joined the lobby";
-				broadCast(toMessage);
-				break;
-				
-			case "CHAT":
-				toMessage = "CHAT|Player "+players.get(clientNum)+"("+clientNum + ") said: "+args[1];
-				broadCast(toMessage);
-				break;
-				
-			case "PING":
-				from.send("CHAT|Ping Received");
-				break;
-				
-			default:
-				//invalid input
-				from.send("INVALID|Improper command");
-				break;
 			}
-		}
-		catch (IllegalArgumentException iae){
+			else if (prompt==1){//WON A PURPLE TOURN
+				if ("WINTOKEN".equals(command)){
+					//engine.addStone(args);
+					prompt=0;
+				}
+			}
+			else if (prompt==2){//LOST WITH A MAIDEN
+				if ("LOSETOKEN".equals(command)){
+					//engine.removeToken(args);
+					prompt=0;
+				}
+			}
+		}catch (IllegalArgumentException iae){
 			from.send("INVALID|Improper arguments:"+iae.getMessage());
 		}
 
-		
+
+
 	}
 
 	public void broadCastUpdate(){
@@ -310,5 +341,13 @@ public class Server implements Runnable {
 		}
 		System.out.println("SERVER----------Server Shutdown cleanly "+ server);
 		
+	}
+	private int findClientByPlayerNum(int p){
+		for (Integer key : players.keySet()){
+			if (players.get(key)==p){
+				return key;
+			}
+		}
+		return -1;
 	}
 }
