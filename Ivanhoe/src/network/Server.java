@@ -270,8 +270,8 @@ public class Server implements Runnable {
 					break;
 				case "DESC":
 					if (args.length==2)
-					from.send(new Card(args[1]).getDesc());
-
+					from.send("DESC|"+new Card(args[1]).getDesc());
+					break;
 				default:
 					//invalid input
 					from.send("INVALID|Improper command");

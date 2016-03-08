@@ -89,8 +89,8 @@ public class Engine {
 			playActionCard(in);
 		}
 		else{
-			if(state.getCol()!= c.getColour() && c.getColour()!= 'W' ) throw new IllegalArgumentException();
-			if(state.getPlayers()[state.getTurn()].containsMaiden()) throw new IllegalArgumentException();
+			if(state.getCol()!= c.getColour() && c.getColour()!= 'W' ) throw new IllegalArgumentException("Please play a valid colour");
+			if((c.getColour()=='W'&&c.getValue()==6)&&state.getPlayers()[state.getTurn()].containsMaiden()) throw new IllegalArgumentException("Your display already contains a maiden");
 			state.playCard(c, state.getTurn());
 		}
 	}

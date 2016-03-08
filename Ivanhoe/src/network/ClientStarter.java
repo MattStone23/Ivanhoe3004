@@ -53,7 +53,6 @@ public class ClientStarter {
 		
 		
 		while(!in.equals("quit")){
-			System.out.print("INPUT:");
 			in=get.nextLine();
 			c.sendMessage(in);
 		}

@@ -137,6 +137,9 @@ public class Client {
 			playerNum = -1;
 			playerID = -1;
 			break;
+		case "DESC":
+			System.out.println(args[1]);
+			break;
 		default:
 			System.err.println("UNRECOGNIZED RESPONSE FROM SERVER\n"+message);
 		}
