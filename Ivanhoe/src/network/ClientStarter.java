@@ -1,6 +1,6 @@
 package network;
 
-import java.net.InetAddress;
+
 import java.util.Scanner;
 
 import Util.config;
@@ -60,6 +60,7 @@ public class ClientStarter {
 		catch (Exception e){
 			System.out.println(e.getMessage());
 		}
+		get.close();
 		c.stop();
 		s.shutdown();
 		

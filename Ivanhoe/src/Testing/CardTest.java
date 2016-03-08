@@ -19,7 +19,7 @@ public class CardTest {
 	}
 	@Test(expected=IllegalArgumentException.class )
 	public void test2() {
-		Card badCard = new Card(2, 'F');
+		new Card(2, 'F');
 	}
 	@Test//Tests that equals() is overriden properly in card
 	public void test3(){
