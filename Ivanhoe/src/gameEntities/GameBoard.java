@@ -310,22 +310,22 @@ public class GameBoard {
 	
 	//This was to colour the text
 	//Not really working
-	private String getFancyCol(){
-		switch (tourney){
-		case 'R':
-			return config.RED_TEXT+tourney+config.DEFAULT_TEXT;
-		case 'G':
-			return config.GREEN_TEXT+tourney+config.DEFAULT_TEXT;
-		case 'Y':
-			return config.YELLOW_TEXT+tourney+config.DEFAULT_TEXT;
-		case 'B':
-			return config.BLUE_TEXT+tourney+config.DEFAULT_TEXT;
-		case 'P':
-			return config.PURPLE_TEXT+tourney+config.DEFAULT_TEXT;
-		default:
-			return tourney+"";	
-		}
-	}
+//	private String getFancyCol(){
+//		switch (tourney){
+//		case 'R':
+//			return config.RED_TEXT+tourney+config.DEFAULT_TEXT;
+//		case 'G':
+//			return config.GREEN_TEXT+tourney+config.DEFAULT_TEXT;
+//		case 'Y':
+//			return config.YELLOW_TEXT+tourney+config.DEFAULT_TEXT;
+//		case 'B':
+//			return config.BLUE_TEXT+tourney+config.DEFAULT_TEXT;
+//		case 'P':
+//			return config.PURPLE_TEXT+tourney+config.DEFAULT_TEXT;
+//		default:
+//			return tourney+"";	
+//		}
+//	}
 	
 	public String getValidMoves(int player){
 		String basic = "CHAT, DESC";

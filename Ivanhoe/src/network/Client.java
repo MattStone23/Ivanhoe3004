@@ -24,7 +24,7 @@ public class Client {
 	private logger networkLog;
 	private int playerNum;
 	private int playerID;
-	private int prompt;
+//	private int prompt;
 	
 	
 	public Client(){
@@ -137,6 +137,9 @@ public class Client {
 			playerNum = -1;
 			playerID = -1;
 			break;
+		case "DESC":
+			System.out.println(args[1]);
+			break;
 		default:
 			System.err.println("UNRECOGNIZED RESPONSE FROM SERVER\n"+message);
 		}
@@ -182,13 +185,13 @@ public class Client {
 		if (1==Integer.parseInt(args[1])){
 			//won purple tourn
 			System.out.println("You won a purple tournament. Please reply with a colour to win. \"WINTOKEN|C\"");
-			prompt=1;
+//			prompt=1;
 		}
 		else if(2==Integer.parseInt(args[1])){
 			if (Boolean.parseBoolean(args[2])){
 				//LOST WITH MAIDEN
 				System.out.println("You lost a tournament with a maiden out. Please reply with a colour to lose. \"LOSETOKEN|C\"");
-				prompt=1;
+//				prompt=1;
 			}
 			else{
 				sendMessage("ENDTURN");

@@ -17,7 +17,7 @@ public class config {
 		{"Change Weapon","The tournament color changes from red, blue or yellow to a different one of these colors, as announced by the player."},
 		{"Drop Weapon","The tournament color changes from red, blue or yellow to green"},
 		{"Break Lance","Force one opponent to discard all purple cards from his display."},
-		{"Dodge","Discard any one card from any one opponent’s display"},
+		{"Dodge","Discard any one card from any one opponent's display"},
 		{"Retreat","Take any one card from your own display back into your hand."},
 		{"OutManuever","All opponents must remove the last card played on their displays."},
 		{"Charge","Identify the lowest value card throughout all displays. All players must discard all cards of this value from their displays."},

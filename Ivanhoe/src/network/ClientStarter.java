@@ -1,6 +1,6 @@
 package network;
 
-import java.net.InetAddress;
+
 import java.util.Scanner;
 
 import Util.config;
@@ -53,7 +53,6 @@ public class ClientStarter {
 		
 		
 		while(!in.equals("quit")){
-			System.out.print("INPUT:");
 			in=get.nextLine();
 			c.sendMessage(in);
 		}
@@ -61,6 +60,7 @@ public class ClientStarter {
 		catch (Exception e){
 			System.out.println(e.getMessage());
 		}
+		get.close();
 		c.stop();
 		s.shutdown();
 		
