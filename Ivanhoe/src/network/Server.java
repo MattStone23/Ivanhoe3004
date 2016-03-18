@@ -2,12 +2,9 @@ package network;
 
 import java.io.IOException;
 import java.net.InetAddress;
-import java.net.NetworkInterface;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.Enumeration;
 import java.util.HashMap;
-import java.util.Set;
 
 import Util.config;
 import Util.timer;
@@ -29,7 +26,7 @@ public class Server implements Runnable {
 	
 	private static final int LOBBY = 0;
 	private static final int RUNNING = 1;
-	private static final int ENDED = 2;
+//	private static final int ENDED = 2;
 	
 	public Server(){
 		port = config.PORT;
@@ -137,7 +134,6 @@ public class Server implements Runnable {
 		//TODO handle stuff
 		ServerThread from = clients.get(clientNum);
 		String toMessage = "";
-		String fromMessage = "";
 		
 		String[] args =  message.split("\\|");
 		String command = args[0];
@@ -270,8 +266,8 @@ public class Server implements Runnable {
 					break;
 				case "DESC":
 					if (args.length==2)
-					from.send(new Card(args[1]).getDesc());
-
+					from.send("DESC|"+new Card(args[1]).getDesc());
+					break;
 				default:
 					//invalid input
 					from.send("INVALID|Improper command");

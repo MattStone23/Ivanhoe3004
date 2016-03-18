@@ -1,6 +1,6 @@
 package gameEntities;
 
-import java.util.*;
+
 public class Engine {
 	GameBoard state;
 	//tracks which player last drew a card
@@ -89,8 +89,8 @@ public class Engine {
 			playActionCard(in);
 		}
 		else{
-			if(state.getCol()!= c.getColour() && c.getColour()!= 'W' ) throw new IllegalArgumentException();
-			if(state.getPlayers()[state.getTurn()].containsMaiden()) throw new IllegalArgumentException();
+			if(state.getCol()!= c.getColour() && c.getColour()!= 'W' ) throw new IllegalArgumentException("Please play a valid colour");
+			if((c.getColour()=='W'&&c.getValue()==6)&&state.getPlayers()[state.getTurn()].containsMaiden()) throw new IllegalArgumentException("Your display already contains a maiden");
 			state.playCard(c, state.getTurn());
 		}
 	}
@@ -252,11 +252,19 @@ public class Engine {
 
 	public void startTour(String[] args){
 		//check args
+		char[] colours={'R','P','G','Y','B'};
 		if (args.length!=2){
 			throw new IllegalArgumentException("Improper arguments");
 		}
 		
 		char col = args[1].charAt(0);
+		boolean check=false;
+		for(char colour:colours){
+			if(col==colour){
+				check=true;
+			}
+		}
+		if(!check)throw new IllegalArgumentException("Improper colour argument");
 		if(state.getCol()!='N'){
 			System.out.print("No changing colours midtournament");
 			return;
@@ -278,7 +286,7 @@ public class Engine {
 	}
 	
 	public void printState(){
-		state.print();
+		state.printState();
 	}
 	
 	
