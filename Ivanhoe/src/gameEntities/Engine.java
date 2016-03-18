@@ -183,6 +183,7 @@ public class Engine {
 			break;
 			
 			//Adapt: removes all duplicate cards, player chooses
+			//Throw an exception maybe? possibly bad form, but hey.
 		case 11:
 			
 			break;
@@ -191,6 +192,7 @@ public class Engine {
 		case 12:
 			
 			break;
+		//shield
 		case 13:
 			state.setShield(state.getTurn());
 			break;
@@ -200,9 +202,11 @@ public class Engine {
 		case 15:
 			
 			break;
+		//riposte
 		case 16:
 			
 			break;
+		//knock down
 		case 17:
 			
 			break;
