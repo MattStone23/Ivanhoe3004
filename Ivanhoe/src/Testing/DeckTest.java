@@ -1,10 +1,10 @@
 package Testing;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import gameEntities.Deck;
 import gameEntities.Card;
+import gameEntities.Deck;
 import gameEntities.Hand;
 
 public class DeckTest {

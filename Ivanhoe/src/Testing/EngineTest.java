@@ -1,13 +1,16 @@
 package Testing;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+
+import java.util.Scanner;
+
+import org.junit.Test;
 
 import gameEntities.Card;
 import gameEntities.Engine;
 import gameEntities.GameBoard;
-import java.util.*;
-
-import org.junit.Test;
 
 public class EngineTest {
 

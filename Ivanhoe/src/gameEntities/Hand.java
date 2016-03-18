@@ -1,5 +1,5 @@
 package gameEntities;
-import java.util.*;
+import java.util.Stack;
 public class Hand {
 	Stack<Card> hand;
 	public Hand(){
