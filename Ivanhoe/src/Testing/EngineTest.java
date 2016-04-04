@@ -37,7 +37,7 @@ public class EngineTest {
 			eng.endTurn();
 		}
 	}*/
-	
+
 	@Test
 	public void testParse(){
 		Engine eng= new Engine(2);
@@ -431,6 +431,17 @@ public class EngineTest {
 		eng.playCard("PLAY|A4|1".split("\\|"));
 		assertEquals(0,eng.currentState().getPlayers()[1].displayVal());
 	}
+	
+	@Test
+	public void breakLanceShieldTest(){
+		Engine eng = new Engine(2);
+		GameBoard testboard= new GameBoard(2);
+		testboard.setGameState("GAMESTATE|B~0~94~0~2~true|[0, 0, 0, 0, 0]$false$A4,A16$0|[0, 0, 0, 0, 0]$false$R3,R3,B2,B2,Y2,P5,W2,G1$P5,P5,P7");
+		eng.setState(testboard);
+		eng.currentState().getPlayers()[1].setShield();
+		eng.playCard("PLAY|A4|1".split("\\|"));
+		assertEquals(17,eng.currentState().getPlayers()[1].displayVal());
+	}
 	@Test
 	public void dodgeTest(){
 		Engine eng = new Engine(2);
@@ -439,6 +450,16 @@ public class EngineTest {
 		eng.setState(testboard);
 		eng.playCard("PLAY|A5|1|2".split("\\|"));
 		assertEquals(10,eng.currentState().getPlayers()[1].displayVal());
+	}
+	@Test
+	public void dodgeShieldTest(){
+		Engine eng = new Engine(2);
+		GameBoard testboard= new GameBoard(2);
+		testboard.setGameState("GAMESTATE|B~0~94~0~2~true|[0, 0, 0, 0, 0]$false$A5,A16$0|[0, 0, 0, 0, 0]$false$R3,R3,B2,B2,Y2,P5,W2,G1$P5,P5,P7");
+		eng.setState(testboard);
+		eng.currentState().getPlayers()[1].setShield();
+		eng.playCard("PLAY|A5|1|2".split("\\|"));
+		assertEquals(17,eng.currentState().getPlayers()[1].displayVal());
 	}
 	@Test
 	public void retreatTest(){
@@ -458,6 +479,18 @@ public class EngineTest {
 		testboard.setGameState("GAMESTATE|B~0~94~0~3~true|[1, 0, 0, 0, 0]$false$A7,A16,W6,W6,A11,Y3,R3,B4$B3|[0, 0, 0, 0, 0]$false$P7,R3,B2,B2,Y2,P5,W2,G1$B4|[0, 0, 0, 0, 0]$false$P7,R3,B2,B2,Y2,P5,W2,G1$B4");
 		eng.setState(testboard);
 		eng.playCard("PLAY|A7".split("\\|"));
+		assertEquals(3,eng.currentState().getPlayers()[0].displayVal());
+		assertEquals(0,eng.currentState().getPlayers()[1].displayVal());
+		assertEquals(0,eng.currentState().getPlayers()[2].displayVal());
+	}
+	@Test
+	public void outmanuverShieldTest(){
+		Engine eng = new Engine(2);
+		GameBoard testboard= new GameBoard(2);
+		testboard.setGameState("GAMESTATE|B~0~94~0~3~true|[1, 0, 0, 0, 0]$false$A7,A16,W6,W6,A11,Y3,R3,B4$B3|[0, 0, 0, 0, 0]$false$P7,R3,B2,B2,Y2,P5,W2,G1$B4|[0, 0, 0, 0, 0]$false$P7,R3,B2,B2,Y2,P5,W2,G1$B4");
+		eng.setState(testboard);
+		eng.currentState().getPlayers()[0].setShield();
+		eng.playCard("PLAY|A7".split("\\|"));
 		assertEquals(0,eng.currentState().getPlayers()[1].displayVal());
 		assertEquals(0,eng.currentState().getPlayers()[2].displayVal());
 	}
@@ -473,6 +506,18 @@ public class EngineTest {
 		assertEquals(3,eng.currentState().getPlayers()[2].displayVal());
 	}
 	@Test
+	public void chargeShieldTest(){
+		Engine eng = new Engine(2);
+		GameBoard testboard= new GameBoard(2);
+		testboard.setGameState("GAMESTATE|Y~0~94~0~3~true|[1, 0, 0, 0, 0]$false$A8,A16,W6,W6,A11,Y3,R3,B4$Y2,Y3|[0, 0, 0, 0, 0]$false$P7,R3,B2,B2,Y2,P5,W2,G1$W2,Y2|[0, 0, 0, 0, 0]$false$P7,R3,B2,B2,Y2,P5,W2,G1$Y2,Y2,Y3");
+		eng.setState(testboard);
+		eng.currentState().getPlayers()[2].setShield();
+		eng.playCard("PLAY|A8".split("\\|"));
+		assertEquals(3,eng.currentState().getPlayers()[0].displayVal());
+		assertEquals(0,eng.currentState().getPlayers()[1].displayVal());
+		assertEquals(7,eng.currentState().getPlayers()[2].displayVal());
+	}
+	@Test
 	public void counterchargeTest(){
 		Engine eng = new Engine(2);
 		GameBoard testboard= new GameBoard(2);
@@ -484,6 +529,18 @@ public class EngineTest {
 		assertEquals(4,eng.currentState().getPlayers()[2].displayVal());
 	}
 	@Test
+	public void counterchargeShieldTest(){
+		Engine eng = new Engine(2);
+		GameBoard testboard= new GameBoard(2);
+		testboard.setGameState("GAMESTATE|Y~0~94~0~3~true|[1, 0, 0, 0, 0]$false$A9,A16,W6,W6,A11,Y3,R3,B4$Y2,Y3|[0, 0, 0, 0, 0]$false$P7,R3,B2,B2,Y2,P5,W2,G1$W2,Y2|[0, 0, 0, 0, 0]$false$P7,R3,B2,B2,Y2,P5,W2,G1$Y2,Y2,Y3");
+		eng.setState(testboard);
+		eng.currentState().getPlayers()[2].setShield();
+		eng.playCard("PLAY|A9".split("\\|"));
+		assertEquals(2,eng.currentState().getPlayers()[0].displayVal());
+		assertEquals(4,eng.currentState().getPlayers()[1].displayVal());
+		assertEquals(7,eng.currentState().getPlayers()[2].displayVal());
+	}
+	@Test
 	public void dishonourTest(){
 		Engine eng = new Engine(2);
 		GameBoard testboard= new GameBoard(2);
@@ -493,6 +550,19 @@ public class EngineTest {
 		eng.printState();
 		assertEquals(5,eng.currentState().getPlayers()[0].displayVal());
 		assertEquals(2,eng.currentState().getPlayers()[1].displayVal());
+		assertEquals(7,eng.currentState().getPlayers()[2].displayVal());
+	}
+	
+	public void dishonourShieldTest(){
+		Engine eng = new Engine(2);
+		GameBoard testboard= new GameBoard(2);
+		testboard.setGameState("GAMESTATE|Y~0~94~0~3~true|[1, 0, 0, 0, 0]$false$A10,A16,W6,W6,A11,Y3,R3,B4$Y2,Y3|[0, 0, 0, 0, 0]$false$P7,R3,B2,B2,Y2,P5,W2,G1$W2,Y2|[0, 0, 0, 0, 0]$false$P7,R3,B2,B2,Y2,P5,W2,G1$W3,W6,Y2,Y2,Y3");
+		eng.setState(testboard);
+		eng.currentState().getPlayers()[1].setShield();
+		eng.playCard("PLAY|A10".split("\\|"));
+		eng.printState();
+		assertEquals(5,eng.currentState().getPlayers()[0].displayVal());
+		assertEquals(4,eng.currentState().getPlayers()[1].displayVal());
 		assertEquals(7,eng.currentState().getPlayers()[2].displayVal());
 	}
 	
@@ -516,9 +586,32 @@ public class EngineTest {
 	@Test
 	public void StunTest(){
 		Engine eng = new Engine(2);
-		eng.currentState().getPlayers()[1].setStun();
-		assertTrue(eng.currentState().getPlayers()[1].isStunned());
+		eng.currentState().getPlayers()[0].setStun();
+		assertTrue(eng.currentState().getPlayers()[0].isStunned());
 	}
+	
+	@Test
+	public void StunEndTurnTest(){
+		Engine eng = new Engine(2);
+		GameBoard testboard= new GameBoard(2);
+		testboard.setGameState("GAMESTATE|Y~0~94~0~3~true|[1, 0, 0, 0, 0]$false$A12,A16,W6,W6,A11,Y3,R3,B4$Y2,Y3|[0, 0, 0, 0, 0]$false$P7,R3,B2,B2,Y2,P5,W2,G1$0|[0, 0, 0, 0, 0]$false$P7,R3,B2,B2,Y2,P5,W2,G1$0");
+		eng.setState(testboard);
+		eng.currentState().getPlayers()[0].setStun();
+		eng.playCard("PLAY|Y3".split("\\|"));
+		assertEquals(1,eng.turnNum());
+	}
+	
+	public void StunWithdrawTest(){
+		Engine eng = new Engine(2);
+		GameBoard testboard= new GameBoard(2);
+		testboard.setGameState("GAMESTATE|Y~0~94~0~3~true|[1, 0, 0, 0, 0]$false$A12,A16,W6,W6,A11,Y3,R3,B4$0|[0, 0, 0, 0, 0]$false$P7,R3,B2,B2,Y2,P5,W2,G1$Y3,Y2|[0, 0, 0, 0, 0]$false$P7,R3,B2,B2,Y2,P5,W2,G1$0");
+		eng.setState(testboard);
+		eng.currentState().getPlayers()[0].setStun();
+		eng.playCard("PLAY|Y3".split("\\|"));
+		assertEquals(1,eng.turnNum());
+		assertTrue(eng.currentState().getPlayers()[0].isWithdrawn());
+	}
+	
 	@Test
 	public void outwitStunShieldtest(){
 		Engine eng = new Engine(2);
@@ -528,6 +621,7 @@ public class EngineTest {
 		eng.currentState().getPlayers()[0].setStun();
 		eng.currentState().getPlayers()[1].setShield();
 		eng.playCard("PLAY|A12|1|-2|-1".split("\\|"));
+		eng.printState();
 		assertTrue(eng.currentState().getPlayers()[0].isShielded());
 		assertTrue(eng.currentState().getPlayers()[1].isStunned());
 	}

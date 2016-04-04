@@ -94,12 +94,19 @@ public class Engine {
 			if((c.getColour()=='W'&&c.getValue()==6)&&state.getPlayers()[state.getTurn()].containsMaiden()) throw new IllegalArgumentException("Your display already contains a maiden");
 			state.playCard(c, state.getTurn());
 		}
+		if(state.getPlayers()[state.getTurn()].isStunned()){
+			if(state.getCol()=='G'){
+				if(state.getTurn()!=state.highestDisplayG()) withdraw();
+			}
+			else if(state.getTurn()!=state.highestDisplay()) withdraw();
+			else endTurn();
+		}
 	}
 	public void playActionCard(String[] in){
 		Card c = new Card(in[1]);
 		char type = c.getColour();
 		int val = c.getValue();
-		
+		Card temp;
 		switch(val){
 		//Unhorse card: changes tournament colour to not purple (RBY)
 		case 1:
@@ -206,16 +213,14 @@ public class Engine {
 			break;
 			
 		//outwit
-		//switches cards, from player that plays and one indicated by in[2], switches cards from in[3] and in[4] respectively
+		//switches cards, from player that plays and one indicated by in[2], switches cards from in[3] and in[4] respectively. Immune to shield!
 			//TODO write test.
 		case 12:
-			if(!state.getPlayers()[Integer.parseInt(in[2])].isShielded()){
-				Card temp;
+
 				temp= state.getPlayers()[state.getTurn()].removeCard(Integer.parseInt(in[3]));
 				state.getPlayers()[Integer.parseInt(in[2])].addCard(temp);
 				temp = state.getPlayers()[Integer.parseInt(in[2])].removeCard(Integer.parseInt(in[4]));
 				state.getPlayers()[state.getTurn()].addCard(temp);;
-			}
 			break;
 		//shield
 		case 13:
@@ -233,7 +238,6 @@ public class Engine {
 		//steals last card in oppenents display
 		case 16:
 			if(!state.getPlayers()[Integer.parseInt(in[2])].isShielded()){
-				Card temp;
 				temp = state.getPlayers()[Integer.parseInt(in[2])].removeCard(state.getPlayers()[Integer.parseInt(in[2])].displayNum()-1);
 				state.getPlayers()[state.getTurn()].addCard(temp);
 			}
@@ -243,7 +247,6 @@ public class Engine {
 		case 17:
 			if(!state.getPlayers()[Integer.parseInt(in[2])].isShielded()){
 				Random rnd = new Random();
-				Card temp;
 				temp= state.getPlayers()[Integer.parseInt(in[2])].removeCard(rnd.nextInt(state.getPlayers()[Integer.parseInt(in[2])].getHand().getHandStack().size()));
 				state.getPlayers()[state.getTurn()].getHand().addCard(temp);
 			}
