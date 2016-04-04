@@ -495,6 +495,43 @@ public class EngineTest {
 		assertEquals(2,eng.currentState().getPlayers()[1].displayVal());
 		assertEquals(7,eng.currentState().getPlayers()[2].displayVal());
 	}
+	
+	@Test
+	public void outwitTest(){
+		Engine eng = new Engine(2);
+		GameBoard testboard= new GameBoard(2);
+		testboard.setGameState("GAMESTATE|Y~0~94~0~3~true|[1, 0, 0, 0, 0]$false$A12,A16,W6,W6,A11,Y3,R3,B4$Y2,Y3|[0, 0, 0, 0, 0]$false$P7,R3,B2,B2,Y2,P5,W2,G1$W2,Y2|[0, 0, 0, 0, 0]$false$P7,R3,B2,B2,Y2,P5,W2,G1$W3,W6,Y2,Y2,Y3");
+		eng.setState(testboard);
+		eng.playCard("PLAY|A12|1|1|0".split("\\|"));	
+		assertEquals(4,eng.currentState().getPlayers()[0].displayVal());
+		assertEquals(5,eng.currentState().getPlayers()[1].displayVal());
+		assertEquals(16,eng.currentState().getPlayers()[2].displayVal());
+	}
+	@Test
+	public void ShieldTest(){
+		Engine eng = new Engine(2);
+		eng.currentState().getPlayers()[1].setShield();
+		assertTrue(eng.currentState().getPlayers()[1].isShielded());
+	}
+	@Test
+	public void StunTest(){
+		Engine eng = new Engine(2);
+		eng.currentState().getPlayers()[1].setStun();
+		assertTrue(eng.currentState().getPlayers()[1].isStunned());
+	}
+	@Test
+	public void outwitStunShieldtest(){
+		Engine eng = new Engine(2);
+		GameBoard testboard= new GameBoard(2);
+		testboard.setGameState("GAMESTATE|Y~0~94~0~3~true|[1, 0, 0, 0, 0]$false$A12,A16,W6,W6,A11,Y3,R3,B4$Y2,Y3|[0, 0, 0, 0, 0]$false$P7,R3,B2,B2,Y2,P5,W2,G1$W2,Y2|[0, 0, 0, 0, 0]$false$P7,R3,B2,B2,Y2,P5,W2,G1$W3,W6,Y2,Y2,Y3");
+		eng.setState(testboard);
+		eng.currentState().getPlayers()[0].setStun();
+		eng.currentState().getPlayers()[1].setShield();
+		eng.playCard("PLAY|A12|1|-2|-1".split("\\|"));
+		assertTrue(eng.currentState().getPlayers()[0].isShielded());
+		assertTrue(eng.currentState().getPlayers()[1].isStunned());
+	}
+	
 	@Test
 	public void maidenwithdraw(){
 		Engine eng = new Engine(2);

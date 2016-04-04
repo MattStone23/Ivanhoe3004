@@ -1,5 +1,6 @@
 package gameEntities;
 
+import java.util.Random;
 
 public class Engine {
 	GameBoard state;
@@ -131,12 +132,16 @@ public class Engine {
 			
 			//Break Lance: makes player indicated by in[2] discard all purple cards.
 		case 4:
-			state.getPlayers()[Integer.parseInt(in[2])].displayDiscCol('P', state.getDiscard());
+			if(!state.getPlayers()[Integer.parseInt(in[2])].isShielded()) {
+				state.getPlayers()[Integer.parseInt(in[2])].displayDiscCol('P', state.getDiscard());
+			}
 			break;
 			
 		case 5:
 			//Dodge:discards a specific card from the player indicated by arg[2]'s display
-			state.getPlayers()[Integer.parseInt(in[2])].displayDisc( Integer.parseInt(in[3])  , state.discard);
+			if(!state.getPlayers()[Integer.parseInt(in[2])].isShielded()){
+				state.getPlayers()[Integer.parseInt(in[2])].displayDisc( Integer.parseInt(in[3])  , state.discard);
+			}
 			break;
 			
 			//Retreat: returns card from display to hand.
@@ -149,7 +154,9 @@ public class Engine {
 			//Outmanuver:discards the last card in each opponents display.
 			for(int ply = 0; ply<state.getNumPlayers(); ply++){
 				if(ply != state.getTurn()){
-					state.getPlayers()[ply].displayDisc(state.getPlayers()[ply].displayNum()-1, state.discard);
+					if(!state.getPlayers()[ply].isShielded()){
+						state.getPlayers()[ply].displayDisc(state.getPlayers()[ply].displayNum()-1, state.discard);
+					}
 				}
 			}
 			break;
@@ -158,27 +165,37 @@ public class Engine {
 		case 8:
 			int minval=10;
 			for(int ply = 0; ply<state.getNumPlayers(); ply++){
-				if(state.getPlayers()[ply].displayLowest()<minval)minval= state.getPlayers()[ply].displayLowest();
-			}
+					if(!state.getPlayers()[ply].isShielded()){
+						if(state.getPlayers()[ply].displayLowest()<minval)minval= state.getPlayers()[ply].displayLowest();
+					}
+				}
 			for(int ply = 0; ply<state.getNumPlayers();ply++){
-				state.getPlayers()[ply].displayDiscVal(minval, state.discard);
+				if(!state.getPlayers()[ply].isShielded()){
+					state.getPlayers()[ply].displayDiscVal(minval, state.discard);
+				}
 			}
 			break;
 			// Counter charge Discards all cards of a highest value in all players displays
 		case 9:
 			int maxval=0;
 			for(int ply = 0; ply<state.getNumPlayers(); ply++){
-				if(state.getPlayers()[ply].displayHighest()>maxval)maxval= state.getPlayers()[ply].displayHighest();
+				if(!state.getPlayers()[ply].isShielded()){
+					if(state.getPlayers()[ply].displayHighest()>maxval)maxval= state.getPlayers()[ply].displayHighest();
+				}
 			}
 			for(int ply = 0; ply<state.getNumPlayers();ply++){
-				state.getPlayers()[ply].displayDiscVal(maxval, state.discard);
+				if(!state.getPlayers()[ply].isShielded()){
+					state.getPlayers()[ply].displayDiscVal(maxval, state.discard);
+				}
 			}
 			break;
 			
 			//Dishonour: removes all follower (white) cards from all players display
 		case 10:
 			for(int ply = 0; ply<state.getNumPlayers(); ply++){
+				if(!state.getPlayers()[ply].isShielded()){
 					state.getPlayers()[ply].displayDiscCol('W', state.discard);	
+				}
 			}
 			break;
 			
@@ -188,27 +205,48 @@ public class Engine {
 			
 			break;
 			
-			
+		//outwit
+		//switches cards, from player that plays and one indicated by in[2], switches cards from in[3] and in[4] respectively
+			//TODO write test.
 		case 12:
-			
+			if(!state.getPlayers()[Integer.parseInt(in[2])].isShielded()){
+				Card temp;
+				temp= state.getPlayers()[state.getTurn()].removeCard(Integer.parseInt(in[3]));
+				state.getPlayers()[Integer.parseInt(in[2])].addCard(temp);
+				temp = state.getPlayers()[Integer.parseInt(in[2])].removeCard(Integer.parseInt(in[4]));
+				state.getPlayers()[state.getTurn()].addCard(temp);;
+			}
 			break;
 		//shield
 		case 13:
 			state.setShield(state.getTurn());
 			break;
+		//stunned
 		case 14:
-			
+			state.getPlayers()[Integer.parseInt(in[2])].setStun();
 			break;
+		//ivanhoe
 		case 15:
 			
 			break;
 		//riposte
+		//steals last card in oppenents display
 		case 16:
-			
+			if(!state.getPlayers()[Integer.parseInt(in[2])].isShielded()){
+				Card temp;
+				temp = state.getPlayers()[Integer.parseInt(in[2])].removeCard(state.getPlayers()[Integer.parseInt(in[2])].displayNum()-1);
+				state.getPlayers()[state.getTurn()].addCard(temp);
+			}
 			break;
 		//knock down
+		//steals random card from opponents hand
 		case 17:
-			
+			if(!state.getPlayers()[Integer.parseInt(in[2])].isShielded()){
+				Random rnd = new Random();
+				Card temp;
+				temp= state.getPlayers()[Integer.parseInt(in[2])].removeCard(rnd.nextInt(state.getPlayers()[Integer.parseInt(in[2])].getHand().getHandStack().size()));
+				state.getPlayers()[state.getTurn()].getHand().addCard(temp);
+			}
 			break;
 		default:
 			throw new IllegalArgumentException();

@@ -6,11 +6,13 @@ public class Player {
 	int colours[];
 	boolean withdrawn;
 	Card shield;
+	Card stun;
 	public Player(){
 		plyHand = new Hand();
 		display = new Stack<Card>();
 		colours = new int[5];
 		shield=null;
+		stun=null;
 		for(int i = 0; i< 5; i++){
 			colours[i]=0;
 		}
@@ -53,13 +55,29 @@ public class Player {
 		shield = new Card(13, 'A');
 	}
 	
+	public void setStun(){
+		stun= new Card(14, 'A');
+	}
+	
+	public boolean isShielded(){
+		if(shield == null) return false;
+		return true;
+	}
+	
+	public boolean isStunned(){
+		if(stun == null) return false;
+		return true;
+	}
+	
 	public void withdraw(Deck discard){
 		withdrawn= true;
 		if(shield !=null) discard.putInto(shield);
+		if(stun !=null) discard.putInto(stun);
 		while(!display.isEmpty()){
 			discard.putInto(display.pop());
 		}
 		shield= null;
+		stun=null;
 	}
 	
 	public void win(Deck discard){
@@ -199,6 +217,25 @@ public class Player {
 	
 	public void playCard(Card type){
 		display.push(plyHand.play(type));
+	}
+	
+	//DANGER! Only use for the outwit action, not to be trifled with, as may lose a card. Uses -1 and -2 for shield and stun cards respectively
+	public Card removeCard(int i){
+		if(i==-1){
+			shield=null;
+			return new Card(13,'A');
+		}
+		if(i==-2){
+			stun=null;
+			return new Card(14, 'A');
+		}
+		return display.remove(i);
+	}
+	
+	public void addCard( Card add){
+		if(add.equals(new Card(13, 'A'))) shield= add;
+		else if(add.equals(new Card(14, 'A'))) stun= add;
+		else display.push(add);
 	}
 	
 	public void discardType(Card type, Deck discard){
