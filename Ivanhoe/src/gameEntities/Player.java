@@ -290,4 +290,8 @@ public class Player {
 		}
 
 	}
+	
+	public Stack<Card> getDisplay(){
+		return display;
+	}
 }

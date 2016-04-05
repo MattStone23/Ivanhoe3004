@@ -13,15 +13,22 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
+
+import Util.config;
+import gameEntities.Card;
+import gameEntities.GameBoard;
+
 import java.awt.BorderLayout;
 import net.miginfocom.swing.MigLayout;
 import java.awt.FlowLayout;
+import java.awt.Font;
 
 public class GUIFrame extends JFrame {
 
 	private JPanel contentPane;
 	private PlayerPanel[] playerPanels;
 	private JTextField txtHello;
+	private GameBoard gameState;
 	
 	/**
 	 * Launch the application.
@@ -30,7 +37,18 @@ public class GUIFrame extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					GUIFrame frame = new GUIFrame();
+					GameBoard state = new GameBoard(3);
+					state.startTour('B');
+					state.playCard(new Card(4,'B'), 0);
+					state.getPlayers()[0].addStone('R');
+					state.getPlayers()[0].addStone('B');
+					state.getPlayers()[0].addStone('P');
+					state.getPlayers()[1].addStone('G');
+					state.getPlayers()[1].addStone('Y');
+					state.withdraw(1);
+					System.out.println(state.getGameStateForPlayer(1));
+					state.setGameState("GAMESTATE|"+state.getGameStateForPlayer(1));
+					GUIFrame frame = new GUIFrame(state);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -42,16 +60,17 @@ public class GUIFrame extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public GUIFrame() {
+	public GUIFrame(GameBoard gb) {
+		gameState = gb;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 1255, 772);
+		setBounds(100, 100, 1555, 772);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		this.setTitle("Ivanhoe");
 		setContentPane(contentPane);
 		GridBagLayout gbl_contentPane = new GridBagLayout();
-		gbl_contentPane.columnWidths = new int[] {1000, 200};
-		gbl_contentPane.rowHeights = new int[] {100, 600};
+		gbl_contentPane.columnWidths = new int[] {1345, 200};
+		gbl_contentPane.rowHeights = new int[] {50, 650};
 		gbl_contentPane.columnWeights = new double[]{0.0, 0.0};
 		gbl_contentPane.rowWeights = new double[]{0.0, 0.0};
 		contentPane.setLayout(gbl_contentPane);
@@ -80,7 +99,7 @@ public class GUIFrame extends JFrame {
 		txtHello.setColumns(10);
 		
 		JPanel pnlHeader = new JPanel();
-		pnlHeader.setBackground(Color.GREEN);
+		pnlHeader.setBackground(config.getColor(gameState.getCol()));
 		pnlHeader.setLayout(null);
 		GridBagConstraints gbc_pnlHeader = new GridBagConstraints();
 		gbc_pnlHeader.fill = GridBagConstraints.BOTH;
@@ -90,16 +109,19 @@ public class GUIFrame extends JFrame {
 		gbc_pnlHeader.gridy = 0;
 		contentPane.add(pnlHeader, gbc_pnlHeader);
 		
-		JLabel lblCurrentPlayer = new JLabel("Current Player");
-		lblCurrentPlayer.setBounds(10, 11, 46, 14);
+		JLabel lblCurrentPlayer = new JLabel("Current Player: "+gameState.getTurn());
+		lblCurrentPlayer.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblCurrentPlayer.setBounds(10, 11, 135, 33);
 		pnlHeader.add(lblCurrentPlayer);
 		
-		JLabel lblDeck = new JLabel("DECK");
-		lblDeck.setBounds(194, 11, 46, 14);
+		JLabel lblDeck = new JLabel("DECK: "+ gameState.getDeckSize());
+		lblDeck.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblDeck.setBounds(194, 11, 92, 33);
 		pnlHeader.add(lblDeck);
 		
-		JLabel lblDiscard = new JLabel("DISCARD");
-		lblDiscard.setBounds(328, 11, 46, 14);
+		JLabel lblDiscard = new JLabel("DISCARD: "+ gameState.getDiscardSize());
+		lblDiscard.setFont(new Font("Tahoma", Font.BOLD, 14));
+		lblDiscard.setBounds(328, 11, 109, 33);
 		pnlHeader.add(lblDiscard);
 		
 		JPanel pnlMain = new JPanel();
@@ -111,9 +133,18 @@ public class GUIFrame extends JFrame {
 		pnlMain.setLayout(new BoxLayout(pnlMain, BoxLayout.Y_AXIS));
 		
 		
-		playerPanels = new PlayerPanel[5];
-		for (int x=0;x<5;x++){
-			playerPanels[x] = new PlayerPanel(x);
+		playerPanels = new PlayerPanel[gameState.getNumPlayers()];
+		for (int x=0;x<gameState.getNumPlayers();x++){
+			playerPanels[x] = new PlayerPanel(x,gameState.getPlayers()[x]);
+			if (gameState.getTurn()==x){
+				playerPanels[x].setBackground(Color.lightGray);
+			}
+			else if(gameState.getPlayers()[x].isWithdrawn()){
+				playerPanels[x].setBackground(Color.darkGray);
+			}
+			else{
+				playerPanels[x].setBackground(Color.gray);
+			}
 			pnlMain.add(playerPanels[x]);
 		}
 	}
