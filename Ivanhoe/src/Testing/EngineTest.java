@@ -69,29 +69,7 @@ public class EngineTest {
 		System.out.println("TESTGAME 2\t"+testGame2.getGameStateForPlayer(-1));
 	}
 	
-	
-	@Test
-	public void maidentest(){
-		Engine eng = new Engine(2);
-		GameBoard testboard= new GameBoard(2);
-		testboard.setGameState("GAMESTATE|N~0~94~0~2~false|[0, 0, 0, 0, 0]$false$A1,A16,W6,W6,A11,Y3,P7,B4$0|[0, 0, 0, 0, 0]$false$R3,R3,B2,B2,Y2,P5,W2,G1$0");
-		eng.setState(testboard);
-		eng.printState();
-		eng.draw();
-		String args[]="STARTTOURN|P".split("\\|");
-		eng.startTour(args);
-		eng.printState();
-		args="PLAY|W6".split("\\|");
-		eng.playCard(args);
-		try{
-			eng.playCard(args);
-		}
-		catch(IllegalArgumentException e){
-			return;
-		}
-		fail();
-	}
-	
+
 	@Test
 	public void noTournStart(){
 		Engine eng = new Engine(2);
@@ -386,90 +364,21 @@ public class EngineTest {
 		assertTrue(eng.currentState().getPlayers()[1].isStunned());
 	}
 	
-	
-	//Tests for checking withdrawing with a maiden in different tournaments
-	
 	@Test
-	public void maidenwithdrawY(){
+	public void notEnoughCArd(){
 		Engine eng = new Engine(2);
 		GameBoard testboard= new GameBoard(2);
-		testboard.setGameState("GAMESTATE|Y~0~94~0~3~true|[1, 1, 0, 0, 0]$false$A10,A16,W6,W6,A11,Y3,R3,B4$W6,Y3|[0, 0, 0, 0, 0]$false$P7,R3,B2,B2,Y2,P5,W2,G1$0|[0, 0, 0, 0, 0]$false$P7,R3,B2,B2,Y2,P5,W2,G1$0");
+		testboard.setGameState("GAMESTATE|Y~0~94~0~0~true|[1, 0, 0, 0, 0]$false$A12,A16,W6,W6,A11,Y3,R3,B4$Y2,Y3|[0, 0, 0, 0, 0]$false$P7,R3,B2,B2,Y2,P5,W2,G1$W2,Y2|[0, 0, 0, 0, 0]$false$P7,R3,B2,B2,Y2,P5,W2,G1$W3,W6,Y2,Y2,Y3");
 		eng.setState(testboard);
 		try{
-			boolean temp=eng.withdraw();
-			assertTrue(temp);
+			eng.draw();
+			eng.endTurn();
 		}
 		catch(IllegalArgumentException e){
-			System.out.println(e.getMessage());
+			//assertEquals(e, "")
 		}
-		
-		
 	}
-	@Test
-	public void maidenwithdrawR(){
-		Engine eng = new Engine(2);
-		GameBoard testboard= new GameBoard(2);
-		testboard.setGameState("GAMESTATE|R~0~94~0~3~true|[1, 1, 0, 0, 0]$false$A10,A16,W6,W6,A11,Y3,R3,B4$W6,Y3|[0, 0, 0, 0, 0]$false$P7,R3,B2,B2,Y2,P5,W2,G1$0|[0, 0, 0, 0, 0]$false$P7,R3,B2,B2,Y2,P5,W2,G1$0");
-		eng.setState(testboard);
-		try{
-			boolean temp=eng.withdraw();
-			assertTrue(temp);
-		}
-		catch(IllegalArgumentException e){
-			System.out.println(e.getMessage());
-		}
-		
-		
-	}
-	@Test
-	public void maidenwithdrawB(){
-		Engine eng = new Engine(2);
-		GameBoard testboard= new GameBoard(2);
-		testboard.setGameState("GAMESTATE|B~0~94~0~3~true|[1, 1, 0, 0, 0]$false$A10,A16,W6,W6,A11,Y3,R3,B4$W6,Y3|[0, 0, 0, 0, 0]$false$P7,R3,B2,B2,Y2,P5,W2,G1$0|[0, 0, 0, 0, 0]$false$P7,R3,B2,B2,Y2,P5,W2,G1$0");
-		eng.setState(testboard);
-		try{
-			boolean temp=eng.withdraw();
-			assertTrue(temp);
-		}
-		catch(IllegalArgumentException e){
-			System.out.println(e.getMessage());
-		}
-		
-		
-	}
-	@Test
-	public void maidenwithdrawG(){
-		Engine eng = new Engine(2);
-		GameBoard testboard= new GameBoard(2);
-		testboard.setGameState("GAMESTATE|G~0~94~0~3~true|[1, 1, 0, 0, 0]$false$A10,A16,W6,W6,A11,Y3,R3,B4$W6,Y3|[0, 0, 0, 0, 0]$false$P7,R3,B2,B2,Y2,P5,W2,G1$0|[0, 0, 0, 0, 0]$false$P7,R3,B2,B2,Y2,P5,W2,G1$0");
-		eng.setState(testboard);
-		try{
-			boolean temp=eng.withdraw();
-			assertTrue(temp);
-		}
-		catch(IllegalArgumentException e){
-			System.out.println(e.getMessage());
-		}
-		
-		
-	}
-	@Test
-	public void maidenwithdrawP(){
-		Engine eng = new Engine(2);
-		GameBoard testboard= new GameBoard(2);
-		testboard.setGameState("GAMESTATE|P~0~94~0~3~true|[1, 1, 0, 0, 0]$false$A10,A16,W6,W6,A11,Y3,R3,B4$W6,Y3|[0, 0, 0, 0, 0]$false$P7,R3,B2,B2,Y2,P5,W2,G1$0|[0, 0, 0, 0, 0]$false$P7,R3,B2,B2,Y2,P5,W2,G1$0");
-		eng.setState(testboard);
-		try{
-			boolean temp=eng.withdraw();
-			assertTrue(temp);
-		}
-		catch(IllegalArgumentException e){
-			System.out.println(e.getMessage());
-		}
-		
-		
-	}
-	/*
+/*
 	@Test
 	public void GameTest(){
 		Engine eng=new Engine(3);
