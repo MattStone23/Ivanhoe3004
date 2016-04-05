@@ -375,7 +375,7 @@ public class EngineTest {
 			eng.endTurn();
 		}
 		catch(IllegalArgumentException e){
-			//assertEquals(e, "")
+			assertEquals(e, "You have not played enough cards to be the highest value display\n");
 		}
 	}
 /*
