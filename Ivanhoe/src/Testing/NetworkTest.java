@@ -1,13 +1,15 @@
 package Testing;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
-import network.Client;
-import network.Server;
 import Util.config;
 import Util.timer;
+import network.Client;
+import network.Server;
 
 public class NetworkTest {
 

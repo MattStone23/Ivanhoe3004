@@ -48,8 +48,7 @@ public class ClientStarter {
 		
 		c = new Client(in,config.PORT);
 		timer.wait(1);
-		c.sendMessage("CONNECT");
-//		
+		c.sendMessage("CONNECT");		
 		
 		
 		while(!in.equals("quit")){

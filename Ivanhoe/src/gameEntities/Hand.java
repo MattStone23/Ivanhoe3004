@@ -1,5 +1,5 @@
 package gameEntities;
-import java.util.*;
+import java.util.Stack;
 public class Hand {
 	Stack<Card> hand;
 	public Hand(){
@@ -90,5 +90,9 @@ public class Hand {
 		for (int x=0;x<numCards;x++){
 			hand.push(new Card());
 		}
+	}
+	
+	public int getSize(){
+		return hand.size();
 	}
 }
