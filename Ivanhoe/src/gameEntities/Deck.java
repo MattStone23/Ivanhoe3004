@@ -1,6 +1,8 @@
 
 package gameEntities;
-import java.util.*;
+import java.util.Collections;
+import java.util.Random;
+import java.util.Stack;
 public class Deck {
 	/*using stack here, as it give us a nice pop and push function, good for the deck and the discard pile
 	 * also extends vector, meaning we can see all elements and change them(for shuffling, plus use clone
