@@ -91,4 +91,8 @@ public class Hand {
 			hand.push(new Card());
 		}
 	}
+	
+	public int getSize(){
+		return hand.size();
+	}
 }

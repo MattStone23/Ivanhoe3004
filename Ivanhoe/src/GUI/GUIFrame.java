@@ -15,6 +15,7 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 import Util.config;
+import Util.timer;
 import gameEntities.Card;
 import gameEntities.GameBoard;
 
@@ -26,8 +27,19 @@ import java.awt.Font;
 public class GUIFrame extends JFrame {
 
 	private JPanel contentPane;
+	private JPanel pnlChat;
+	private JPanel pnlHeader;
+	private JPanel pnlMain;
+	
+	private JLabel lblCurrentPlayer;
+	private JLabel lblDeck;
+	private JLabel lblDiscard;
+	
 	private PlayerPanel[] playerPanels;
-	private JTextField txtHello;
+	
+	private JTextField txtChat;
+	private JTextArea txtChatArea;
+	
 	private GameBoard gameState;
 	
 	/**
@@ -38,6 +50,11 @@ public class GUIFrame extends JFrame {
 			public void run() {
 				try {
 					GameBoard state = new GameBoard(3);
+					System.out.println(state.getGameStateForPlayer(1));
+					state.setGameState("GAMESTATE|"+state.getGameStateForPlayer(1));
+					GUIFrame frame = new GUIFrame(state);
+					frame.setVisible(true);
+					
 					state.startTour('B');
 					state.playCard(new Card(4,'B'), 0);
 					state.getPlayers()[0].addStone('R');
@@ -46,10 +63,9 @@ public class GUIFrame extends JFrame {
 					state.getPlayers()[1].addStone('G');
 					state.getPlayers()[1].addStone('Y');
 					state.withdraw(1);
-					System.out.println(state.getGameStateForPlayer(1));
 					state.setGameState("GAMESTATE|"+state.getGameStateForPlayer(1));
-					GUIFrame frame = new GUIFrame(state);
-					frame.setVisible(true);
+					frame.setGameBoard(state);
+					
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -75,7 +91,7 @@ public class GUIFrame extends JFrame {
 		gbl_contentPane.rowWeights = new double[]{0.0, 0.0};
 		contentPane.setLayout(gbl_contentPane);
 		
-		JPanel pnlChat = new JPanel();
+		pnlChat = new JPanel();
 		GridBagConstraints gbc_pnlChat = new GridBagConstraints();
 		gbc_pnlChat.fill = GridBagConstraints.BOTH;
 		gbc_pnlChat.gridheight = 2;
@@ -86,19 +102,19 @@ public class GUIFrame extends JFrame {
 		contentPane.add(pnlChat, gbc_pnlChat);
 		pnlChat.setLayout(new BorderLayout(0, 4));
 		
-		JTextArea textArea = new JTextArea();
-		textArea.setBackground(Color.BLACK);
-		textArea.setForeground(Color.WHITE);
-		pnlChat.add(textArea);
+		txtChatArea = new JTextArea();
+		txtChatArea.setBackground(Color.BLACK);
+		txtChatArea.setForeground(Color.WHITE);
+		pnlChat.add(txtChatArea);
 		
-		txtHello = new JTextField();
-		txtHello.setText("CHAT");
-		txtHello.setForeground(Color.WHITE);
-		txtHello.setBackground(Color.BLACK);
-		pnlChat.add(txtHello, BorderLayout.SOUTH);
-		txtHello.setColumns(10);
+		txtChat = new JTextField();
+		txtChat.setText("CHAT");
+		txtChat.setForeground(Color.WHITE);
+		txtChat.setBackground(Color.BLACK);
+		pnlChat.add(txtChat, BorderLayout.SOUTH);
+		txtChat.setColumns(10);
 		
-		JPanel pnlHeader = new JPanel();
+		pnlHeader = new JPanel();
 		pnlHeader.setBackground(config.getColor(gameState.getCol()));
 		pnlHeader.setLayout(null);
 		GridBagConstraints gbc_pnlHeader = new GridBagConstraints();
@@ -109,22 +125,22 @@ public class GUIFrame extends JFrame {
 		gbc_pnlHeader.gridy = 0;
 		contentPane.add(pnlHeader, gbc_pnlHeader);
 		
-		JLabel lblCurrentPlayer = new JLabel("Current Player: "+gameState.getTurn());
+		lblCurrentPlayer = new JLabel("Current Player: "+gameState.getTurn());
 		lblCurrentPlayer.setFont(new Font("Tahoma", Font.BOLD, 14));
 		lblCurrentPlayer.setBounds(10, 11, 135, 33);
 		pnlHeader.add(lblCurrentPlayer);
 		
-		JLabel lblDeck = new JLabel("DECK: "+ gameState.getDeckSize());
+		lblDeck = new JLabel("DECK: "+ gameState.getDeckSize());
 		lblDeck.setFont(new Font("Tahoma", Font.BOLD, 14));
 		lblDeck.setBounds(194, 11, 92, 33);
 		pnlHeader.add(lblDeck);
 		
-		JLabel lblDiscard = new JLabel("DISCARD: "+ gameState.getDiscardSize());
+		lblDiscard = new JLabel("DISCARD: "+ gameState.getDiscardSize());
 		lblDiscard.setFont(new Font("Tahoma", Font.BOLD, 14));
 		lblDiscard.setBounds(328, 11, 109, 33);
 		pnlHeader.add(lblDiscard);
 		
-		JPanel pnlMain = new JPanel();
+		pnlMain = new JPanel();
 		GridBagConstraints gbc_pnlMain = new GridBagConstraints();
 		gbc_pnlMain.fill = GridBagConstraints.BOTH;
 		gbc_pnlMain.gridx = 0;
@@ -148,4 +164,67 @@ public class GUIFrame extends JFrame {
 			pnlMain.add(playerPanels[x]);
 		}
 	}
+	
+	public void setGameBoard(GameBoard gb){
+		gameState = gb;
+		update();
+		
+		validate();
+		repaint();
+	}
+	
+	private void update(){
+		//disable
+		
+		
+		updateHeader();
+		updatePlayers();
+		
+		
+		//enable
+	}
+	
+	private void updateHeader(){
+		lblCurrentPlayer.setText("You are player X");
+		lblDeck.setText("Deck: "+gameState.getDeckSize());
+		lblDiscard.setText("Discard: "+gameState.getDiscardSize());
+		pnlHeader.setBackground(config.getColor(gameState.getCol()));
+	}
+	
+	public void updateChat(String message){
+		txtChatArea.setText(txtChatArea.getText()+ "\n" + message);
+	}
+	
+	private void updatePlayers(){
+		while (pnlMain.getComponentCount()!=0){
+			pnlMain.remove(0);
+		}
+		
+		playerPanels = new PlayerPanel[gameState.getNumPlayers()];
+		for (int x=0;x<gameState.getNumPlayers();x++){
+			playerPanels[x] = new PlayerPanel(x,gameState.getPlayers()[x]);
+			
+			//paint backgrounds
+			if (gameState.getTurn()==x){
+				playerPanels[x].setBackground(Color.lightGray);
+			}
+			else if(gameState.getPlayers()[x].isWithdrawn()){
+				playerPanels[x].setBackground(Color.darkGray);
+			}
+			else{
+				playerPanels[x].setBackground(Color.gray);
+			}
+			
+			//add panel
+			pnlMain.add(playerPanels[x]);
+		}
+		
+		for (int x=0;x<gameState.getNumPlayers();x++){
+			playerPanels[x].repaint();
+		}
+			
+		pnlMain.repaint();
+	}
+	
+
 }
