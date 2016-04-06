@@ -102,6 +102,8 @@ public class Player {
 	}
 	
 	public void displayDisc(int card, Deck discard){
+		if(display.size()==1)return;
+
 		discard.putInto(display.get(card));
 		display.remove(card);
 	}
@@ -109,22 +111,38 @@ public class Player {
 	public void displayDiscVal(int val, Deck discard){
 		Stack<Card> temp= new Stack<Card>();
 		for( Card card:display){
-			if(card.getValue()==val && card.getColour()!='A'){
+			if(card.getValue()==val&&display.size()!=1){
+
 				discard.putInto(card);
 			}
 			else temp.push(card);
 		}
+
+		if(temp.isEmpty()){
+			temp.push(display.elementAt(0));
+			discard.CardRemove(display.elementAt(0));
+		}
+
 		display=temp;
 	}
 	
 	public void displayDiscCol(char col, Deck discard){
 		Stack<Card> temp= new Stack<Card>();
 		for( Card card:display){
-			if(card.getColour()==col){
+
+			if(card.getColour()==col&&display.size()!=1){
+
+
 				discard.putInto(card);
 			}
 			else temp.push(card);
 		}
+
+		if(temp.isEmpty()){
+			temp.push(display.elementAt(0));
+			discard.CardRemove(display.elementAt(0));
+		}
+
 		display=temp;
 	}
 	
@@ -325,8 +343,7 @@ public class Player {
 			card.print();
 		}
 
-	}
-	
+	}	
 	public Stack<Card> getDisplay(){
 		return display;
 	}

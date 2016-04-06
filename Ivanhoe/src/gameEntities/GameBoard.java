@@ -358,5 +358,11 @@ public class GameBoard {
 	}
 	
 	
+	//Testing function, discards top card from deck 
+	public void disctop(){
+		discard.putInto(inPlay.draw());
+	}
+	
+	
 	
 }
