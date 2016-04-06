@@ -96,9 +96,15 @@ public class Engine {
 		}
 		if(state.getPlayers()[state.getTurn()].isStunned()){
 			if(state.getCol()=='G'){
-				if(state.getTurn()!=state.highestDisplayG()) withdraw();
+				if(state.getTurn()!=state.highestDisplayG()){
+					withdraw();
+					endTurn();
+				}
 			}
-			else if(state.getTurn()!=state.highestDisplay()) withdraw();
+			else if(state.getTurn()!=state.highestDisplay()){
+				withdraw();
+				endTurn();
+			}
 			else endTurn();
 		}
 	}
@@ -131,7 +137,7 @@ public class Engine {
 			
 		//Drop Weapon: Goes from RBY tournament to G tournament.
 		case 3:
-			if (state.getCol()=='G' || state.getCol()== 'G'){
+			if (state.getCol()=='G' || state.getCol()== 'P'){
 				throw new IllegalArgumentException();
 			}
 			state.changeCol('G');
@@ -213,10 +219,10 @@ public class Engine {
 			break;
 			
 		//outwit
-		//switches cards, from player that plays and one indicated by in[2], switches cards from in[3] and in[4] respectively. Immune to shield!
+		//switches cards, from player that plays and one indicated by in[2], switches cards from in[3] and in[4] respectively. Immunish to shieldish!
 			//TODO write test.
 		case 12:
-
+			if(state.getPlayers()[Integer.parseInt(in[2])].isShielded()&&Integer.parseInt(in[4])>=0) break;
 				temp= state.getPlayers()[state.getTurn()].removeCard(Integer.parseInt(in[3]));
 				state.getPlayers()[Integer.parseInt(in[2])].addCard(temp);
 				temp = state.getPlayers()[Integer.parseInt(in[2])].removeCard(Integer.parseInt(in[4]));
@@ -225,11 +231,13 @@ public class Engine {
 		//shield
 		case 13:
 			state.setShield(state.getTurn());
-			break;
+			return;
+			//break;
 		//stunned
 		case 14:
 			state.getPlayers()[Integer.parseInt(in[2])].setStun();
-			break;
+			return;
+			//break;
 		//ivanhoe
 		case 15:
 			
@@ -237,7 +245,7 @@ public class Engine {
 		//riposte
 		//steals last card in oppenents display
 		case 16:
-			if(!state.getPlayers()[Integer.parseInt(in[2])].isShielded()){
+			if(!state.getPlayers()[Integer.parseInt(in[2])].isShielded()&&state.getPlayers()[Integer.parseInt(in[2])].displayNum()>1){
 				temp = state.getPlayers()[Integer.parseInt(in[2])].removeCard(state.getPlayers()[Integer.parseInt(in[2])].displayNum()-1);
 				state.getPlayers()[state.getTurn()].addCard(temp);
 			}
