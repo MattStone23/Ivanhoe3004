@@ -81,10 +81,11 @@ public class Engine {
 	
 	public void playCard( String[] in){
 		if(lastLeft()) return;
+		if(!state.hasDrawn)throw new IllegalArgumentException("Draw a card first");
 		Card c = new Card(in[1]);
 
 		if(!state.getPlayers()[state.getTurn()].getHand().getHandStack().contains(c)){
-			throw new IllegalArgumentException();
+			throw new IllegalArgumentException("Your hand doesn't have that card");
 		}
 		if(c.getColour()=='A'){
 			playActionCard(in);
@@ -222,6 +223,10 @@ public class Engine {
 		//switches cards, from player that plays and one indicated by in[2], switches cards from in[3] and in[4] respectively. Immunish to shieldish!
 			//TODO write test.
 		case 12:
+			if(!state.getPlayers()[state.getTurn()].isShielded()&&-1==Integer.parseInt(in[3]))throw new IllegalArgumentException("You don't have that card");
+			if(!state.getPlayers()[state.getTurn()].isStunned()&&-2==Integer.parseInt(in[3]))throw new IllegalArgumentException("You don't have that card");
+			if(!state.getPlayers()[Integer.parseInt(in[2])].isShielded()&&-1==Integer.parseInt(in[4]))throw new IllegalArgumentException("You don't have that card");
+			if(!state.getPlayers()[Integer.parseInt(in[2])].isStunned()&&-2==Integer.parseInt(in[4]))throw new IllegalArgumentException("You don't have that card");
 			if(state.getPlayers()[Integer.parseInt(in[2])].isShielded()&&Integer.parseInt(in[4])>=0) break;
 				temp= state.getPlayers()[state.getTurn()].removeCard(Integer.parseInt(in[3]));
 				state.getPlayers()[Integer.parseInt(in[2])].addCard(temp);
@@ -255,7 +260,7 @@ public class Engine {
 		case 17:
 			if(!state.getPlayers()[Integer.parseInt(in[2])].isShielded()){
 				Random rnd = new Random();
-				temp= state.getPlayers()[Integer.parseInt(in[2])].removeCard(rnd.nextInt(state.getPlayers()[Integer.parseInt(in[2])].getHand().getHandStack().size()));
+				temp= state.getPlayers()[Integer.parseInt(in[2])].getHand().getHandStack().remove(rnd.nextInt(state.getPlayers()[Integer.parseInt(in[2])].getHand().getHandStack().size()));
 				state.getPlayers()[state.getTurn()].getHand().addCard(temp);
 			}
 			break;

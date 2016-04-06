@@ -80,7 +80,24 @@ public class EngineTest {
 		eng.endTurn();
 		assertEquals(eng.turnNum(),1);
 	}
-	
+	//checks that trying to play a card before drawing returns an error message.
+	@Test
+	public void drawTest(){
+
+		Engine eng = new Engine(2);
+		GameBoard testboard= new GameBoard(2);
+		testboard.setGameState("GAMESTATE|P~0~94~0~2~false|[0, 0, 0, 0, 0]$false$A1,A16$0|[0, 0, 0, 0, 0]$false$R3,R3,B2,B2,Y2,P5,W2,G1$0");
+		eng.setState(testboard);
+		try{
+		    eng.playCard("PLAY|A1|R".split("\\|"));
+		}
+		catch(IllegalArgumentException e){
+			assertTrue(e.getMessage().equals("Draw a card first"));
+		}
+	}
+		
+		
+		
 	@Test
 	public void unhorseTest(){
 		Engine eng = new Engine(2);
@@ -405,13 +422,29 @@ public class EngineTest {
 		assertEquals(0, eng.currentState().getDiscardSize());
 		eng.endTurn();
 		eng.draw();
-		eng.playCard("PLAY|A16|1".split("\\|"));
+		eng.playCard("PLAY|A16|0".split("\\|"));
 		assertEquals('Y', eng.currentState().getCol());
 		assertEquals(0,eng.turnNum());
 		assertTrue(eng.currentState().getPlayers()[1].isStunned());
-		assertEquals(3,eng.currentState().getDiscardSize());
+		assertEquals(1,eng.currentState().getDiscardSize());
 	}
-	
+	//test to make sure a player can possibly stay in the tournament
+	@Test
+	public void StunstayinTest(){
+		Engine eng = new Engine(2);
+		GameBoard testboard= new GameBoard(2);
+		testboard.setGameState("GAMESTATE|Y~0~94~0~2~true|[1, 0, 0, 0, 0]$false$A14,A16,W6,W6,A11,Y3,R3,B4$Y3|[0, 0, 0, 0, 0]$false$P7,R3,B2,B2,Y2,A16,W2,W6,G1$0");
+		eng.setState(testboard);
+		eng.playCard("PLAY|A14|1".split("\\|"));
+		assertTrue(eng.currentState().getPlayers()[1].isStunned());
+		assertEquals(0, eng.currentState().getDiscardSize());
+		eng.endTurn();
+		eng.draw();
+		eng.playCard("PLAY|W6".split("\\|"));
+		assertEquals('Y', eng.currentState().getCol());
+		assertEquals(0,eng.turnNum());
+		assertTrue(eng.currentState().getPlayers()[1].isStunned());
+	}
 	@Test
 	public void StunEndTurnTest(){
 		Engine eng = new Engine(2);
@@ -447,6 +480,45 @@ public class EngineTest {
 		assertTrue(eng.currentState().getPlayers()[0].isShielded());
 		assertTrue(eng.currentState().getPlayers()[1].isStunned());
 	}
+	//tests whether trying to switch stun and sheild will work if the players don't have those cards
+	@Test
+	public void outwitinvalidTest(){
+		Engine eng = new Engine(2);
+		GameBoard testboard= new GameBoard(2);
+		testboard.setGameState("GAMESTATE|Y~0~94~0~3~true|[1, 0, 0, 0, 0]$false$A12,A16,W6,W6,A11,Y3,R3,B4$Y2,Y3|[0, 0, 0, 0, 0]$false$P7,R3,B2,B2,Y2,P5,W2,G1$W2,Y2|[0, 0, 0, 0, 0]$false$P7,R3,B2,B2,Y2,P5,W2,G1$W3,W6,Y2,Y2,Y3");
+		eng.setState(testboard);
+		try{
+			eng.playCard("PLAY|A12|1|-1|0".split("\\|"));	
+		}
+		catch(IllegalArgumentException e){
+			System.out.println(e);
+			assertTrue(e.getMessage().equals("You don't have that card"));
+		}
+		eng.currentState().printState();
+		try{
+			eng.playCard("PLAY|A12|1|1|-1".split("\\|"));	
+		}
+		catch(IllegalArgumentException e){
+			System.out.println(e);
+			assertTrue(e.getMessage().equals("You don't have that card"));
+		}
+		try{
+			eng.playCard("PLAY|A12|1|-2|0".split("\\|"));	
+		}
+		catch(IllegalArgumentException e){
+			System.out.println(e);
+			assertTrue(e.getMessage().equals("You don't have that card"));
+		}
+		try{
+			eng.playCard("PLAY|A12|1|1|-2".split("\\|"));	
+		}
+		catch(IllegalArgumentException e){
+			System.out.println(e);
+			assertTrue(e.getMessage().equals("You don't have that card"));
+		}
+		
+
+	}
 
 	@Test
 	public void riposteTest(){
@@ -475,6 +547,31 @@ public class EngineTest {
 		assertEquals(1,eng.currentState().getDiscardSize());
 	}
 	
+	@Test
+	public void KnockdownTest(){
+		Engine eng = new Engine(2);
+		GameBoard testboard= new GameBoard(2);
+		testboard.setGameState("GAMESTATE|Y~0~94~0~2~true|[1, 0, 0, 0, 0]$false$A16,A17,W6,W6,A11,Y3,R3,B4$0|[0, 0, 0, 0, 0]$false$P7,R3,B2,B2,Y2,P5,W2,G1$Y2,Y3");
+		eng.setState(testboard);
+		eng.draw();
+		eng.playCard("PLAY|A17|1".split("\\|"));
+		assertEquals(8,eng.currentState().getPlayers()[0].getHand().getHandStack().size());
+		assertEquals(7,eng.currentState().getPlayers()[1].getHand().getHandStack().size());
+		assertEquals(1,eng.currentState().getDiscardSize());
+	}
+	@Test
+	public void KnockdownshieldTest(){
+		Engine eng = new Engine(2);
+		GameBoard testboard= new GameBoard(2);
+		testboard.setGameState("GAMESTATE|Y~0~94~0~2~true|[1, 0, 0, 0, 0]$false$A16,A17,W6,W6,A11,Y3,R3,B4$0|[0, 0, 0, 0, 0]$false$P7,R3,B2,B2,Y2,P5,W2,G1$Y2,Y3");
+		eng.setState(testboard);
+		eng.draw();
+		eng.currentState().getPlayers()[1].setShield();
+		eng.playCard("PLAY|A17|1".split("\\|"));
+		assertEquals(7,eng.currentState().getPlayers()[0].getHand().getHandStack().size());
+		assertEquals(8,eng.currentState().getPlayers()[1].getHand().getHandStack().size());
+		assertEquals(1,eng.currentState().getDiscardSize());
+	}
 	
 	@Test
 	public void notEnoughCArd(){
