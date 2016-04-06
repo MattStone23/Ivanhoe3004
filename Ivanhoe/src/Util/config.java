@@ -19,12 +19,12 @@ public class config {
 		/*A9*/{"Counter Charge"," Identify the highest value card throughout all displays. All players must discard all cards of this value from their displays."},
 		/*A10*/{"Disgrace","Each player must remove all his supporters from his display"},
 		/*A11*/{"Adapt","INVALID\nEach player may only keep one card of each value in his display. All other cards with the same value are discarded. Each player decides which of the matching-value cards he will discard"},
-		/*A12*/{"Outwit","INVALID\nPlace one of your faceup cards in front of an opponent, and take one faceup card from this opponent and place it face up in front of yourself. This may include the SHIELD and STUNNED cards."},
-		/*A13*/{"Shield","INVALID\nA player plays this card face up in front of himself, but separate from his display. As long as a player has the SHIELD card in front of him, all action cards have no effect on his display"},
-		/*A14*/{"Stunned","INVALID\nPlace this card separately face up in front of any one opponent. As long as a player has the STUNNED card in front of him, he may add only one new card to his display each turn."},
+		/*A12*/{"Outwit","Place one of your faceup cards in front of an opponent, and take one faceup card from this opponent and place it face up in front of yourself. This may include the SHIELD and STUNNED cards."},
+		/*A13*/{"Shield","A player plays this card face up in front of himself, but separate from his display. As long as a player has the SHIELD card in front of him, all action cards have no effect on his display"},
+		/*A14*/{"Stunned","Place this card separately face up in front of any one opponent. As long as a player has the STUNNED card in front of him, he may add only one new card to his display each turn."},
 		/*A15*/{"IVANHOE","INVALID\nThis is the only card a player can play outside of his turn. A player can play it at any time as long as he is still in the tournament. Use this card to cancel all effects of any one action card just played."},
-		/*A16*/{"Riposte","INVALID\nTake the last card played on any one opponent’s display and add it to your own display."},
-		/*A17*/{"KnockDown","INVALID\nDraw at random one card from any one opponent’s hand and add it to your hand, without revealing the card to other opponents."}
+		/*A16*/{"Riposte","Take the last card played on any one opponent’s display and add it to your own display."},
+		/*A17*/{"KnockDown","Draw at random one card from any one opponent’s hand and add it to your hand, without revealing the card to other opponents."}
 		};
 	
 	public static Color getColor(char c){

@@ -112,7 +112,7 @@ public class Client {
 			gameState.setGameState(message);
 			
 			if (gui == null){
-				gui = new GUIFrame(gameState);
+				gui = new GUIFrame(gameState,this);
 				gui.setVisible(true);
 			}
 
