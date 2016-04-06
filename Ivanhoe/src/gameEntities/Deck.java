@@ -3,6 +3,8 @@ package gameEntities;
 import java.util.Collections;
 import java.util.Random;
 import java.util.Stack;
+
+import Util.config;
 public class Deck {
 	/*using stack here, as it give us a nice pop and push function, good for the deck and the discard pile
 	 * also extends vector, meaning we can see all elements and change them(for shuffling, plus use clone
@@ -124,7 +126,9 @@ public class Deck {
 	}
 	//provides a constant random deck
 	public void seededShuffle(){
-		Collections.shuffle(currentDeck, new Random(80085));
+		Collections.shuffle(currentDeck, new Random(config.RANDOMSEED));
+		//TESTING OF GUI RETREAT
+		currentDeck.push(new Card(6,'A'));
 	}
 
 }

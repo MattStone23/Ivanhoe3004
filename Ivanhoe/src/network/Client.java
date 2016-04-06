@@ -122,6 +122,8 @@ public class Client {
 			break;
 		case "CHAT":
 			System.out.println(args[1]);
+			if (gui!=null)
+				gui.updateChat(args[1]);
 			recentMessage = args[1];
 			messageRecieved = true;
 			break;

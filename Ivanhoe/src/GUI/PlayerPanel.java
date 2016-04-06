@@ -265,6 +265,10 @@ public class PlayerPanel extends JPanel {
 		lblShieldIcon.setVisible(player.isStunned());
 	}
 	
+	public void updateforGreenTourn(){
+		lblDisplayVal.setText("Display Value: "+player.displayNum());
+	}
+	
 	private void updateTokens(){
 		for (int x=0;x<5;x++){
 			if (player.getStones()[x]==0){

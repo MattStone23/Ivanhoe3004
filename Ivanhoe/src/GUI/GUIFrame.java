@@ -29,6 +29,8 @@ import java.awt.Font;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class GUIFrame extends JFrame {
 
@@ -68,16 +70,6 @@ public class GUIFrame extends JFrame {
 					state.setGameState("GAMESTATE|"+state.getGameStateForPlayer(1));
 					GUIFrame frame = new GUIFrame(state,null);
 					frame.setVisible(true);
-					
-					state.startTour('B');
-					state.playCard(new Card(4,'B'), 0);
-					state.getPlayers()[0].addStone('R');
-					state.getPlayers()[0].addStone('B');
-					state.getPlayers()[0].addStone('P');
-					state.getPlayers()[1].addStone('G');
-					state.getPlayers()[1].addStone('Y');
-					state.withdraw(1);
-					state.setGameState("GAMESTATE|"+state.getGameStateForPlayer(1));
 					frame.setGameBoard(state);
 					
 				} catch (Exception e) {
@@ -124,6 +116,15 @@ public class GUIFrame extends JFrame {
 		pnlChat.add(txtChatArea);
 		
 		txtChat = new JTextField();
+		txtChat.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent arg0) {
+				if (arg0.getKeyCode()==KeyEvent.VK_ENTER){
+					client.chat(txtChat.getText());
+					txtChat.setText("");
+				}
+			}
+		});
 		txtChat.setText("CHAT");
 		txtChat.setForeground(Color.WHITE);
 		txtChat.setBackground(Color.BLACK);
@@ -260,6 +261,9 @@ public class GUIFrame extends JFrame {
 		playerPanels = new PlayerPanel[gameState.getNumPlayers()];
 		for (int x=0;x<gameState.getNumPlayers();x++){
 			playerPanels[x] = new PlayerPanel(x,gameState.getPlayers()[x]);
+			
+			//if green tournament
+			if (gameState.getCol()=='G') playerPanels[x].updateforGreenTourn();
 			
 			//update cards listeners
 			updateHandButtons(playerPanels[x].getHand());
