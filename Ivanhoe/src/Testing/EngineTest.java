@@ -575,7 +575,7 @@ public class EngineTest {
 	}
 	
 	@Test
-	public void notEnoughCArd(){
+	public void notEnoughCard(){
 		Engine eng = new Engine(3);
 		GameBoard testboard= new GameBoard(3);
 		testboard.setGameState("GAMESTATE|Y~0~94~0~3~true|[1, 0, 0, 0, 0]$false$A12,A16,W6,W6,A11,Y3,R3,B4$Y2,Y3|[0, 0, 0, 0, 0]$false$P7,R3,B2,B2,Y2,P5,W2,G1$W2,Y2|[0, 0, 0, 0, 0]$false$P7,R3,B2,B2,Y2,P5,W2,G1$W3,W6,Y2,Y2,Y3");

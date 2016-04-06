@@ -15,7 +15,7 @@ public class TournamentTests {
 		public void testRedtournMult(){
 			Engine eng = new Engine(2);
 			GameBoard testboard= new GameBoard(2);
-			testboard.setGameState("GAMESTATE|N~0~94~0~2~false|[1, 0, 0, 0, 0]$false$A1,A16,W6,W6,A11,Y3,R3,B4$0|[0, 0, 0, 0, 0]$false$P7,R3,B2,B2,Y2,P5,W2,G1$0");
+			testboard.setGameState("GAMESTATE|N~0~94~0~2~false|[1, 0, 0, 0, 0]$false$A1,A16,W6,W6,A11,R3,R3,B4$0|[0, 0, 0, 0, 0]$false$P7,R3,B2,B2,Y2,P5,W2,G1$0");
 			eng.setState(testboard);
 			eng.printState();
 			eng.draw();
@@ -23,6 +23,7 @@ public class TournamentTests {
 			eng.startTour(args);
 			eng.printState();
 			args="PLAY|R3".split("\\|");
+			eng.playCard(args);
 			eng.playCard(args);
 			eng.endTurn();
 			eng.draw();
@@ -1286,7 +1287,7 @@ public class TournamentTests {
 		public void testPurpletournManySupportmanyround(){
 			Engine eng = new Engine(2);
 			GameBoard testboard= new GameBoard(2);
-			testboard.setGameState("GAMESTATE|N~0~94~0~2~false|[0, 0, 0, 0, 0]$false$A1,A16,W2,W2,W2,W2,A11,Y3,P3,B4$0|[0, 0, 0, 0, 0]$false$P7,P3,B2,B2,Y2,P5,W3,W2,W2,W2,G1$0");
+			testboard.setGameState("GAMESTATE|N~0~94~0~2~false|[0, 0, 0, 0, 0]$false$A1,W6,W2,W2,W2,W2,A11,Y3,P3,B4$0|[0, 0, 0, 0, 0]$false$P7,P3,B2,B2,Y2,P5,W3,W2,W2,W2,G1$0");
 			eng.setState(testboard);
 			eng.printState();
 			eng.draw();
@@ -1305,8 +1306,11 @@ public class TournamentTests {
 			eng.playCard(args);
 			eng.playCard(args);
 			eng.playCard(args);
+			args="PLAY|W6".split("\\|");
+			eng.playCard(args);
 			eng.endTurn();
 			eng.draw();
+			args="PLAY|W2".split("\\|");
 			eng.playCard(args);
 			eng.playCard(args);
 			eng.withdraw();
