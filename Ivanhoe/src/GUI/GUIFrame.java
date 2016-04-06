@@ -9,6 +9,7 @@ import java.awt.Insets;
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -21,8 +22,13 @@ import gameEntities.GameBoard;
 
 import java.awt.BorderLayout;
 import net.miginfocom.swing.MigLayout;
+import network.Client;
+
 import java.awt.FlowLayout;
 import java.awt.Font;
+import javax.swing.JButton;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class GUIFrame extends JFrame {
 
@@ -40,7 +46,15 @@ public class GUIFrame extends JFrame {
 	private JTextField txtChat;
 	private JTextArea txtChatArea;
 	
+	private JButton btnDraw;
+	private JButton btnStartTournament;
+	private JButton btnWithdraw;
+	private JButton btnEndTurn;
+	
+	
 	private GameBoard gameState;
+	
+	private Client client;
 	
 	/**
 	 * Launch the application.
@@ -52,7 +66,7 @@ public class GUIFrame extends JFrame {
 					GameBoard state = new GameBoard(3);
 					System.out.println(state.getGameStateForPlayer(1));
 					state.setGameState("GAMESTATE|"+state.getGameStateForPlayer(1));
-					GUIFrame frame = new GUIFrame(state);
+					GUIFrame frame = new GUIFrame(state,null);
 					frame.setVisible(true);
 					
 					state.startTour('B');
@@ -76,7 +90,9 @@ public class GUIFrame extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public GUIFrame(GameBoard gb) {
+	
+	public GUIFrame(GameBoard gb,Client c) {
+		client = c;
 		gameState = gb;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1555, 772);
@@ -140,6 +156,46 @@ public class GUIFrame extends JFrame {
 		lblDiscard.setBounds(328, 11, 109, 33);
 		pnlHeader.add(lblDiscard);
 		
+		btnDraw = new JButton("Draw");
+		btnDraw.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				c.sendMessage("DRAW");
+			}
+		});
+		btnDraw.setBounds(500, 18, 89, 23);
+		pnlHeader.add(btnDraw);
+		
+		btnStartTournament = new JButton("Start Tournament");
+		btnStartTournament.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				Object[] values = {"RED","BLUE","YELLOW","GREEN","PURPLE"};
+				Object selected = JOptionPane.showInputDialog(null, "What colour of tournament?", "Start Tournament", JOptionPane.DEFAULT_OPTION, null, values, "0");
+				if (selected!=null){
+					client.sendMessage("STARTTOURN|"+selected.toString().charAt(0));
+				}
+			}
+		});
+		btnStartTournament.setBounds(614, 18, 129, 23);
+		pnlHeader.add(btnStartTournament);
+		
+		btnWithdraw = new JButton("Withdraw");
+		btnWithdraw.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				client.sendMessage("WITHDRAW");
+			}
+		});
+		btnWithdraw.setBounds(765, 18, 89, 23);
+		pnlHeader.add(btnWithdraw);
+		
+		btnEndTurn = new JButton("End Turn");
+		btnEndTurn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				client.sendMessage("ENDTURN");
+			}
+		});
+		btnEndTurn.setBounds(874, 18, 89, 23);
+		pnlHeader.add(btnEndTurn);
+		
 		pnlMain = new JPanel();
 		GridBagConstraints gbc_pnlMain = new GridBagConstraints();
 		gbc_pnlMain.fill = GridBagConstraints.BOTH;
@@ -185,10 +241,11 @@ public class GUIFrame extends JFrame {
 	}
 	
 	private void updateHeader(){
-		lblCurrentPlayer.setText("You are player X");
+		lblCurrentPlayer.setText("You are player "+client.getPlayerNum());
 		lblDeck.setText("Deck: "+gameState.getDeckSize());
 		lblDiscard.setText("Discard: "+gameState.getDiscardSize());
 		pnlHeader.setBackground(config.getColor(gameState.getCol()));
+		updateButtons();
 	}
 	
 	public void updateChat(String message){
@@ -203,6 +260,9 @@ public class GUIFrame extends JFrame {
 		playerPanels = new PlayerPanel[gameState.getNumPlayers()];
 		for (int x=0;x<gameState.getNumPlayers();x++){
 			playerPanels[x] = new PlayerPanel(x,gameState.getPlayers()[x]);
+			
+			//update cards listeners
+			updateHandButtons(playerPanels[x].getHand());
 			
 			//paint backgrounds
 			if (gameState.getTurn()==x){
@@ -219,12 +279,28 @@ public class GUIFrame extends JFrame {
 			pnlMain.add(playerPanels[x]);
 		}
 		
-		for (int x=0;x<gameState.getNumPlayers();x++){
-			playerPanels[x].repaint();
-		}
-			
-		pnlMain.repaint();
+		
 	}
 	
-
+	private void updateButtons(){
+		String moves = gameState.getValidMoves(client.getPlayerNum()-1);
+		btnDraw.setEnabled(moves.contains(" DRAW"));
+		btnStartTournament.setEnabled(moves.contains("STARTTOURN"));
+		btnWithdraw.setEnabled(moves.contains("WITHDRAW"));
+		btnEndTurn.setEnabled(moves.contains("ENDTURN"));
+	}
+	
+	private void updateHandButtons(CardButton[] cards){
+		for (CardButton card : cards){
+			card.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					CardButton c = (CardButton) e.getSource();
+					String args = c.handle(gameState);
+					if (args!=null)
+						client.sendMessage("PLAY|"+args);
+				}
+			});
+			card.setEnabled(gameState.getTurn()==client.getPlayerNum()-1);
+		}
+	}
 }

@@ -353,6 +353,10 @@ public class GameBoard {
 		
 	}
 	
+	public boolean hasDrawn(){
+		return hasDrawn;
+	}
+	
 	
 	
 }

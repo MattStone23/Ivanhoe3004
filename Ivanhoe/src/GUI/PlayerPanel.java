@@ -19,6 +19,8 @@ import gameEntities.Player;
 
 import java.awt.FlowLayout;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import net.miginfocom.swing.MigLayout;
 
@@ -288,6 +290,10 @@ public class PlayerPanel extends JPanel {
 				}
 			}
 		}
+	}
+	
+	public CardButton[] getHand(){
+		return btnHand;
 	}
 
 }
