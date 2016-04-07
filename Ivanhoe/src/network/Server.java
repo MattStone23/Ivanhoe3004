@@ -257,6 +257,7 @@ public class Server implements Runnable {
 					break;
 
 				case "CHAT":
+					if (args.length<2) throw new IllegalArgumentException("Invalid arguments. CHAT|message");
 					toMessage = "CHAT|Player "+players.get(clientNum)+"("+clientNum + ") said: "+args[1];
 					broadCast(toMessage);
 					break;

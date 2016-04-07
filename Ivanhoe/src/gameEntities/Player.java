@@ -283,8 +283,8 @@ public class Player {
 	public String getPublicString(){
 		String r = Arrays.toString(colours) + "$" +
 				withdrawn +"$"+
-				(shield==null?true:false)+"$"+
-				(stun==null?true:false)+"$"+
+				(shield==null?false:true)+"$"+
+				(stun==null?false:true)+"$"+
 				"size"+plyHand.getHandStack().size() +"$"+
 				displayToString();
 		return r;
@@ -342,14 +342,14 @@ public class Player {
 		else stun=null;
 		
 		//check public or private hand
-		if (args[3].startsWith("size")){
-			plyHand.setHand(Integer.parseInt(args[3].substring(4)));
+		if (args[4].startsWith("size")){
+			plyHand.setHand(Integer.parseInt(args[4].substring(4)));
 		}
 		else{
-			plyHand.setHand(args[3]);
+			plyHand.setHand(args[4]);
 		}
 		
-		setDisplay(args[4]);
+		setDisplay(args[5]);
 	}
 
 	public void displayPrint(){
