@@ -347,6 +347,9 @@ public class GameBoard {
 		if (this.highestDisplay()==player){
 			return basic + ", PLAY, WITHDRAW, ENDTURN";
 		}
+		else if(this.highestDisplay()==-1){
+			return basic + ", PLAY";
+		}
 		else{
 			return basic + ", PLAY, WITHDRAW";
 		}
