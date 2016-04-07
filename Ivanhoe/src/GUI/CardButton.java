@@ -145,8 +145,8 @@ public class CardButton extends JButton {
 				values[x] = x;
 			}
 			selected = JOptionPane.showInputDialog(null, aCard.getDesc(), aCard.getName(), JOptionPane.DEFAULT_OPTION, null, values, "0");
-			if (selected!=null){
-				return aCard.toString()+"|"+selected.toString();
+			if (selected==null){
+				return null;
 			}
 			
 			//own card

@@ -43,7 +43,7 @@ public class ClientStarter {
 					validIP=true;
 				}
 				c = new Client(in,config.PORT);
-				timer.wait(1);
+				timer.wait(2);
 				c.sendMessage("CONNECT");		
 				
 				
