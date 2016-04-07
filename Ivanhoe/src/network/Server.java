@@ -208,7 +208,7 @@ public class Server implements Runnable {
 						broadCastUpdate();
 
 						if (tempX==2){
-							broadCast("GAMEOVER|"+engine.turnNum()+1);
+							broadCast("GAMEOVER|"+engine.turnNum());
 						}
 					}
 					break;
