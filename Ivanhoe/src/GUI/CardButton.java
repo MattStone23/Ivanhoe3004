@@ -73,14 +73,14 @@ public class CardButton extends JButton {
 			for(int x=0;x<state.getNumPlayers();x++){
 				values[x] = x;
 			}
-			selected = JOptionPane.showInputDialog(null, aCard.getDesc(), aCard.getName(), JOptionPane.DEFAULT_OPTION, null, values, "0");
+			selected = JOptionPane.showInputDialog(null, aCard.getDesc()+"\nPlease select which player", aCard.getName(), JOptionPane.DEFAULT_OPTION, null, values, "0");
 			if (selected==null){
 				return null;
 			}
 			
 			//select card
 			values2 = state.getPlayers()[(int) selected].getDisplayAsStringArray();
-			selected2 = JOptionPane.showInputDialog(null, aCard.getDesc(), aCard.getName(), JOptionPane.DEFAULT_OPTION, null, values, "0");
+			selected2 = JOptionPane.showInputDialog(null, aCard.getDesc()+"\nPlease select which card", aCard.getName(), JOptionPane.DEFAULT_OPTION, null, values2, "0");
 			if (selected2!=null){
 				for (int x=0;x<values2.length;x++){
 					if (selected2.equals(values2[x])){

@@ -286,6 +286,28 @@ public class GUIFrame extends JFrame {
 		
 	}
 	
+	public void promptWinToken(){
+		Object answer = null;
+		String[] values = {"RED","BLUE","YELLOW","GREEN","PURPLE"};
+		do {
+			answer = JOptionPane.showInputDialog(null, "What colour of token would you like to win?", "PURPLE TOURNAMENT WON", JOptionPane.DEFAULT_OPTION, null, values, "0");
+		}while(answer == null);
+		client.sendMessage("WINTOKEN|"+answer.toString().charAt(0));
+	}
+	
+	public void promptLoseToken(){
+		Object answer = null;
+		String[] values = {"RED","BLUE","YELLOW","GREEN","PURPLE"};
+		do {
+			answer = JOptionPane.showInputDialog(null, "Pick a colour of token to lose.", "Maiden Withdraw", JOptionPane.DEFAULT_OPTION, null, values, "0");
+		}while(answer == null);
+		client.sendMessage("LOSETOKEN|"+answer.toString().charAt(0));
+	}
+	
+	public void invalidMessage(String message){
+		JOptionPane.showMessageDialog(this, message, "ERROR", JOptionPane.ERROR_MESSAGE);
+	}
+	
 	private void updateButtons(){
 		String moves = gameState.getValidMoves(client.getPlayerNum()-1);
 		btnDraw.setEnabled(moves.contains(" DRAW"));
