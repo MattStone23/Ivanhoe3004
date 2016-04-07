@@ -7,6 +7,8 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+import javax.swing.JOptionPane;
+
 import GUI.GUIFrame;
 import Util.config;
 import Util.logger;
@@ -152,6 +154,12 @@ public class Client {
 			break;
 		case "DESC":
 			System.out.println(args[1]);
+			break;
+		case "GAMEOVER":
+			JOptionPane.showMessageDialog(gui, "Player "+args[1]+" won", "GAME OVER", JOptionPane.PLAIN_MESSAGE);
+			if (gui!=null) gui.dispose();
+			gui=null;
+			stop();
 			break;
 		default:
 			System.err.println("UNRECOGNIZED RESPONSE FROM SERVER\n"+message);

@@ -82,10 +82,12 @@ public class Player {
 	
 	public void win(Deck discard){
 		if(shield !=null) discard.putInto(shield);
+		if(stun !=null) discard.putInto(stun);
 		while(!display.isEmpty()){
 			discard.putInto(display.pop());
 		}
 		shield= null;
+		stun=null;
 	}
 	
 	public boolean isWithdrawn(){
