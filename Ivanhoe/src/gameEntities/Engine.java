@@ -236,11 +236,13 @@ public class Engine {
 		//shield
 		case 13:
 			state.setShield(state.getTurn());
+			state.getPlayers()[state.getTurn()].getHand().getHandStack().remove(c);
 			return;
 			//break;
 		//stunned
 		case 14:
 			state.getPlayers()[Integer.parseInt(in[2])].setStun();
+			state.getPlayers()[state.getTurn()].getHand().getHandStack().remove(c);
 			return;
 			//break;
 		//ivanhoe
