@@ -242,7 +242,7 @@ public class GUIFrame extends JFrame {
 	}
 	
 	private void updateHeader(){
-		lblCurrentPlayer.setText("You are player "+client.getPlayerNum());
+		lblCurrentPlayer.setText("You are player "+(client.getPlayerNum()-1));
 		lblDeck.setText("Deck: "+gameState.getDeckSize());
 		lblDiscard.setText("Discard: "+gameState.getDiscardSize());
 		pnlHeader.setBackground(config.getColor(gameState.getCol()));

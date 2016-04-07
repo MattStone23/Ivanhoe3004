@@ -29,32 +29,31 @@ public class ClientStarter {
 		}
 		
 		try{
-		if ("HOST".equals(in)){
-			System.out.println("STARTING SERVER");
-			s = new Server();
-			timer.wait(1);
-			in = "0.0.0.0";
-		}
-		else{
-			boolean validIP=false;
-			while (!validIP){
-				System.out.println("Please enter the Server's IP");
-				in = get.nextLine();
-				//TODO validIP = isValidIP(in);
-				validIP=true;
+			if ("HOST".equals(in)){
+				System.out.println("STARTING SERVER");
+				s = new Server();
+				timer.wait(1);
 			}
-		}
-		
-		
-		c = new Client(in,config.PORT);
-		timer.wait(1);
-		c.sendMessage("CONNECT");		
-		
-		
-		while(!in.equals("quit")){
-			in=get.nextLine();
-			c.sendMessage(in);
-		}
+			else{
+				boolean validIP=false;
+				while (!validIP){
+					System.out.println("Please enter the Server's IP");
+					in = get.nextLine();
+					//TODO validIP = isValidIP(in);
+					validIP=true;
+				}
+				c = new Client(in,config.PORT);
+				timer.wait(1);
+				c.sendMessage("CONNECT");		
+				
+				
+				
+			}
+			
+			while(!in.equals("quit")){
+				in=get.nextLine();
+				c.sendMessage(in);
+			}
 		}
 		catch (Exception e){
 			System.out.println(e.getMessage());

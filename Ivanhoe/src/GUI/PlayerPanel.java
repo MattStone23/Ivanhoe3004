@@ -82,7 +82,7 @@ public class PlayerPanel extends JPanel {
 		fl_pnlInfo.setAlignment(FlowLayout.LEFT);
 		add(pnlInfo, "cell 0 0 2 1,alignx left,aligny center");
 		
-		lblName = new JLabel("NAME " + playerNum);
+		lblName = new JLabel("Player " + playerNum);
 		pnlInfo.add(lblName);
 		
 		pnlTokens = new JPanel();
