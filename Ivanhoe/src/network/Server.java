@@ -277,9 +277,13 @@ public class Server implements Runnable {
 			else if (prompt==1){//WON A PURPLE TOURN
 				if ("WINTOKEN".equals(command)){
 					try{
-						engine.addstone(args);
-						prompt=0;
-						broadCastUpdate();
+						if (engine.addstone(args)!=2){
+							prompt=0;
+							broadCastUpdate();
+						}
+						else{
+							broadCast("GAMEOVER|"+engine.turnNum()+1);
+						}
 					}catch (IllegalArgumentException iae){
 						from.send("INVALID|Improper arguments:"+iae.getMessage());
 						from.send("PROMPT|1");
