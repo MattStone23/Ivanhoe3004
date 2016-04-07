@@ -276,17 +276,27 @@ public class Server implements Runnable {
 			}
 			else if (prompt==1){//WON A PURPLE TOURN
 				if ("WINTOKEN".equals(command)){
-					engine.addstone(args);
-					prompt=0;
-					broadCastUpdate();
+					try{
+						engine.addstone(args);
+						prompt=0;
+						broadCastUpdate();
+					}catch (IllegalArgumentException iae){
+						from.send("INVALID|Improper arguments:"+iae.getMessage());
+						from.send("PROMPT|1");
+					}
 				}
 			}
 			else if (prompt==2){//LOST WITH A MAIDEN
 				if ("LOSETOKEN".equals(command)){
-					engine.removeToken(args);
-					prompt=0;
-					broadCastUpdate();
-					from.send("PROMPT|2|"+false);
+					try{
+						engine.removeToken(args);
+						prompt=0;
+						broadCastUpdate();
+						from.send("PROMPT|2|"+false);
+					}catch (IllegalArgumentException iae){
+						from.send("INVALID|Improper arguments:"+iae.getMessage());
+						from.send("PROMPT|2|"+true);
+					}
 				}
 			}
 		}catch (IllegalArgumentException iae){

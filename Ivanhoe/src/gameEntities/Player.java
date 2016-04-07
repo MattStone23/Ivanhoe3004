@@ -102,7 +102,7 @@ public class Player {
 	}
 	
 	public void displayDisc(int card, Deck discard){
-		if(display.size()==1)return;
+		if(display.size()<=1)return;
 
 		discard.putInto(display.get(card));
 		display.remove(card);
@@ -346,5 +346,12 @@ public class Player {
 	}	
 	public Stack<Card> getDisplay(){
 		return display;
+	}
+	public String[] getDisplayAsStringArray(){
+		String[] cards = new String[display.size()];
+		for (int x=0;x<cards.length;x++){
+			cards[x] = display.get(x).toString();
+		}
+		return cards;
 	}
 }

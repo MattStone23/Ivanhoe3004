@@ -7,7 +7,7 @@ import gameEntities.Card;
 import gameEntities.GameBoard;
 
 public class CardButton extends JButton {
-	Card aCard;
+	private Card aCard;
 	
 	public CardButton(){
 		super();
@@ -73,14 +73,14 @@ public class CardButton extends JButton {
 			for(int x=0;x<state.getNumPlayers();x++){
 				values[x] = x;
 			}
-			selected = JOptionPane.showInputDialog(null, aCard.getDesc(), aCard.getName(), JOptionPane.DEFAULT_OPTION, null, values, "0");
+			selected = JOptionPane.showInputDialog(null, aCard.getDesc()+"\nPlease select which player", aCard.getName(), JOptionPane.DEFAULT_OPTION, null, values, "0");
 			if (selected==null){
 				return null;
 			}
 			
 			//select card
-			values2 = state.getPlayers()[(int) selected].getDisplay().toArray();
-			selected2 = JOptionPane.showInputDialog(null, aCard.getDesc(), aCard.getName(), JOptionPane.DEFAULT_OPTION, null, values, "0");
+			values2 = state.getPlayers()[(int) selected].getDisplayAsStringArray();
+			selected2 = JOptionPane.showInputDialog(null, aCard.getDesc()+"\nPlease select which card", aCard.getName(), JOptionPane.DEFAULT_OPTION, null, values2, "0");
 			if (selected2!=null){
 				for (int x=0;x<values2.length;x++){
 					if (selected2.equals(values2[x])){
@@ -94,8 +94,9 @@ public class CardButton extends JButton {
 			
 		case 6:
 			//Retreat: select own display card
-			values = state.getPlayers()[state.getTurn()].getDisplay().toArray();
-			selected = JOptionPane.showInputDialog(null, aCard.getDesc(), aCard.getName(), JOptionPane.DEFAULT_OPTION, null, values, "0").toString();
+			values = state.getPlayers()[state.getTurn()].getDisplayAsStringArray();
+			
+			selected = JOptionPane.showInputDialog(null,aCard.getDesc(),aCard.getName(),JOptionPane.DEFAULT_OPTION,null,values,"0");
 			if (selected!=null){
 				for (int x=0;x<values.length;x++){
 					if (selected.equals(values[x])){
@@ -103,7 +104,7 @@ public class CardButton extends JButton {
 						break;
 					}
 				}
-				return aCard.toString()+"|"+selected.toString();
+				return aCard.toString()+"|"+selected;
 			}
 			break;
 		case 7:
@@ -149,7 +150,7 @@ public class CardButton extends JButton {
 			}
 			
 			//own card
-			values2 = state.getPlayers()[state.getTurn()].getDisplay().toArray();
+			values2 = state.getPlayers()[state.getTurn()].getDisplayAsStringArray();
 			selected2 = JOptionPane.showInputDialog(null, aCard.getDesc(), aCard.getName(), JOptionPane.DEFAULT_OPTION, null, values, "0");
 			if (selected2==null){
 				return null;
@@ -163,7 +164,7 @@ public class CardButton extends JButton {
 			
 			
 			//target card
-			values3 = state.getPlayers()[(int) selected].getDisplay().toArray();
+			values3 = state.getPlayers()[(int) selected].getDisplayAsStringArray();
 			selected3 = JOptionPane.showInputDialog(null, aCard.getDesc(), aCard.getName(), JOptionPane.DEFAULT_OPTION, null, values, "0");
 			if (selected3!=null){
 				for (int x=0;x<values3.length;x++){

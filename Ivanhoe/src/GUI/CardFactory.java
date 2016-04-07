@@ -2,7 +2,6 @@ package GUI;
 
 import java.awt.Image;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
@@ -17,8 +16,8 @@ public class CardFactory {
 		if (c==null){
 			return null;
 		}
-		try {                
-			BufferedImage image = ImageIO.read(new File("Resources/"+(c.getValue()==0?"0":c.toString())+".jpeg"));
+		try {                	
+			BufferedImage image = ImageIO.read(c.getClass().getResourceAsStream("/images/"+(c.getValue()==0?"0":c.toString())+".jpeg"));
 			ImageIcon imageIcon = new ImageIcon(image.getScaledInstance(70, 100, Image.SCALE_DEFAULT));
 			return imageIcon;
 		} catch (IOException ex) {
@@ -29,7 +28,8 @@ public class CardFactory {
 	
 	public static ImageIcon getShieldIcon(){
 		try {                
-			BufferedImage image = ImageIO.read(new File("Resources/A13.jpeg"));
+			Card c = new Card();
+			BufferedImage image = ImageIO.read(c.getClass().getResourceAsStream("/images/A13.jpeg"));
 			ImageIcon imageIcon = new ImageIcon(image.getScaledInstance(28, 40, Image.SCALE_DEFAULT));
 			return imageIcon;
 		} catch (IOException ex) {
@@ -39,8 +39,9 @@ public class CardFactory {
 	}
 	
 	public static ImageIcon getStunIcon(){
-		try {                
-			BufferedImage image = ImageIO.read(new File("Resources/A14.jpeg"));
+		try {   
+			Card c = new Card();
+			BufferedImage image = ImageIO.read(c.getClass().getResourceAsStream("/images/A14.jpeg"));
 			ImageIcon imageIcon = new ImageIcon(image.getScaledInstance(28, 40, Image.SCALE_DEFAULT));
 			return imageIcon;
 		} catch (IOException ex) {

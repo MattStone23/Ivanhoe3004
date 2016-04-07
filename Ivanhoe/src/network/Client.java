@@ -122,6 +122,8 @@ public class Client {
 			break;
 		case "CHAT":
 			System.out.println(args[1]);
+			if (gui!=null)
+				gui.updateChat(args[1]);
 			recentMessage = args[1];
 			messageRecieved = true;
 			break;
@@ -137,6 +139,8 @@ public class Client {
 			break;
 		case "INVALID":
 			System.err.println(args[1]);
+			if (gui!=null)
+				gui.invalidMessage(args[1]);
 			break;
 		case "CLOSE":
 			clientThread.close();
@@ -194,12 +198,18 @@ public class Client {
 		if (1==Integer.parseInt(args[1])){
 			//won purple tourn
 			System.out.println("You won a purple tournament. Please reply with a colour to win. \"WINTOKEN|C\"");
+			if (gui!=null){
+				gui.promptWinToken();
+			}
 //			prompt=1;
 		}
 		else if(2==Integer.parseInt(args[1])){
 			if (Boolean.parseBoolean(args[2])){
 				//LOST WITH MAIDEN
 				System.out.println("You lost a tournament with a maiden out. Please reply with a colour to lose. \"LOSETOKEN|C\"");
+				if (gui!=null){
+					gui.promptLoseToken();
+				}
 //				prompt=1;
 			}
 			else{

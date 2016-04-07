@@ -82,7 +82,7 @@ public class PlayerPanel extends JPanel {
 		fl_pnlInfo.setAlignment(FlowLayout.LEFT);
 		add(pnlInfo, "cell 0 0 2 1,alignx left,aligny center");
 		
-		lblName = new JLabel("NAME " + playerNum);
+		lblName = new JLabel("Player " + playerNum);
 		pnlInfo.add(lblName);
 		
 		pnlTokens = new JPanel();
@@ -263,6 +263,10 @@ public class PlayerPanel extends JPanel {
 		lblDisplayVal.setText("Display Value: "+player.displayVal());
 		lblShieldIcon.setVisible(player.isShielded());
 		lblShieldIcon.setVisible(player.isStunned());
+	}
+	
+	public void updateforGreenTourn(){
+		lblDisplayVal.setText("Display Value: "+player.displayNum());
 	}
 	
 	private void updateTokens(){
