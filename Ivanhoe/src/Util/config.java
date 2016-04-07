@@ -6,7 +6,7 @@ public class config {
 	public static int PORT = 3000;
 	public static String IP = "fe80::edb4:37bc:e476:d64a";
 	public static int MAX_CLIENTS = 5;
-	public static boolean SEEDED = true;
+	public static boolean SEEDED = false;
 	public static int RANDOMSEED = 80085;
 	public static String[][] ACTIONS = 
 		/*A1*/{{"Unhorse","The tournament color changes from purple to red, blue or yellow, as announced by the player."},

@@ -127,8 +127,6 @@ public class Deck {
 	//provides a constant random deck
 	public void seededShuffle(){
 		Collections.shuffle(currentDeck, new Random(config.RANDOMSEED));
-		//TESTING OF GUI RETREAT
-		currentDeck.push(new Card(6,'A'));
 	}
 
 }
