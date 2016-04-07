@@ -50,7 +50,7 @@ public class GameBoard {
 			System.out.print("YOu already drew a card this turn\n");
 			return null;
 		}
-		players[plyr].displayVal();
+		
 		Card c = players[plyr].plyHand.DrawCard(inPlay);
 		hasDrawn=true;
 		if(inPlay.remaining()==0){
@@ -351,6 +351,16 @@ public class GameBoard {
 			return basic + ", PLAY, WITHDRAW";
 		}
 		
+	}
+	
+	public boolean hasDrawn(){
+		return hasDrawn;
+	}
+	
+	
+	//Testing function, discards top card from deck 
+	public void disctop(){
+		discard.putInto(inPlay.draw());
 	}
 	
 	

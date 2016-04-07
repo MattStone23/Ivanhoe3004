@@ -7,6 +7,7 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
+import GUI.GUIFrame;
 import Util.config;
 import Util.logger;
 import gameEntities.GameBoard;
@@ -24,6 +25,7 @@ public class Client {
 	private logger networkLog;
 	private int playerNum;
 	private int playerID;
+	private GUIFrame gui;
 //	private int prompt;
 	
 	
@@ -108,7 +110,14 @@ public class Client {
 				System.out.println("Starting Game");
 			}
 			gameState.setGameState(message);
+			
+			if (gui == null){
+				gui = new GUIFrame(gameState,this);
+				gui.setVisible(true);
+			}
+
 			gameState.print();
+			gui.setGameBoard(gameState);
 			printClientData();
 			break;
 		case "CHAT":
