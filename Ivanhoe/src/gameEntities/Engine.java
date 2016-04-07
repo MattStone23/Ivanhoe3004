@@ -292,11 +292,14 @@ public class Engine {
 		return temp;
 	}
 	
-	public void addstone(String[] in){
+	public int addstone(String[] in){
 		if(in.length!=2){
 			throw new IllegalArgumentException("Illegal argument");
 		}		
 		state.endTour(state.getTurn(), (in[1].charAt(0)));
+		//check for win
+		if(state.getPlayers()[state.getTurn()].isWinner(state.getNumPlayers())) return 2;
+		return 0;
 	}
 	
 	public boolean lastLeft(){
